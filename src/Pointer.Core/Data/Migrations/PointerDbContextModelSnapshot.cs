@@ -178,6 +178,11 @@ namespace Pointer.Core.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("booking_id");
 
+                    b.Property<string>("CheckoutUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)")
+                        .HasColumnName("checkout_url");
+
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_utc");
@@ -188,6 +193,11 @@ namespace Pointer.Core.Data.Migrations
                         .HasColumnType("character(3)")
                         .HasColumnName("currency")
                         .IsFixedLength();
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("payment_intent_id");
 
                     b.Property<long>("PlatformFeeCents")
                         .HasColumnType("bigint")
@@ -221,6 +231,9 @@ namespace Pointer.Core.Data.Migrations
                     b.HasIndex("BookingId")
                         .HasDatabaseName("ix_payments_booking_id");
 
+                    b.HasIndex("Provider", "PaymentIntentId")
+                        .HasDatabaseName("ix_payments_provider_payment_intent_id");
+
                     b.HasIndex("Provider", "ProviderPaymentId")
                         .IsUnique()
                         .HasDatabaseName("ix_payments_provider_provider_payment_id");
@@ -229,6 +242,34 @@ namespace Pointer.Core.Data.Migrations
                         {
                             t.HasCheckConstraint("ck_payments_amounts", "amount_cents >= 0 AND platform_fee_cents >= 0 AND platform_fee_cents <= amount_cents");
                         });
+                });
+
+            modelBuilder.Entity("Pointer.Core.Domain.ProcessedWebhookEvent", b =>
+                {
+                    b.Property<string>("Provider")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("provider");
+
+                    b.Property<string>("EventId")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("event_id");
+
+                    b.Property<DateTime>("ReceivedUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("received_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Provider", "EventId")
+                        .HasName("pk_processed_webhook_events");
+
+                    b.ToTable("processed_webhook_events", (string)null);
                 });
 
             modelBuilder.Entity("Pointer.Core.Domain.Service", b =>

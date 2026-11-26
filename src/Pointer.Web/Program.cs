@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Pointer.Core.Data;
 using Pointer.Web;
+using Pointer.Web.Payments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapGet("/healthz", () => Results.Ok("ok"));
+app.MapStripeWebhook();
 app.MapRazorPages();
 
 app.Run();

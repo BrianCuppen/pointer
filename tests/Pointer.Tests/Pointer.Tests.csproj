@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Pointer.Core\Pointer.Core.csproj" />
+    <ProjectReference Include="..\..\src\Pointer.Web\Pointer.Web.csproj" />
   </ItemGroup>
 
 </Project>

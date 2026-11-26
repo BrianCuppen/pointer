@@ -61,4 +61,19 @@ CI (`.github/workflows/ci.yml`) builds and tests every push and pull request aga
 | --- | --- | --- |
 | `ConnectionStrings__Default` | none (required) | PostgreSQL connection string |
 | `Database__MigrateOnStartup` | `false` (`true` in Development) | Apply EF Core migrations when the app starts |
-| `Bookings__PaymentHoldMinutes` | `15` | How long a slot is held while the customer pays the deposit |
+| `Bookings__PaymentHoldMinutes` | `30` | How long a slot is held while the customer pays the deposit (Stripe Checkout needs at least 30) |
+| `Availability__SlotStepMinutes` | `15` | Distance between offered start times |
+| `Availability__MinimumNoticeMinutes` | `60` | How soon a slot can start |
+| `Availability__BookingHorizonDays` | `60` | How far ahead customers can book |
+| `Fees__PerDepositFeeCents` | `30` | Our application fee per paid deposit, in cents |
+| `Stripe__SecretKey` | none | Platform secret key. `sk_test_...` everywhere except production |
+| `Stripe__WebhookSecret` | none | Signing secret of the Connect webhook endpoint |
+
+## Stripe setup (test mode)
+
+1. In the Stripe dashboard (test mode), enable Connect, and enable Bancontact, iDEAL and cards for connected accounts under Settings > Payment methods.
+2. Add a webhook endpoint for **connected accounts** (Connect events) pointing at `https://<host>/webhooks/stripe`, with the events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired` and `charge.refunded`.
+3. Set `Stripe__SecretKey` and `Stripe__WebhookSecret` as environment variables.
+4. Locally: `stripe listen --forward-connect-to localhost:5137/webhooks/stripe` prints a webhook secret to use.
+
+Until shop onboarding exists in the admin, set a shop's `payment_account_id` (acct_...) by hand.
