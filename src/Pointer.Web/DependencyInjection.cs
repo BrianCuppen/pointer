@@ -1,3 +1,4 @@
+using Pointer.Core.Availability;
 using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 
@@ -14,6 +15,8 @@ public static class DependencyInjection
         services.AddDbContext<PointerDbContext>(o => o.UsePointerDatabase(connectionString));
         services.AddSingleton(TimeProvider.System);
         services.Configure<BookingOptions>(configuration.GetSection(BookingOptions.SectionName));
+        services.Configure<AvailabilityOptions>(configuration.GetSection(AvailabilityOptions.SectionName));
+        services.AddScoped<AvailabilityService>();
         services.AddScoped<BookingService>();
         return services;
     }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using Pointer.Core.Availability;
 using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 using Pointer.Core.Domain;
@@ -16,7 +17,10 @@ public sealed class DoubleBookingTests(PostgresFixture fixture)
     private readonly FakeClock _clock = new(Now);
 
     private BookingService CreateService(PointerDbContext db) =>
-        new(db, _clock, Options.Create(new BookingOptions { PaymentHoldMinutes = 15 }));
+        new(db,
+            new AvailabilityService(db, _clock, Options.Create(new AvailabilityOptions())),
+            _clock,
+            Options.Create(new BookingOptions { PaymentHoldMinutes = 15 }));
 
     private static CreateBookingRequest Request(SeededShop s, DateTime start, Guid? staffId = null) =>
         new(s.Shop.Id, s.Haircut.Id, staffId ?? s.Owner.Id, start, "An Peeters", "an@example.com", null);
@@ -209,6 +213,25 @@ public sealed class DoubleBookingTests(PostgresFixture fixture)
 
         Assert.Equal("start_in_past", Assert.IsType<CreateBookingResult.Invalid>(past).Reason);
         Assert.Equal("start_must_be_utc", Assert.IsType<CreateBookingResult.Invalid>(local).Reason);
+    }
+
+    [Fact]
+    public async Task Rejects_slot_outside_opening_hours_or_during_time_off()
+    {
+        await using var db = fixture.CreateContext();
+        var s = await TestData.SeedShopAsync(db);
+        // 10:00 UTC on 2 Dec is 11:00 in Brussels. The shop is open 09:00-18:00 local.
+        db.TimeOff.Add(new TimeOff { ShopId = s.Shop.Id, StartUtc = TenAm, EndUtc = TenAm.AddHours(1) });
+        await db.SaveChangesAsync();
+        var service = CreateService(db);
+
+        var beforeOpening = await service.CreatePendingAsync(Request(s, TenAm.AddHours(-3)));     // 08:00 local
+        var pastClosing = await service.CreatePendingAsync(Request(s, TenAm.AddHours(6).AddMinutes(45))); // 17:45-18:15 local
+        var duringTimeOff = await service.CreatePendingAsync(Request(s, TenAm.AddMinutes(30)));
+
+        Assert.Equal("outside_schedule", Assert.IsType<CreateBookingResult.Invalid>(beforeOpening).Reason);
+        Assert.Equal("outside_schedule", Assert.IsType<CreateBookingResult.Invalid>(pastClosing).Reason);
+        Assert.Equal("outside_schedule", Assert.IsType<CreateBookingResult.Invalid>(duringTimeOff).Reason);
     }
 
     private static Booking NewBooking(SeededShop s, DateTime start, BookingStatus status) => new()

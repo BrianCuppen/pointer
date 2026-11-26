@@ -13,7 +13,7 @@ public sealed record SeededShop(Shop Shop, Service Haircut, Staff Owner);
 
 public static class TestData
 {
-    /// <summary>A shop with one 30 minute service and its single default staff member.</summary>
+    /// <summary>A Brussels shop open 09:00-18:00 every day, with one 30 minute service and its single default staff member.</summary>
     public static async Task<SeededShop> SeedShopAsync(PointerDbContext db, string? slug = null)
     {
         var shop = new Shop
@@ -27,6 +27,8 @@ public static class TestData
         db.Shops.Add(shop);
         db.Services.Add(haircut);
         db.Staff.Add(owner);
+        foreach (var day in Enum.GetValues<DayOfWeek>())
+            db.OpeningHours.Add(new OpeningHours { ShopId = shop.Id, DayOfWeek = day, Opens = new(9, 0), Closes = new(18, 0) });
         await db.SaveChangesAsync();
         return new SeededShop(shop, haircut, owner);
     }
