@@ -6,7 +6,7 @@ Guidance for Claude when working in this repository.
 
 A multi-tenant appointment booking service for small local shops (barbershops and salons first, any appointment-based business later). Each shop gets a hosted booking page and an embeddable button for its own website. Customers pick an open slot and pay a deposit. The shop decides what happens to the deposit on a no-show.
 
-Working name: `Bookings` (rename when a product name is chosen).
+Working name: `Pointer` (rename when a product name is chosen).
 
 ## Business context
 
@@ -64,27 +64,31 @@ Out for now:
 - Prefer small, reviewable changes. Run the tests before saying something is done.
 - Do not add new dependencies without a short reason.
 
-## Commands (fill in once the project exists)
+## Commands
 
 ```
 # build
 dotnet build
 
-# run tests
+# run tests (needs PostgreSQL; set POINTER_TEST_DB, see README)
 dotnet test
 
-# run locally
-dotnet run --project src/Bookings.Api
+# run locally (needs ConnectionStrings__Default)
+dotnet run --project src/Pointer.Web
 
-# database migrations
-dotnet ef migrations add <Name> --project src/Bookings.Api
-dotnet ef database update --project src/Bookings.Api
+# database migrations (migrations live in Pointer.Core)
+dotnet tool restore
+dotnet ef migrations add <Name> --project src/Pointer.Core --startup-project src/Pointer.Web --output-dir Data/Migrations
+dotnet ef database update --project src/Pointer.Core --startup-project src/Pointer.Web
 ```
+
+## Decisions
+
+- Payments: Stripe Connect, direct charges on the shop's connected account with our fee as an application fee.
+- Frontend: server-rendered Razor Pages with htmx. Pages stay unstyled until the Figma designs exist.
 
 ## Open questions
 
 - Product name and domain.
-- Mollie Connect or Stripe Connect (compare fees and Belgian payment method support before choosing).
-- Frontend approach (server-rendered pages or a small SPA).
 - Exact pricing: setup fee, monthly fee, per-deposit fee.
 - Whether to reuse code from the existing barbershop booking sites or start clean.

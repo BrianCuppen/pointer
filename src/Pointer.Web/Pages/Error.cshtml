@@ -1,0 +1,14 @@
+@page
+@model ErrorModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["ErrorTitle"];
+}
+
+<h1>@T["ErrorTitle"]</h1>
+<p>@T["ErrorBody"]</p>
+
+@if (Model.ShowRequestId)
+{
+    <p><code>@Model.RequestId</code></p>
+}
