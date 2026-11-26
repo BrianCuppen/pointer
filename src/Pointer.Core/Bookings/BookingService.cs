@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using Pointer.Core.Availability;
 using Pointer.Core.Data;
 using Pointer.Core.Domain;
 
@@ -11,13 +12,17 @@ namespace Pointer.Core.Bookings;
 /// <see cref="PointerDbContext.BookingOverlapConstraint"/>, not by a check-then-insert in code,
 /// so two customers racing for the same slot can never both get it.
 /// </summary>
-public sealed class BookingService(PointerDbContext db, TimeProvider clock, IOptions<BookingOptions> options)
+public sealed class BookingService(
+    PointerDbContext db,
+    AvailabilityService availability,
+    TimeProvider clock,
+    IOptions<BookingOptions> options)
 {
     private readonly BookingOptions _options = options.Value;
 
     /// <summary>
     /// Holds a slot in <see cref="BookingStatus.PendingPayment"/> until the deposit is paid
-    /// or the hold expires. Does not check opening hours yet: that comes with the availability service.
+    /// or the hold expires. The slot must lie inside opening hours and outside time off.
     /// </summary>
     public async Task<CreateBookingResult> CreatePendingAsync(CreateBookingRequest request, CancellationToken ct = default)
     {
@@ -40,6 +45,9 @@ public sealed class BookingService(PointerDbContext db, TimeProvider clock, IOpt
         var staffExists = await db.Staff.AnyAsync(s => s.Id == request.StaffId && s.ShopId == shop.Id && s.IsActive, ct);
         if (!staffExists)
             return new CreateBookingResult.Invalid("staff_not_found");
+
+        if (!await availability.IsWithinScheduleAsync(shop, service, request.StaffId, request.StartUtc, ct))
+            return new CreateBookingResult.Invalid("outside_schedule");
 
         var start = request.StartUtc;
         var end = start.AddMinutes(service.DurationMinutes);
