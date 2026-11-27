@@ -1,12 +1,83 @@
 @page
 @model Pointer.Web.Pages.Beheer.IndexModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
 @{
     ViewData["Title"] = T["Admin_Calendar"];
 }
 <h1>@Model.ShopName</h1>
 <p>@T["Admin_BookingPage"]: <a href="@Model.BookingPageUrl">@Model.BookingPageUrl</a></p>
+
+<h2>@T["Calendar_Week", Model.Monday.ToString("d MMMM yyyy")]</h2>
+<nav aria-label="@T["Calendar_WeekNav"]">
+    <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(-7).ToString("yyyy-MM-dd")">@T["Calendar_Previous"]</a>
+    <a asp-page="Index">@T["Calendar_ThisWeek"]</a>
+    <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(7).ToString("yyyy-MM-dd")">@T["Calendar_Next"]</a>
+</nav>
+
+@foreach (var day in Model.Week)
+{
+    <section aria-labelledby="day-@day.Date.ToString("yyyyMMdd")">
+        <h3 id="day-@day.Date.ToString("yyyyMMdd")">@day.Date.ToString("dddd d MMMM")</h3>
+        @if (day.Entries.Count == 0)
+        {
+            <p>@T["Calendar_NoBookings"]</p>
+        }
+        else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">@T["Calendar_Time"]</th>
+                        <th scope="col">@T["Calendar_Service"]</th>
+                        <th scope="col">@T["Calendar_Customer"]</th>
+                        <th scope="col">@T["Calendar_Status"]</th>
+                        <th scope="col">@T["Calendar_Actions"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in day.Entries)
+                    {
+                        <tr>
+                            <td>@e.StartLocal.ToString("HH:mm")–@e.EndLocal.ToString("HH:mm")</td>
+                            <td>@e.Service</td>
+                            <td>
+                                @e.CustomerName<br />
+                                <a href="mailto:@e.CustomerEmail">@e.CustomerEmail</a>
+                                @if (e.CustomerPhone is not null) { <br /><a href="tel:@e.CustomerPhone">@e.CustomerPhone</a> }
+                            </td>
+                            <td>
+                                @T[$"Status_{e.Status}"]
+                                @if (e.DepositCents > 0 && e.PaymentStatus is { } ps)
+                                {
+                                    <br /><small>@T["Calendar_Deposit", Money.Format(e.DepositCents)]: @T[$"Payment_{ps}"]</small>
+                                }
+                            </td>
+                            <td>
+                                @if (e.Status == BookingStatus.Confirmed && !e.HasStarted)
+                                {
+                                    <form method="post" asp-page-handler="Cancel" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
+                                        <button type="submit" aria-label="@T["Calendar_CancelFor", e.CustomerName]">@T["Calendar_Cancel"]</button>
+                                    </form>
+                                }
+                                @if (e.Status == BookingStatus.Confirmed && e.HasStarted)
+                                {
+                                    <form method="post" asp-page-handler="Completed" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
+                                        <button type="submit" aria-label="@T["Calendar_CompletedFor", e.CustomerName]">@T["Calendar_Completed"]</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="NoShow" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
+                                        <button type="submit" aria-label="@T["Calendar_NoShowFor", e.CustomerName]">@T["Calendar_NoShow"]</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+}
+
 <h2>@T["Admin_EmbedTitle"]</h2>
 <p>@T["Admin_EmbedHelp"]</p>
 <pre><code>@Model.EmbedSnippet</code></pre>
-<p>@T["Admin_CalendarComingSoon"]</p>
