@@ -1,0 +1,50 @@
+@page
+@model Pointer.Web.Pages.Beheer.InstellingenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
+@{
+    ViewData["Title"] = T["Admin_Settings"];
+}
+<h1>@T["Admin_Settings"]</h1>
+<form method="post">
+    <div asp-validation-summary="All" role="alert"></div>
+    <fieldset>
+        <legend>@T["Settings_Shop"]</legend>
+        <p><label asp-for="Input.Name">@T["Field_ShopName"]</label> <input asp-for="Input.Name" required maxlength="200" /></p>
+        <p><label asp-for="Input.Address">@T["Field_Address"]</label> <input asp-for="Input.Address" maxlength="300" /></p>
+        <p><label asp-for="Input.OwnerEmail">@T["Field_OwnerEmail"]</label> <input asp-for="Input.OwnerEmail" type="email" maxlength="320" /></p>
+    </fieldset>
+    <fieldset>
+        <legend>@T["Settings_Rules"]</legend>
+        <p>
+            <label asp-for="Input.NoShowPolicy">@T["Field_NoShowPolicy"]</label>
+            <select asp-for="Input.NoShowPolicy">
+                <option value="@NoShowPolicy.KeepDeposit">@T["NoShow_KeepDeposit"]</option>
+                <option value="@NoShowPolicy.RefundDeposit">@T["NoShow_RefundDeposit"]</option>
+            </select>
+        </p>
+        <p>
+            <label asp-for="Input.FreeCancellationHours">@T["Field_FreeCancellationHours"]</label>
+            <input asp-for="Input.FreeCancellationHours" type="number" min="0" max="336" required />
+        </p>
+    </fieldset>
+    <fieldset>
+        <legend>@T["Settings_Emails"]</legend>
+        <p><input asp-for="Input.OwnerInstantEmails" type="checkbox" /> <label asp-for="Input.OwnerInstantEmails">@T["Field_OwnerInstantEmails"]</label></p>
+        <p><input asp-for="Input.OwnerDailyOverview" type="checkbox" /> <label asp-for="Input.OwnerDailyOverview">@T["Field_OwnerDailyOverview"]</label></p>
+        <p><input asp-for="Input.NoShowNoticeEnabled" type="checkbox" /> <label asp-for="Input.NoShowNoticeEnabled">@T["Field_NoShowNotice"]</label></p>
+        <p>
+            <label asp-for="Input.ReminderHoursBefore">@T["Field_ReminderHours"]</label>
+            <input asp-for="Input.ReminderHoursBefore" type="number" min="2" max="48" required />
+        </p>
+    </fieldset>
+    <fieldset>
+        <legend>@T["Settings_Payments"]</legend>
+        <p>
+            <label asp-for="Input.PaymentAccountId">@T["Field_StripeAccount"]</label>
+            <input asp-for="Input.PaymentAccountId" placeholder="acct_..." maxlength="255" aria-describedby="stripe-help" />
+            <small id="stripe-help">@T["Settings_StripeHelp"]</small>
+        </p>
+    </fieldset>
+    <button type="submit">@T["Save"]</button>
+</form>

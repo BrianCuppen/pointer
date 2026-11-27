@@ -17,6 +17,7 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ProcessedWebhookEvent> ProcessedWebhookEvents => Set<ProcessedWebhookEvent>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<ShopUser> ShopUsers => Set<ShopUser>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -149,6 +150,14 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
             e.HasIndex(x => new { x.ShopId, x.Type, x.OverviewDate }).IsUnique().HasFilter("overview_date IS NOT NULL");
             e.HasOne<Shop>().WithMany().HasForeignKey(x => x.ShopId).OnDelete(DeleteBehavior.Cascade);
             e.HasOne<Booking>().WithMany().HasForeignKey(x => x.BookingId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        b.Entity<ShopUser>(e =>
+        {
+            e.Property(x => x.Email).HasMaxLength(320);
+            e.Property(x => x.PasswordHash).HasMaxLength(500);
+            e.HasIndex(x => x.Email).IsUnique();
+            e.HasOne<Shop>().WithMany().HasForeignKey(x => x.ShopId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

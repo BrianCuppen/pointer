@@ -4,8 +4,83 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- User-facing strings. Neutral culture is Dutch (nl-BE). Add SharedResource.fr.resx etc. for other languages. -->
+  <data name="Admin_BookingPage" xml:space="preserve"><value>Je boekingspagina</value></data>
+  <data name="Admin_Calendar" xml:space="preserve"><value>Agenda</value></data>
+  <data name="Admin_CalendarComingSoon" xml:space="preserve"><value>De agenda volgt binnenkort.</value></data>
+  <data name="Admin_Hours" xml:space="preserve"><value>Openingsuren</value></data>
+  <data name="Admin_Logout" xml:space="preserve"><value>Afmelden</value></data>
+  <data name="Admin_Nav" xml:space="preserve"><value>Beheermenu</value></data>
+  <data name="Admin_Services" xml:space="preserve"><value>Diensten</value></data>
+  <data name="Admin_Settings" xml:space="preserve"><value>Instellingen</value></data>
+  <data name="Admin_TimeOff" xml:space="preserve"><value>Vrije dagen</value></data>
+  <data name="Admin_Title" xml:space="preserve"><value>Beheer</value></data>
   <data name="AppName" xml:space="preserve"><value>Pointer</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Annuleren</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>Online afspraken boeken voor jouw zaak. Binnenkort beschikbaar.</value></data>
-  <data name="ErrorTitle" xml:space="preserve"><value>Er ging iets mis</value></data>
+  <data name="Delete" xml:space="preserve"><value>Verwijderen</value></data>
+  <data name="Edit" xml:space="preserve"><value>Bewerken</value></data>
   <data name="ErrorBody" xml:space="preserve"><value>Probeer het later opnieuw.</value></data>
+  <data name="ErrorTitle" xml:space="preserve"><value>Er ging iets mis</value></data>
+  <data name="Error_Amount" xml:space="preserve"><value>Het bedrag kan niet negatief zijn.</value></data>
+  <data name="Error_CancellationHours" xml:space="preserve"><value>Kies tussen 0 en 336 uur.</value></data>
+  <data name="Error_DateRange" xml:space="preserve"><value>De einddatum moet op of na de begindatum liggen.</value></data>
+  <data name="Error_Deposit" xml:space="preserve"><value>Het voorschot moet tussen 0 en de prijs liggen.</value></data>
+  <data name="Error_Duration" xml:space="preserve"><value>Kies een duur tussen 5 en 480 minuten, in stappen van 5.</value></data>
+  <data name="Error_Email" xml:space="preserve"><value>Dit is geen geldig e-mailadres.</value></data>
+  <data name="Error_Hours" xml:space="preserve"><value>Vul een begin- en einduur in, met het einde na het begin.</value></data>
+  <data name="Error_HoursOverlap" xml:space="preserve"><value>Het tweede blok moet na het eerste beginnen.</value></data>
+  <data name="Error_ReminderHours" xml:space="preserve"><value>Kies tussen 2 en 48 uur.</value></data>
+  <data name="Error_Required" xml:space="preserve"><value>Dit veld is verplicht.</value></data>
+  <data name="Error_StripeAccount" xml:space="preserve"><value>Een Stripe-account begint met acct_.</value></data>
+  <data name="Field_Active" xml:space="preserve"><value>Actief</value></data>
+  <data name="Field_Address" xml:space="preserve"><value>Adres</value></data>
+  <data name="Field_Deposit" xml:space="preserve"><value>Voorschot</value></data>
+  <data name="Field_Duration" xml:space="preserve"><value>Duur</value></data>
+  <data name="Field_Email" xml:space="preserve"><value>E-mailadres</value></data>
+  <data name="Field_FreeCancellationHours" xml:space="preserve"><value>Gratis annuleren tot zoveel uur voor de afspraak</value></data>
+  <data name="Field_NoShowNotice" xml:space="preserve"><value>Stuur de klant een bericht als ik een afspraak als niet opgedaagd markeer</value></data>
+  <data name="Field_NoShowPolicy" xml:space="preserve"><value>Als een klant niet komt opdagen</value></data>
+  <data name="Field_OwnerDailyOverview" xml:space="preserve"><value>Stuur mij elke ochtend om 7 uur de afspraken van de dag</value></data>
+  <data name="Field_OwnerEmail" xml:space="preserve"><value>E-mailadres voor meldingen</value></data>
+  <data name="Field_OwnerInstantEmails" xml:space="preserve"><value>Stuur mij een e-mail bij elke nieuwe afspraak en annulering</value></data>
+  <data name="Field_Password" xml:space="preserve"><value>Wachtwoord</value></data>
+  <data name="Field_Price" xml:space="preserve"><value>Prijs</value></data>
+  <data name="Field_ReminderHours" xml:space="preserve"><value>Herinnering naar de klant, zoveel uur voor de afspraak (2 tot 48)</value></data>
+  <data name="Field_ServiceName" xml:space="preserve"><value>Naam van de dienst</value></data>
+  <data name="Field_ShopName" xml:space="preserve"><value>Naam van de zaak</value></data>
+  <data name="Field_StripeAccount" xml:space="preserve"><value>Stripe-account</value></data>
+  <data name="Hours_Closes" xml:space="preserve"><value>tot</value></data>
+  <data name="Hours_Closes2" xml:space="preserve"><value>tot</value></data>
+  <data name="Hours_Day" xml:space="preserve"><value>Dag</value></data>
+  <data name="Hours_Help" xml:space="preserve"><value>Vul per dag de uren in. Laat een dag leeg als je gesloten bent. Een tweede blok is voor bijvoorbeeld een middagpauze.</value></data>
+  <data name="Hours_Opens" xml:space="preserve"><value>Open van</value></data>
+  <data name="Hours_Opens2" xml:space="preserve"><value>Tweede blok van</value></data>
+  <data name="Login_Failed" xml:space="preserve"><value>E-mailadres of wachtwoord klopt niet.</value></data>
+  <data name="Login_Submit" xml:space="preserve"><value>Aanmelden</value></data>
+  <data name="Login_Title" xml:space="preserve"><value>Aanmelden</value></data>
+  <data name="Minutes" xml:space="preserve"><value>minuten</value></data>
+  <data name="No" xml:space="preserve"><value>Nee</value></data>
+  <data name="NoShow_KeepDeposit" xml:space="preserve"><value>Ik houd het voorschot</value></data>
+  <data name="NoShow_RefundDeposit" xml:space="preserve"><value>Het voorschot wordt terugbetaald</value></data>
+  <data name="Save" xml:space="preserve"><value>Opslaan</value></data>
+  <data name="Saved" xml:space="preserve"><value>Opgeslagen.</value></data>
+  <data name="Services_ActiveHelp" xml:space="preserve"><value>Klanten kunnen deze dienst boeken</value></data>
+  <data name="Services_Add" xml:space="preserve"><value>Dienst toevoegen</value></data>
+  <data name="Services_DepositHelp" xml:space="preserve"><value>Dit bedrag betaalt de klant online bij het boeken. 0 betekent geen voorschot.</value></data>
+  <data name="Services_Edit" xml:space="preserve"><value>Dienst bewerken</value></data>
+  <data name="Services_None" xml:space="preserve"><value>Je hebt nog geen diensten.</value></data>
+  <data name="Settings_Emails" xml:space="preserve"><value>E-mails</value></data>
+  <data name="Settings_Payments" xml:space="preserve"><value>Betalingen</value></data>
+  <data name="Settings_Rules" xml:space="preserve"><value>Regels voor klanten</value></data>
+  <data name="Settings_Shop" xml:space="preserve"><value>Zaak</value></data>
+  <data name="Settings_StripeHelp" xml:space="preserve"><value>Het Stripe-account van je zaak. Het voorschot komt rechtstreeks op dit account.</value></data>
+  <data name="TimeOff_Add" xml:space="preserve"><value>Vrije dagen toevoegen</value></data>
+  <data name="TimeOff_From" xml:space="preserve"><value>Van</value></data>
+  <data name="TimeOff_Help" xml:space="preserve"><value>Op deze dagen kan niemand boeken.</value></data>
+  <data name="TimeOff_None" xml:space="preserve"><value>Er zijn geen vrije dagen gepland.</value></data>
+  <data name="TimeOff_Note" xml:space="preserve"><value>Notitie (optioneel)</value></data>
+  <data name="TimeOff_To" xml:space="preserve"><value>Tot en met</value></data>
+  <data name="TimeOff_Upcoming" xml:space="preserve"><value>Geplande vrije dagen</value></data>
+  <data name="Yes" xml:space="preserve"><value>Ja</value></data>
 </root>

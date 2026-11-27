@@ -1,4 +1,5 @@
 using Pointer.Core.Availability;
+using Pointer.Core.Admin;
 using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 using Pointer.Core.Payments;
@@ -22,6 +23,8 @@ public static class DependencyInjection
         services.Configure<AvailabilityOptions>(configuration.GetSection(AvailabilityOptions.SectionName));
         services.AddScoped<AvailabilityService>();
         services.AddScoped<BookingService>();
+        services.AddScoped<ShopAdminService>();
+        services.AddScoped<ShopProvisioning>();
 
         services.Configure<PlatformFeeOptions>(configuration.GetSection(PlatformFeeOptions.SectionName));
         services.Configure<StripeOptions>(configuration.GetSection(StripeOptions.SectionName));
