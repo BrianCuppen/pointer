@@ -1,0 +1,163 @@
+@page "/about"
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["About_Title"];
+    ViewData["Bleed"] = true;
+    var demo = "/" + Pointer.Web.Setup.DemoSeeder.Slug;
+    const string repo = "https://github.com/BrianCuppen/pointer";
+
+    // One feature row: copy on one side, a framed screenshot on the other.
+    var features = new[]
+    {
+        (Key: "F1", Img: "slots.png", W: 1200, H: 780, Url: "/kapper-demo", Alt: "About_ShotAlt_Slots", Phone: false),
+        (Key: "F2", Img: "checkout.png", W: 1200, H: 780, Url: "/demo-betaling", Alt: "About_ShotAlt_Checkout", Phone: false),
+        (Key: "F3", Img: "calendar.png", W: 1680, H: 1050, Url: "/beheer", Alt: "About_ShotAlt_Calendar", Phone: false),
+        (Key: "F4", Img: "phone.png", W: 3070, H: 1204, Url: "", Alt: "About_ShotAlt_Phone", Phone: true),
+    };
+    var tech = new[]
+    {
+        ("code", ".NET 8 · Razor Pages", "About_Tech_Razor"),
+        ("zap", "htmx", "About_Tech_Htmx"),
+        ("database", "Entity Framework Core", "About_Tech_Ef"),
+        ("database", "PostgreSQL", "About_Tech_Pg"),
+        ("card", "Stripe Connect", "About_Tech_Stripe"),
+        ("mail", "Brevo", "About_Tech_Brevo"),
+        ("settings", "Docker", "About_Tech_Docker"),
+        ("check-circle", "GitHub Actions", "About_Tech_Gha"),
+    };
+}
+<header class="pub-bar about-bar">
+    <a class="wordmark" href="/about">@Icon.Mark() @T["AppName"]</a>
+    <nav class="about-nav" aria-label="@T["About_Title"]">
+        <a href="#functies">@T["About_NavFeatures"]</a>
+        <a href="#hoe">@T["About_NavHow"]</a>
+        <a href="#techniek">@T["About_NavTech"]</a>
+    </nav>
+    <div class="row" style="gap:8px">
+        <a class="btn btn-sm btn-ghost" href="/beheer">@T["Login_Submit"]</a>
+        <a class="btn btn-sm btn-primary" href="@demo">@T["About_TryDemo"]</a>
+    </div>
+</header>
+
+<section class="about-hero">
+    <div class="wrap">
+        <span class="pill rise"><b>@T["About_Pill"]</b> <span class="pill-text">@T["About_PillText"]</span></span>
+        <h1 class="rise rise-1">@Html.Raw(T["About_HeroTitle"].Value)</h1>
+        <p class="lead rise rise-2">@T["About_HeroLead"]</p>
+        <div class="landing-cta rise rise-3">
+            <a class="btn btn-primary btn-lg" href="@demo">@T["About_TryDemo"] @Icon.Svg("arrow-right")</a>
+            <a class="btn btn-lg" href="/beheer">@T["Landing_TryAdmin"]</a>
+        </div>
+        <p class="hero-note rise rise-3">@T["About_HeroNote"]</p>
+    </div>
+    <div class="hero-shot rise rise-4">
+        <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span class="url">/kapper-demo/gegevens</span></div>
+            <img src="~/img/about/booking.png" width="1440" height="900" alt="@T["About_ShotAlt_Booking"]" fetchpriority="high" />
+        </div>
+    </div>
+</section>
+
+<div class="about-band">
+    <div class="wrap">
+        <span>@Icon.Svg("zap") @T["About_Band1"]</span>
+        <span>@Icon.Svg("card") @T["About_Band2"]</span>
+        <span>@Icon.Svg("lock") @T["About_Band3"]</span>
+        <span>@Icon.Svg("shield") @T["About_Band4"]</span>
+    </div>
+</div>
+
+<section class="about-section" id="functies">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="kicker">@T["About_FeaturesKicker"]</span>
+            <h2>@T["About_FeaturesTitle"]</h2>
+            <p>@T["About_FeaturesLead"]</p>
+        </div>
+        @foreach (var (f, i) in features.Select((f, i) => (f, i)))
+        {
+            <div class="feature-row @(i % 2 == 1 ? "flip" : null)">
+                <div class="feature-copy">
+                    <span class="eyebrow">@T[$"About_{f.Key}_Kicker"]</span>
+                    <h3>@T[$"About_{f.Key}_Title"]</h3>
+                    <p>@T[$"About_{f.Key}_Body"]</p>
+                    <ul class="checks">
+                        @for (var c = 1; c <= 3; c++)
+                        {
+                            <li>@Icon.Svg("check") <span>@T[$"About_{f.Key}_C{c}"]</span></li>
+                        }
+                    </ul>
+                </div>
+                @if (f.Phone)
+                {
+                    <img class="shot-phone" src="~/img/about/@f.Img" width="@f.W" height="@f.H" alt="@T[f.Alt]" loading="lazy" />
+                }
+                else
+                {
+                    <div class="browser">
+                        <div class="browser-bar"><i></i><i></i><i></i><span class="url">@f.Url</span></div>
+                        <img src="~/img/about/@f.Img" width="@f.W" height="@f.H" alt="@T[f.Alt]" loading="lazy" />
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<section class="about-section tint" id="hoe">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="kicker">@T["About_HowKicker"]</span>
+            <h2>@T["About_HowTitle"]</h2>
+        </div>
+        <ol class="how">
+            @for (var s = 1; s <= 3; s++)
+            {
+                <li>
+                    <h3>@T[$"About_How{s}_Title"]</h3>
+                    <p>@T[$"About_How{s}_Body"]</p>
+                </li>
+            }
+        </ol>
+        <div class="numbers" style="margin-top:24px">
+            <div><b>0</b><span>@T["About_N1"]</span></div>
+            <div><b>3</b><span>@T["About_N2"]</span></div>
+            <div><b>€ 0</b><span>@T["About_N3"]</span></div>
+            <div><b>115+</b><span>@T["About_N4"]</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section" id="techniek">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="kicker">@T["About_TechKicker"]</span>
+            <h2>@T["About_TechTitle"]</h2>
+            <p>@T["About_TechLead"]</p>
+        </div>
+        <ul class="tech">
+            @foreach (var (icon, name, role) in tech)
+            {
+                <li><span class="icon-box">@Icon.Svg(icon)</span><div><b>@name</b><span>@T[role]</span></div></li>
+            }
+        </ul>
+    </div>
+</section>
+
+<section class="about-section" style="padding-top:0;border-top:0">
+    <div class="wrap">
+        <div class="cta-panel">
+            <h2>@T["About_CtaTitle"]</h2>
+            <p>@T["About_CtaBody"]</p>
+            <div class="landing-cta">
+                <a class="btn btn-primary btn-lg" href="@demo">@T["About_TryDemo"] @Icon.Svg("arrow-right")</a>
+                <a class="btn btn-lg" href="@repo" rel="noopener">@Icon.Svg("code") @T["About_CtaCode"]</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer" style="border-top:1px solid var(--line)">
+    <span class="powered">@Icon.Mark() @T["Footer_PoweredBy"]</span>
+    <span class="row" style="gap:16px"><a href="@repo" rel="noopener">GitHub</a><a href="/privacy">@T["Book_PrivacyLink"]</a></span>
+</footer>

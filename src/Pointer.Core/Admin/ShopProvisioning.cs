@@ -13,7 +13,7 @@ public sealed class ShopProvisioning(PointerDbContext db, TimeProvider clock)
     /// <summary>First path segments the app uses itself; a shop slug cannot take them.</summary>
     public static readonly IReadOnlySet<string> ReservedSlugs = new HashSet<string>
     {
-        "beheer", "annuleren", "webhooks", "healthz", "embed", "embed.js", "lib", "css", "js", "privacy", "error", "admin", "api",
+        "beheer", "annuleren", "webhooks", "healthz", "embed", "embed.js", "lib", "css", "js", "privacy", "error", "admin", "api", "about", "img", "fonts", "fout", "demo-betaling",
     };
 
     public async Task<Shop> CreateAsync(string slug, string name, string ownerEmail, string passwordHash, CancellationToken ct = default)

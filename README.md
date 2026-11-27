@@ -61,6 +61,7 @@ docker compose up --build
 
 When the log says `Now listening`, open:
 
+- Product page: http://localhost:8080/about
 - Booking page: http://localhost:8080/kapper-demo
 - Admin: http://localhost:8080/beheer, signing in as `demo@pointer.test` with password `demo-only-password`
 
