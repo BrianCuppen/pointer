@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Customer and owner emails. Neutral culture is Dutch. Placeholders are {Name}; keep them when translating. -->
+  <data name="Subject_CustomerConfirmation" xml:space="preserve"><value>Bevestiging: {Service} op {Date} om {Time}</value></data>
+  <data name="Body_CustomerConfirmation" xml:space="preserve"><value>Hallo {CustomerName},
+
+Je afspraak bij {ShopName} is bevestigd.
+
+Wat: {Service}
+Wanneer: {Date} om {Time}
+Waar: {Address}
+Betaald voorschot: {Deposit}
+
+{NoShowRule}
+{CancellationRule}
+
+Annuleren: {CancelUrl}
+
+Tot dan!
+{ShopName}</value></data>
+  <data name="Subject_CustomerReminder" xml:space="preserve"><value>Herinnering: {Service} op {Date} om {Time}</value></data>
+  <data name="Body_CustomerReminder" xml:space="preserve"><value>Hallo {CustomerName},
+
+Een herinnering aan je afspraak bij {ShopName}.
+
+Wat: {Service}
+Wanneer: {Date} om {Time}
+Waar: {Address}
+{CancelLine}
+Tot dan!
+{ShopName}</value></data>
+  <data name="ReminderCancelLine" xml:space="preserve"><value>
+Kan je niet komen? Annuleer gratis tot {FreeCancelUntil}: {CancelUrl}
+</value></data>
+  <data name="Subject_CustomerCancellation" xml:space="preserve"><value>Je afspraak op {Date} is geannuleerd</value></data>
+  <data name="Body_CustomerCancellation" xml:space="preserve"><value>Hallo {CustomerName},
+
+Je afspraak bij {ShopName} voor {Service} op {Date} om {Time} is geannuleerd.
+
+{RefundStatus}
+
+Nieuwe afspraak maken: {BookingUrl}
+
+{ShopName}</value></data>
+  <data name="Subject_CustomerPaymentFailed" xml:space="preserve"><value>Je afspraak bij {ShopName} is niet doorgegaan</value></data>
+  <data name="Body_CustomerPaymentFailed" xml:space="preserve"><value>Hallo {CustomerName},
+
+De betaling van het voorschot voor {Service} op {Date} om {Time} is niet gelukt, of het moment was intussen niet meer vrij. Je afspraak is daarom niet bevestigd.
+
+{RefundStatus}
+
+Kies een nieuw moment: {BookingUrl}
+
+{ShopName}</value></data>
+  <data name="Subject_CustomerNoShow" xml:space="preserve"><value>Je was niet aanwezig op je afspraak van {Date}</value></data>
+  <data name="Body_CustomerNoShow" xml:space="preserve"><value>Hallo {CustomerName},
+
+Je had een afspraak bij {ShopName} voor {Service} op {Date} om {Time}, maar we hebben je niet gezien.
+
+{NoShowOutcome}
+
+Nieuwe afspraak maken: {BookingUrl}
+
+{ShopName}</value></data>
+  <data name="Subject_OwnerNewBooking" xml:space="preserve"><value>Nieuwe afspraak: {Service} op {Date} om {Time}</value></data>
+  <data name="Body_OwnerNewBooking" xml:space="preserve"><value>Nieuwe afspraak bij {ShopName}.
+
+Wat: {Service}
+Wanneer: {Date} om {Time}
+Klant: {CustomerName}, {CustomerEmail}{CustomerPhoneSuffix}
+Voorschot betaald: {Deposit}</value></data>
+  <data name="Subject_OwnerCancellation" xml:space="preserve"><value>Geannuleerd: {Service} op {Date} om {Time}</value></data>
+  <data name="Body_OwnerCancellation" xml:space="preserve"><value>{CustomerName} heeft de afspraak voor {Service} op {Date} om {Time} geannuleerd.
+
+{OwnerDepositOutcome}</value></data>
+  <data name="Subject_OwnerDailyOverview" xml:space="preserve"><value>Je afspraken voor {Date}</value></data>
+  <data name="Body_OwnerDailyOverview" xml:space="preserve"><value>Goedemorgen,
+
+Je afspraken bij {ShopName} voor {Date}:
+
+{Lines}</value></data>
+  <data name="OverviewLine" xml:space="preserve"><value>{Time}  {Service}  {CustomerName}</value></data>
+  <data name="NoShowRule_KeepDeposit" xml:space="preserve"><value>Kom je niet opdagen zonder te annuleren, dan houdt {ShopName} het voorschot.</value></data>
+  <data name="NoShowRule_RefundDeposit" xml:space="preserve"><value>Kom je niet opdagen, dan krijg je het voorschot toch terug.</value></data>
+  <data name="CancellationRule" xml:space="preserve"><value>Gratis annuleren kan tot {FreeCancelUntil}.</value></data>
+  <data name="CancellationRule_None" xml:space="preserve"><value>Gratis annuleren is niet mogelijk.</value></data>
+  <data name="Refund_Refunded" xml:space="preserve"><value>Je voorschot van {Deposit} wordt terugbetaald.</value></data>
+  <data name="Refund_Kept" xml:space="preserve"><value>Het voorschot van {Deposit} wordt niet terugbetaald, volgens de annuleringsregels.</value></data>
+  <data name="Refund_NoDeposit" xml:space="preserve"><value>Er was geen voorschot betaald.</value></data>
+  <data name="NoShow_Kept" xml:space="preserve"><value>Volgens de regels van {ShopName} wordt het voorschot van {Deposit} niet terugbetaald.</value></data>
+  <data name="NoShow_Refunded" xml:space="preserve"><value>Je voorschot van {Deposit} wordt terugbetaald.</value></data>
+  <data name="Owner_DepositRefunded" xml:space="preserve"><value>Het voorschot van {Deposit} wordt terugbetaald aan de klant.</value></data>
+  <data name="Owner_DepositKept" xml:space="preserve"><value>Het voorschot van {Deposit} blijft bij jou.</value></data>
+  <data name="Owner_NoDeposit" xml:space="preserve"><value>Er was geen voorschot.</value></data>
+  <data name="NoAddress" xml:space="preserve"><value>-</value></data>
+  <data name="IcsSummary" xml:space="preserve"><value>{Service} bij {ShopName}</value></data>
+</root>

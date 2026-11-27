@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pointer.Core.Data;
 using Pointer.Core.Domain;
+using Pointer.Core.Notifications;
 
 namespace Pointer.Core.Payments;
 
@@ -22,6 +23,7 @@ public abstract record StartCheckoutResult
 public sealed class DepositService(
     PointerDbContext db,
     IPaymentGateway gateway,
+    NotificationOutbox notifications,
     TimeProvider clock,
     IOptions<PlatformFeeOptions> fees)
 {
@@ -45,9 +47,13 @@ public sealed class DepositService(
 
         if (booking.DepositCents == 0)
         {
+            var owner = await db.Shops.AsNoTracking().FirstAsync(s => s.Id == booking.ShopId, ct);
+            await using var tx = await db.Database.BeginTransactionAsync(ct);
             booking.Status = BookingStatus.Confirmed;
             booking.HoldExpiresUtc = null;
             await db.SaveChangesAsync(ct);
+            await notifications.OnConfirmedAsync(owner, booking, ct);
+            await tx.CommitAsync(ct);
             return new StartCheckoutResult.ConfirmedWithoutDeposit();
         }
 

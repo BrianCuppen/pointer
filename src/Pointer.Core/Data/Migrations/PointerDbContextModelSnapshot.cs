@@ -30,6 +30,12 @@ namespace Pointer.Core.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("CancelToken")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("cancel_token");
+
                     b.Property<DateTime?>("CancelledUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("cancelled_utc");
@@ -102,6 +108,10 @@ namespace Pointer.Core.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_bookings");
 
+                    b.HasIndex("CancelToken")
+                        .IsUnique()
+                        .HasDatabaseName("ix_bookings_cancel_token");
+
                     b.HasIndex("ShopId", "ServiceId")
                         .HasDatabaseName("ix_bookings_shop_id_service_id");
 
@@ -119,6 +129,82 @@ namespace Pointer.Core.Data.Migrations
 
                             t.HasCheckConstraint("ck_bookings_order", "end_utc > start_utc");
                         });
+                });
+
+            modelBuilder.Entity("Pointer.Core.Domain.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer")
+                        .HasColumnName("attempts");
+
+                    b.Property<Guid?>("BookingId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("booking_id");
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_utc");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("last_error");
+
+                    b.Property<DateTime?>("NotBeforeUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("not_before_utc");
+
+                    b.Property<DateOnly?>("OverviewDate")
+                        .HasColumnType("date")
+                        .HasColumnName("overview_date");
+
+                    b.Property<string>("Recipient")
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)")
+                        .HasColumnName("recipient");
+
+                    b.Property<DateTime?>("SentUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_utc");
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("shop_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_notifications");
+
+                    b.HasIndex("BookingId", "Type")
+                        .IsUnique()
+                        .HasDatabaseName("ix_notifications_booking_id_type")
+                        .HasFilter("booking_id IS NOT NULL");
+
+                    b.HasIndex("Status", "CreatedUtc")
+                        .HasDatabaseName("ix_notifications_status_created_utc");
+
+                    b.HasIndex("ShopId", "Type", "OverviewDate")
+                        .IsUnique()
+                        .HasDatabaseName("ix_notifications_shop_id_type_overview_date")
+                        .HasFilter("overview_date IS NOT NULL");
+
+                    b.ToTable("notifications", (string)null);
                 });
 
             modelBuilder.Entity("Pointer.Core.Domain.OpeningHours", b =>
@@ -326,6 +412,11 @@ namespace Pointer.Core.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("address");
+
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_utc");
@@ -346,16 +437,37 @@ namespace Pointer.Core.Data.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("name");
 
+                    b.Property<bool>("NoShowNoticeEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("no_show_notice_enabled");
+
                     b.Property<string>("NoShowPolicy")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)")
                         .HasColumnName("no_show_policy");
 
+                    b.Property<bool>("OwnerDailyOverview")
+                        .HasColumnType("boolean")
+                        .HasColumnName("owner_daily_overview");
+
+                    b.Property<string>("OwnerEmail")
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)")
+                        .HasColumnName("owner_email");
+
+                    b.Property<bool>("OwnerInstantEmails")
+                        .HasColumnType("boolean")
+                        .HasColumnName("owner_instant_emails");
+
                     b.Property<string>("PaymentAccountId")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("payment_account_id");
+
+                    b.Property<int>("ReminderHoursBefore")
+                        .HasColumnType("integer")
+                        .HasColumnName("reminder_hours_before");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -379,6 +491,8 @@ namespace Pointer.Core.Data.Migrations
                     b.ToTable("shops", null, t =>
                         {
                             t.HasCheckConstraint("ck_shops_free_cancellation_minutes", "free_cancellation_minutes >= 0");
+
+                            t.HasCheckConstraint("ck_shops_reminder_hours", "reminder_hours_before BETWEEN 2 AND 48");
 
                             t.HasCheckConstraint("ck_shops_slug_format", "slug ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?$'");
                         });
@@ -485,6 +599,22 @@ namespace Pointer.Core.Data.Migrations
                     b.Navigation("Service");
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("Pointer.Core.Domain.Notification", b =>
+                {
+                    b.HasOne("Pointer.Core.Domain.Booking", null)
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_notifications_bookings_booking_id");
+
+                    b.HasOne("Pointer.Core.Domain.Shop", null)
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_shops_shop_id");
                 });
 
             modelBuilder.Entity("Pointer.Core.Domain.OpeningHours", b =>
