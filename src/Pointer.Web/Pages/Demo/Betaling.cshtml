@@ -3,43 +3,64 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 @{
     ViewData["Title"] = T["DemoPay_Title"];
-    ViewData["Narrow"] = true;
+    ViewData["Bleed"] = true;
+    var booking = Model.Payment.Booking!;
+    var service = booking.Service!;
+    var start = Pointer.Core.Availability.ShopTime.ToLocal(booking.StartUtc, Pointer.Core.Availability.ShopTime.FindZone(Model.Shop.TimeZoneId));
 }
-<div class="checkout rise">
-    <div class="demo-ribbon" role="note">@Icon.Svg("info") <span>@T["DemoPay_Notice"]</span></div>
-    <div class="card">
-        <div class="checkout-head">
-            <span class="row" style="gap:10px"><span class="mini-mono monogram" style="width:36px;border-radius:11px;font-size:1rem">@(Model.Shop.Name.Length > 0 ? char.ToUpperInvariant(Model.Shop.Name[0]) : 'P')</span> <strong>@Model.Shop.Name</strong></span>
-            <span class="badge badge-warn">@T["DemoPay_Mode"]</span>
+<div class="split">
+    <aside class="split-pane split-aside">
+        <div class="split-inner rise">
+            <div class="row-between" style="margin-bottom:clamp(20px,4vw,40px)">
+                <partial name="/Pages/Boeken/_AsideHead.cshtml" model="Model.Shop" />
+                <span class="badge badge-warn">@T["DemoPay_Mode"]</span>
+            </div>
+            <div class="aside-title">@T["DemoPay_For", service.Name]</div>
+            <div class="aside-amount">@Money.Format(Model.Payment.AmountCents)</div>
+            <div class="aside-block collapse-sm">
+                <ul class="line-items">
+                    <li class="line-item">
+                        <span class="thumb">@Icon.Svg("scissors")</span>
+                        <div class="grow">
+                            <div class="name">@service.Name</div>
+                            <div class="meta">@start.ToString("dddd d MMMM · HH:mm")</div>
+                        </div>
+                        <span class="amt">@Money.Format(Model.Payment.AmountCents)</span>
+                    </li>
+                </ul>
+                <dl class="totals" style="margin-top:6px">
+                    <div class="total"><dt>@T["Book_PayNow"]</dt><dd>@Money.Format(Model.Payment.AmountCents)</dd></div>
+                </dl>
+            </div>
+            <partial name="/Pages/Boeken/_SplitFoot.cshtml" />
         </div>
-        <div class="checkout-amount">
-            <div class="muted" style="font-size:.875rem">@T["DemoPay_For", Model.Payment.Booking!.Service!.Name]</div>
-            <div class="amt">@Money.Format(Model.Payment.AmountCents)</div>
-        </div>
-        @if (Model.Payment.Status == Pointer.Core.Domain.PaymentStatus.Pending)
-        {
-            <form method="post" asp-page-handler="Pay">
-                <fieldset class="methods">
-                    <legend class="label" style="margin-bottom:10px">@T["DemoPay_Method"]</legend>
-                    <label class="method"><input type="radio" name="method" value="bancontact" checked /><span class="radio"></span><span class="name">Bancontact</span><span class="logo logo-bancontact">BC</span></label>
-                    <label class="method"><input type="radio" name="method" value="ideal" /><span class="radio"></span><span class="name">iDEAL</span><span class="logo logo-ideal">iDEAL</span></label>
-                    <label class="method"><input type="radio" name="method" value="card" /><span class="radio"></span><span class="name">@T["DemoPay_Card"]</span><span class="logo logo-card">VISA</span></label>
-                </fieldset>
-                <div class="checkout-actions">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">@Icon.Svg("lock") @T["DemoPay_Pay"]</button>
+    </aside>
+
+    <div class="split-pane split-main">
+        <div class="split-inner rise rise-1">
+            <div class="demo-ribbon" role="note">@Icon.Svg("info") <span>@T["DemoPay_Notice"]</span></div>
+            @if (Model.Payment.Status == Pointer.Core.Domain.PaymentStatus.Pending)
+            {
+                <form method="post" asp-page-handler="Pay" style="margin-top:28px">
+                    <h1 class="pane-title" style="margin-bottom:16px">@T["DemoPay_Method"]</h1>
+                    <fieldset class="methods">
+                        <legend class="visually-hidden">@T["DemoPay_Method"]</legend>
+                        <label class="method"><input type="radio" name="method" value="bancontact" checked /><span class="radio"></span><span class="name">Bancontact</span><span class="logo logo-bancontact">BC</span></label>
+                        <label class="method"><input type="radio" name="method" value="ideal" /><span class="radio"></span><span class="name">iDEAL</span><span class="logo logo-ideal">iDEAL</span></label>
+                        <label class="method"><input type="radio" name="method" value="card" /><span class="radio"></span><span class="name">@T["DemoPay_Card"]</span><span class="logo logo-card">VISA</span></label>
+                    </fieldset>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:20px">@Icon.Svg("lock") @T["DemoPay_Pay"] · @Money.Format(Model.Payment.AmountCents)</button>
+                </form>
+                <div class="checkout-alt">
+                    <form method="post" asp-page-handler="Fail"><button type="submit" class="btn btn-sm btn-ghost">@T["DemoPay_Fail"]</button></form>
+                    <form method="post" asp-page-handler="Cancel"><button type="submit" class="btn btn-sm btn-ghost">@T["DemoPay_Cancel"]</button></form>
                 </div>
-            </form>
-            <div class="card-foot checkout-alt">
-                <form method="post" asp-page-handler="Fail"><button type="submit" class="btn btn-sm btn-ghost">@T["DemoPay_Fail"]</button></form>
-                <form method="post" asp-page-handler="Cancel"><button type="submit" class="btn btn-sm btn-ghost">@T["DemoPay_Cancel"]</button></form>
-            </div>
-        }
-        else
-        {
-            <div class="checkout-actions">
-                <a class="btn btn-block" asp-page="/Boeken/Bevestiging" asp-route-slug="@Model.Shop.Slug" asp-route-token="@Model.Payment.Booking.CancelToken">@T["DemoPay_Done"]</a>
-            </div>
-        }
+            }
+            else
+            {
+                <a class="btn btn-block btn-lg" style="margin-top:28px" asp-page="/Boeken/Bevestiging" asp-route-slug="@Model.Shop.Slug" asp-route-token="@booking.CancelToken">@T["DemoPay_Done"]</a>
+            }
+            <div class="trust">@Icon.Svg("lock") @T["DemoPay_Footer"]</div>
+        </div>
     </div>
-    <div class="trust">@Icon.Svg("lock") @T["DemoPay_Footer"]</div>
 </div>

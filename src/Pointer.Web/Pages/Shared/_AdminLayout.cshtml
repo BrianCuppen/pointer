@@ -4,6 +4,8 @@
     string? Current(params string[] prefixes) =>
         prefixes.Any(p => p == "/beheer" ? path is "/beheer" or "/beheer/index" : path.StartsWith(p)) ? "page" : null;
     var signedIn = User.Identity?.IsAuthenticated == true;
+    var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+    var initial = email.Length > 0 ? char.ToUpperInvariant(email[0]) : '?';
 }
 <!DOCTYPE html>
 <html lang="nl">
@@ -11,8 +13,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1117" media="(prefers-color-scheme: dark)" />
     <title>@ViewData["Title"] · @T["Admin_Title"]</title>
     <link rel="preload" href="~/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -48,6 +50,10 @@
                     }
                 </ul>
                 <div class="sidebar-foot">
+                    <div class="row" style="gap:10px;padding:6px 10px 10px;flex-wrap:nowrap">
+                        <span class="avatar" aria-hidden="true">@initial</span>
+                        <span class="grow" style="font-size:.8125rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@email</span>
+                    </div>
                     <form method="post" asp-page="/Beheer/Uitloggen" class="nav">
                         <button type="submit" data-no-busy>@Icon.Svg("log-out") @T["Admin_Logout"]</button>
                     </form>
@@ -55,8 +61,16 @@
             </aside>
             <div>
                 <header class="topbar">
-                    <a class="wordmark" asp-page="/Beheer/Index">@Icon.Mark() @T["AppName"]</a>
-                    <details class="mobile-nav">
+                    <a class="wordmark only-sm" asp-page="/Beheer/Index">@Icon.Mark() @T["AppName"]</a>
+                    <div class="crumbs only-lg">
+                        <span>@T["Admin_Title"]</span>
+                        @Icon.Svg("chevron-right")
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="actions only-lg">
+                        <span class="avatar" title="@email" aria-hidden="true">@initial</span>
+                    </div>
+                    <details class="mobile-nav only-sm">
                         <summary class="btn btn-ghost btn-icon" aria-label="@T["Admin_Nav"]">@Icon.Svg("menu")</summary>
                         <div class="sheet">
                             <ul class="nav">

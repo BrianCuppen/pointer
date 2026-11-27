@@ -1,0 +1,6 @@
+@model Pointer.Core.Domain.Shop
+@* Shop identity at the top of the summary pane in the booking flow and checkout. *@
+<div class="aside-head">
+    <div class="monogram" aria-hidden="true" style="width:32px;height:32px;border-radius:8px;font-size:.9375rem">@(Model.Name.Length > 0 ? char.ToUpperInvariant(Model.Name[0]) : 'P')</div>
+    <a asp-page="/Boeken/Index" asp-route-slug="@Model.Slug" class="shop-name">@Model.Name</a>
+</div>

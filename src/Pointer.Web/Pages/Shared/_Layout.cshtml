@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1117" media="(prefers-color-scheme: dark)" />
     <title>@(ViewData["Title"] is string title ? $"{title} · " : "")@T["AppName"]</title>
     <link rel="preload" href="~/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -14,13 +14,30 @@
 <body>
     <a class="skip-link" href="#content">@T["SkipToContent"]</a>
     <div class="site">
-        <main id="content" class="site-main @(ViewData["Narrow"] is true ? "narrow" : "")">
+        @if (ViewData["Bleed"] is not true)
+        {
+            <header class="pub-bar">
+                @if (ViewData["BarShop"] is string barShop)
+                {
+                    <span class="row" style="gap:10px"><span class="monogram" aria-hidden="true" style="width:28px;height:28px;border-radius:7px;font-size:.8125rem">@(barShop.Length > 0 ? char.ToUpperInvariant(barShop[0]) : 'P')</span><span class="shop-name">@barShop</span></span>
+                }
+                else
+                {
+                    <a class="wordmark" href="/">@Icon.Mark() @T["AppName"]</a>
+                }
+            </header>
+        }
+        @* Bleed pages (booking flow, checkout) use the whole screen and carry their own footer. *@
+        <main id="content" class="site-main @(ViewData["Bleed"] is true ? "bleed" : ViewData["Narrow"] is true ? "narrow" : "")">
             @RenderBody()
         </main>
-        <footer class="site-footer">
-            <span class="powered">@Icon.Mark() @T["Footer_PoweredBy"]</span>
-            <a href="/privacy">@T["Book_PrivacyLink"]</a>
-        </footer>
+        @if (ViewData["Bleed"] is not true)
+        {
+            <footer class="site-footer">
+                <span class="powered">@Icon.Mark() @T["Footer_PoweredBy"]</span>
+                <a href="/privacy">@T["Book_PrivacyLink"]</a>
+            </footer>
+        }
     </div>
     <script src="~/lib/htmx/htmx.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

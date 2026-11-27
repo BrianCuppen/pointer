@@ -4,49 +4,103 @@
 @inject IConfiguration Config
 @{
     var demo = Config.GetValue<bool>("Demo:Seed");
+    ViewData["Bleed"] = true;
 }
-<header style="padding-top:24px">
+<header class="pub-bar">
     <span class="wordmark">@Icon.Mark() @T["AppName"]</span>
-</header>
-<section class="landing-hero">
-    <span class="eyebrow rise">@Icon.Svg("sparkle") @T["Landing_Eyebrow"]</span>
-    <h1 class="rise rise-1" style="margin-top:16px">@Html.Raw(T["Landing_Title"].Value)</h1>
-    <p class="lead rise rise-2">@T["Landing_Lead"]</p>
     @if (demo)
     {
-        <div class="landing-cta rise rise-3">
-            <a class="btn btn-primary btn-lg" href="/@Pointer.Web.Setup.DemoSeeder.Slug">@T["Landing_TryBooking"] @Icon.Svg("arrow-right")</a>
-            <a class="btn btn-lg" href="/beheer">@T["Landing_TryAdmin"]</a>
+        <a class="btn btn-sm" href="/beheer">@Icon.Svg("lock") @T["Login_Submit"]</a>
+    }
+</header>
+
+<div class="site-main">
+    <section class="landing">
+        <div>
+            <span class="eyebrow rise">@Icon.Svg("sparkle") @T["Landing_Eyebrow"]</span>
+            <h1 class="rise rise-1" style="margin-top:16px">@Html.Raw(T["Landing_Title"].Value)</h1>
+            <p class="lead rise rise-2">@T["Landing_Lead"]</p>
+            @if (demo)
+            {
+                <div class="landing-cta rise rise-3">
+                    <a class="btn btn-primary btn-lg" href="/@Pointer.Web.Setup.DemoSeeder.Slug">@T["Landing_TryBooking"] @Icon.Svg("arrow-right")</a>
+                    <a class="btn btn-lg" href="/beheer">@T["Landing_TryAdmin"]</a>
+                </div>
+            }
+            else
+            {
+                <p class="rise rise-3" style="margin-top:24px">@T["ComingSoon"]</p>
+            }
         </div>
-    }
-    else
-    {
-        <p class="rise rise-3" style="margin-top:24px">@T["ComingSoon"]</p>
-    }
-</section>
-<ul class="features">
-    <li class="card feature rise rise-2">
-        <span class="icon-box">@Icon.Svg("calendar")</span>
-        <h3>@T["Landing_F1_Title"]</h3>
-        <p>@T["Landing_F1_Body"]</p>
-    </li>
-    <li class="card feature rise rise-3">
-        <span class="icon-box">@Icon.Svg("euro")</span>
-        <h3>@T["Landing_F2_Title"]</h3>
-        <p>@T["Landing_F2_Body"]</p>
-    </li>
-    <li class="card feature rise rise-4">
-        <span class="icon-box">@Icon.Svg("shield")</span>
-        <h3>@T["Landing_F3_Title"]</h3>
-        <p>@T["Landing_F3_Body"]</p>
-    </li>
-</ul>
-<section style="margin-top:40px" class="rise rise-4">
-    <h2 class="muted" style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px">@T["Landing_Stack"]</h2>
-    <ul class="stack-list">
-        @foreach (var tech in new[] { ".NET 8", "ASP.NET Core Razor Pages", "htmx", "Entity Framework Core", "PostgreSQL", "Stripe Connect", "Brevo", "Docker", "GitHub Actions" })
-        {
-            <li class="chip">@tech</li>
-        }
+
+        @* A static, illustrative preview of the booking page. Decorative only. *@
+        <div class="mock rise rise-2" aria-hidden="true">
+            <div class="mock-window">
+                <div class="mock-bar"><i></i><i></i><i></i></div>
+                <div class="mock-body">
+                    <div class="mock-left">
+                        <div class="row" style="gap:8px"><span class="monogram" style="width:24px;height:24px;border-radius:6px;font-size:.75rem">K</span><span class="shop-name" style="font-size:.8125rem">Kapper Demo</span></div>
+                        <div style="margin-top:8px">
+                            <div class="aside-title" style="font-size:.75rem">@T["Book_PayNow"]</div>
+                            <div class="aside-amount" style="font-size:1.5rem">€ 10,00</div>
+                        </div>
+                        <div class="line-item" style="padding:10px 0 0">
+                            <span class="thumb" style="width:30px;height:30px">@Icon.Svg("scissors")</span>
+                            <div class="grow"><div class="name" style="font-size:.75rem">Knippen en baard</div><div class="meta" style="font-size:.6875rem">45 @T["Minutes"]</div></div>
+                            <span class="amt" style="font-size:.75rem">€ 35,00</span>
+                        </div>
+                    </div>
+                    <div class="mock-right">
+                        <div class="section-title" style="margin:0"><h3 style="font-size:.8125rem">@T["Book_ChooseDay"]</h3></div>
+                        <ul class="days" style="padding:0;gap:4px">
+                            @foreach (var (d, n, on) in new[] { ("di", 2, false), ("wo", 3, true), ("do", 4, false), ("vr", 5, false) })
+                            {
+                                <li><span class="day" style="width:44px;padding:5px 0" aria-current="@(on ? "date" : null)"><span class="dow">@d</span><span class="dnum" style="font-size:.9375rem">@n</span></span></li>
+                            }
+                        </ul>
+                        <ul class="slots">
+                            @foreach (var t in new[] { "09:00", "09:45", "10:15", "11:00", "13:30", "14:15" })
+                            {
+                                <li><span class="slot">@t</span></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="mock-float"><span class="dot">@Icon.Svg("check")</span> @T["Landing_MockConfirmed"]</div>
+        </div>
+    </section>
+
+    <ul class="features">
+        <li class="feature rise rise-2">
+            <span class="icon-box">@Icon.Svg("calendar")</span>
+            <h3>@T["Landing_F1_Title"]</h3>
+            <p>@T["Landing_F1_Body"]</p>
+        </li>
+        <li class="feature rise rise-3">
+            <span class="icon-box">@Icon.Svg("euro")</span>
+            <h3>@T["Landing_F2_Title"]</h3>
+            <p>@T["Landing_F2_Body"]</p>
+        </li>
+        <li class="feature rise rise-4">
+            <span class="icon-box">@Icon.Svg("shield")</span>
+            <h3>@T["Landing_F3_Title"]</h3>
+            <p>@T["Landing_F3_Body"]</p>
+        </li>
     </ul>
-</section>
+
+    <section style="margin-top:24px;padding-top:28px;border-top:1px solid var(--line)" class="rise rise-4">
+        <h2 class="kicker" style="margin-bottom:12px">@T["Landing_Stack"]</h2>
+        <ul class="stack-list">
+            @foreach (var tech in new[] { ".NET 8", "ASP.NET Core Razor Pages", "htmx", "Entity Framework Core", "PostgreSQL", "Stripe Connect", "Brevo", "Docker", "GitHub Actions" })
+            {
+                <li class="chip">@tech</li>
+            }
+        </ul>
+    </section>
+</div>
+
+<footer class="site-footer">
+    <span class="powered">@Icon.Mark() @T["Footer_PoweredBy"]</span>
+    <a href="/privacy">@T["Book_PrivacyLink"]</a>
+</footer>

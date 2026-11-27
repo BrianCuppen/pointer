@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = T["CancelPage_Title"];
     ViewData["Narrow"] = true;
+    ViewData["BarShop"] = Model.ShopName;
     var start = Model.Local(Model.Booking.StartUtc);
 }
 <section class="result">

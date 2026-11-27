@@ -43,7 +43,7 @@ Each shop gets a hosted booking page and a one-line embed for its own website. C
 ## Tech stack
 
 - .NET 8, ASP.NET Core Razor Pages, htmx (vendored) for the live time picker
-- A hand-written CSS design system (`wwwroot/css/site.css`): tokens, light and dark mode, self-hosted Inter and Fraunces fonts, no CSS framework
+- A hand-written CSS design system (`wwwroot/css/site.css`): tokens, light and dark mode, a self-hosted Inter font, no CSS framework
 - Entity Framework Core with PostgreSQL 16 (Npgsql, snake_case naming)
 - Stripe.net (Connect, Checkout, webhooks), Brevo transactional email over HTTP
 - xUnit tests against a real PostgreSQL database (no in-memory fakes for the data layer)
