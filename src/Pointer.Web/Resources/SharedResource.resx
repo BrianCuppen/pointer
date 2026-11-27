@@ -49,6 +49,28 @@
   <data name="Book_SubmitPay" xml:space="preserve"><value>Verder naar betalen ({0})</value></data>
   <data name="Book_What" xml:space="preserve"><value>Wat</value></data>
   <data name="Book_When" xml:space="preserve"><value>Wanneer</value></data>
+  <data name="Calendar_Actions" xml:space="preserve"><value>Acties</value></data>
+  <data name="Calendar_Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="Calendar_CancelFor" xml:space="preserve"><value>Afspraak van {0} annuleren</value></data>
+  <data name="Calendar_Cancelled" xml:space="preserve"><value>De afspraak is geannuleerd en het voorschot wordt terugbetaald.</value></data>
+  <data name="Calendar_Completed" xml:space="preserve"><value>Gekomen</value></data>
+  <data name="Calendar_CompletedFor" xml:space="preserve"><value>{0} is gekomen</value></data>
+  <data name="Calendar_Customer" xml:space="preserve"><value>Klant</value></data>
+  <data name="Calendar_Deposit" xml:space="preserve"><value>Voorschot {0}</value></data>
+  <data name="Calendar_MarkedCompleted" xml:space="preserve"><value>Gemarkeerd als gekomen.</value></data>
+  <data name="Calendar_MarkedNoShow" xml:space="preserve"><value>Gemarkeerd als niet opgedaagd.</value></data>
+  <data name="Calendar_Next" xml:space="preserve"><value>Volgende week</value></data>
+  <data name="Calendar_NoBookings" xml:space="preserve"><value>Geen afspraken.</value></data>
+  <data name="Calendar_NoShow" xml:space="preserve"><value>Niet opgedaagd</value></data>
+  <data name="Calendar_NoShowFor" xml:space="preserve"><value>{0} is niet opgedaagd</value></data>
+  <data name="Calendar_NotAllowed" xml:space="preserve"><value>Dat kan niet meer voor deze afspraak.</value></data>
+  <data name="Calendar_Previous" xml:space="preserve"><value>Vorige week</value></data>
+  <data name="Calendar_Service" xml:space="preserve"><value>Dienst</value></data>
+  <data name="Calendar_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Calendar_ThisWeek" xml:space="preserve"><value>Deze week</value></data>
+  <data name="Calendar_Time" xml:space="preserve"><value>Uur</value></data>
+  <data name="Calendar_Week" xml:space="preserve"><value>Week van {0}</value></data>
+  <data name="Calendar_WeekNav" xml:space="preserve"><value>Andere week</value></data>
   <data name="Cancel" xml:space="preserve"><value>Annuleren</value></data>
   <data name="CancelPage_Done" xml:space="preserve"><value>Je afspraak is geannuleerd. Je krijgt een bevestiging per e-mail.</value></data>
   <data name="CancelPage_NoRefund" xml:space="preserve"><value>De gratis annuleringstermijn is voorbij: je voorschot van {0} wordt niet terugbetaald.</value></data>
@@ -111,6 +133,11 @@
   <data name="No" xml:space="preserve"><value>Nee</value></data>
   <data name="NoShow_KeepDeposit" xml:space="preserve"><value>Ik houd het voorschot</value></data>
   <data name="NoShow_RefundDeposit" xml:space="preserve"><value>Het voorschot wordt terugbetaald</value></data>
+  <data name="Payment_Failed" xml:space="preserve"><value>mislukt</value></data>
+  <data name="Payment_Pending" xml:space="preserve"><value>nog niet betaald</value></data>
+  <data name="Payment_RefundPending" xml:space="preserve"><value>wordt terugbetaald</value></data>
+  <data name="Payment_Refunded" xml:space="preserve"><value>terugbetaald</value></data>
+  <data name="Payment_Succeeded" xml:space="preserve"><value>betaald</value></data>
   <data name="Privacy_Rights" xml:space="preserve"><value>Je kan je gegevens opvragen of laten verwijderen via de zaak waar je geboekt hebt.</value></data>
   <data name="Privacy_RightsTitle" xml:space="preserve"><value>Je rechten</value></data>
   <data name="Privacy_Title" xml:space="preserve"><value>Privacy</value></data>
@@ -131,6 +158,11 @@
   <data name="Settings_Rules" xml:space="preserve"><value>Regels voor klanten</value></data>
   <data name="Settings_Shop" xml:space="preserve"><value>Zaak</value></data>
   <data name="Settings_StripeHelp" xml:space="preserve"><value>Het Stripe-account van je zaak. Het voorschot komt rechtstreeks op dit account.</value></data>
+  <data name="Status_Cancelled" xml:space="preserve"><value>Geannuleerd</value></data>
+  <data name="Status_Completed" xml:space="preserve"><value>Gekomen</value></data>
+  <data name="Status_Confirmed" xml:space="preserve"><value>Bevestigd</value></data>
+  <data name="Status_NoShow" xml:space="preserve"><value>Niet opgedaagd</value></data>
+  <data name="Status_PendingPayment" xml:space="preserve"><value>Wacht op betaling</value></data>
   <data name="TimeOff_Add" xml:space="preserve"><value>Vrije dagen toevoegen</value></data>
   <data name="TimeOff_From" xml:space="preserve"><value>Van</value></data>
   <data name="TimeOff_Help" xml:space="preserve"><value>Op deze dagen kan niemand boeken.</value></data>
