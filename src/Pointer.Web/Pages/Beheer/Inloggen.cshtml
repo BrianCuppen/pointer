@@ -6,22 +6,11 @@
     ViewData["Title"] = T["Login_Title"];
 }
 <div class="auth">
-    <div class="auth-art" aria-hidden="true">
-        <span class="orb orb-1"></span><span class="orb orb-2"></span>
-        <span class="wordmark">@Icon.Mark() @T["AppName"]</span>
-        <div style="position:relative">
-            <blockquote>@T["Login_Quote"]</blockquote>
-            <div class="preview" style="margin-top:28px">
-                <div><span>09:30 · Knippen</span><b>Bevestigd</b></div>
-                <div><span>10:15 · Knippen en baard</span><b>€ 10,00 betaald</b></div>
-                <div><span>11:00 · Baard trimmen</span><b>Bevestigd</b></div>
-            </div>
-        </div>
-        <small style="position:relative;opacity:.7">@T["Login_ArtFoot"]</small>
+    <div class="auth-top">
+        <a class="wordmark" href="/">@Icon.Mark() @T["AppName"]</a>
     </div>
     <div class="auth-form">
         <div class="auth-card rise">
-            <span class="wordmark" style="margin-bottom:28px">@Icon.Mark() @T["AppName"]</span>
             <h1>@T["Login_Title"]</h1>
             <p class="muted" style="margin-top:8px">@T["Login_Help"]</p>
             <form method="post" style="margin-top:28px">
@@ -50,4 +39,5 @@
             }
         </div>
     </div>
+    <div class="auth-foot">@T["Login_ArtFoot"]</div>
 </div>

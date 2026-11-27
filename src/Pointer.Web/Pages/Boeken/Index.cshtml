@@ -3,133 +3,166 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 @{
     ViewData["Title"] = Model.Shop.Name;
+    ViewData["Bleed"] = true;
     var culture = System.Globalization.CultureInfo.GetCultureInfo("nl-BE");
 }
-<partial name="_ShopHero" model="Model.Shop" />
-
-@if (Model.Service is null)
-{
-    <partial name="_Steps" model="1" />
-    <section aria-labelledby="services-heading" class="rise rise-1">
-        <div class="section-title">
-            <h1 id="services-heading" style="font-size:1.125rem">@T["Book_ChooseService"]</h1>
-            <span class="muted" style="font-size:.875rem">@T["Book_ServiceCount", Model.Services.Count]</span>
-        </div>
-        @if (Model.Services.Count == 0)
-        {
-            <div class="card empty">
-                <div class="empty-icon">@Icon.Svg("scissors")</div>
-                <strong>@T["Book_NoServices"]</strong>
-            </div>
-        }
-        else
-        {
-            <ul class="services">
-                @foreach (var (s, i) in Model.Services.Select((s, i) => (s, i)))
-                {
-                    <li class="rise" style="animation-delay:@(60 + i * 40)ms">
-                        <a class="service" asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@s.Id">
-                            <div class="service-body">
-                                <div class="service-name">@s.Name</div>
-                                <div class="service-meta">
-                                    <span class="chip">@Icon.Svg("clock") @s.DurationMinutes @T["Minutes"]</span>
-                                    @if (s.DepositCents > 0)
-                                    {
-                                        <span class="chip chip-brass">@T["Book_DepositOnline", Money.Format(s.DepositCents)]</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="chip chip-brand">@T["Book_NoDepositChip"]</span>
-                                    }
-                                </div>
-                            </div>
-                            <div class="service-price"><strong>@Money.Format(s.PriceCents)</strong></div>
-                            <span class="service-go" aria-hidden="true">@Icon.Svg("arrow-right")</span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        }
-    </section>
-}
-else
-{
-    <partial name="_Steps" model="2" />
-    <div class="book-grid aside-wide-only">
-        <div class="stack rise rise-1" style="--stack:22px">
-            <div class="picked">
-                <div>
-                    <div class="label-sm">@T["Book_YourChoice"]</div>
-                    <strong>@Model.Service.Name</strong>
-                    <span class="muted"> · @Model.Service.DurationMinutes @T["Minutes"] · @Money.Format(Model.Service.PriceCents)</span>
+<div class="split wide-main">
+    <aside class="split-pane split-aside">
+        <div class="split-inner rise">
+            <partial name="_AsideHead" model="Model.Shop" />
+            @if (Model.Service is null)
+            {
+                <div class="aside-title">@T["Book_OnlineAt"]</div>
+                <div class="aside-amount">@Model.Shop.Name</div>
+                <div class="shop-meta" style="margin-top:10px">
+                    @if (Model.Shop.Address is not null)
+                    {
+                        <span>@Icon.Svg("map-pin") @Model.Shop.Address</span>
+                    }
                 </div>
-                <a class="btn btn-sm" asp-page="Index" asp-route-slug="@Model.Slug">@T["Book_OtherService"]</a>
-            </div>
-
-            <section>
-                <div class="section-title">
-                    <h1 id="days-heading" style="font-size:1.125rem">@T["Book_ChooseDay"]</h1>
-                </div>
-                <div class="days-wrap">
-                    <ul class="days" aria-labelledby="days-heading">
-                        @foreach (var day in Model.Days)
-                        {
-                            <li>
-                                <a class="day" data-day asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@Model.Service.Id" asp-route-date="@day.ToString("yyyy-MM-dd")"
-                                   hx-get="@Url.Page("Tijden", new { slug = Model.Slug, service = Model.Service.Id, date = day.ToString("yyyy-MM-dd") })"
-                                   hx-target="#slots" hx-indicator="#slots-panel" hx-push-url="false"
-                                   aria-label="@day.ToString("dddd d MMMM", culture)"
-                                   aria-current="@(day == Model.Date ? "date" : null)">
-                                    <span class="dow">@day.ToString("ddd", culture).TrimEnd('.')</span>
-                                    <span class="dnum">@day.Day</span>
-                                    <span class="mon">@day.ToString("MMM", culture).TrimEnd('.')</span>
-                                </a>
-                            </li>
-                        }
+                <div class="aside-block collapse-sm">
+                    <ul class="rules">
+                        <li>@Icon.Svg("zap") <span>@T["Book_InstantConfirm"]</span></li>
+                        <li>@Icon.Svg("lock") <span>@T["Book_SecurePay"]</span></li>
+                        <li>@Icon.Svg("calendar-x") <span>@T["Book_CancelOnline"]</span></li>
                     </ul>
                 </div>
-
-                <div class="card card-pad slots-panel" id="slots-panel">
-                    <div class="slots-loading" aria-hidden="true">
-                        <div class="skeleton" style="width:40%;height:18px;margin-bottom:16px"></div>
-                        <div class="skeleton-grid">
-                            @for (var i = 0; i < 12; i++) { <div class="skeleton"></div> }
-                        </div>
-                    </div>
-                    <section id="slots" aria-live="polite">
-                        @if (Model.Date is not null)
-                        {
-                            <partial name="_Slots" model="Model.SlotsView" />
-                        }
-                        else
-                        {
-                            <div class="empty">
-                                <div class="empty-icon">@Icon.Svg("calendar")</div>
-                                <strong>@T["Book_PickDayFirst"]</strong>
-                                <span>@T["Book_PickDayHelp"]</span>
+            }
+            else
+            {
+                var s = Model.Service;
+                <div class="aside-title">@T["Book_PayNow"]</div>
+                <div class="aside-amount">@(s.DepositCents > 0 ? Money.Format(s.DepositCents) : T["Book_NoDepositChip"])</div>
+                <div class="aside-sub">@T["Book_PickDayShort"]</div>
+                <div class="aside-block collapse-sm">
+                    <ul class="line-items">
+                        <li class="line-item">
+                            <span class="thumb">@Icon.Svg("scissors")</span>
+                            <div class="grow">
+                                <div class="name">@s.Name</div>
+                                <div class="meta">@s.DurationMinutes @T["Minutes"]</div>
                             </div>
-                        }
+                            <span class="amt">@Money.Format(s.PriceCents)</span>
+                        </li>
+                    </ul>
+                    <dl class="totals" style="margin-top:6px">
+                        <div><dt>@T["Book_Price"]</dt><dd>@Money.Format(s.PriceCents)</dd></div>
+                        <div class="total"><dt>@T["Book_PayNow"]</dt><dd>@(s.DepositCents > 0 ? Money.Format(s.DepositCents) : T["Book_NoDepositChip"])</dd></div>
+                    </dl>
+                </div>
+            }
+            <partial name="_SplitFoot" />
+        </div>
+    </aside>
+
+    <div class="split-pane split-main">
+        <div class="split-inner">
+            @if (Model.Service is null)
+            {
+                <partial name="_Steps" model="1" />
+                <section aria-labelledby="services-heading" class="rise rise-1">
+                    <div class="section-title">
+                        <h1 id="services-heading" class="pane-title">@T["Book_ChooseService"]</h1>
+                        <span class="muted" style="font-size:.8125rem">@T["Book_ServiceCount", Model.Services.Count]</span>
+                    </div>
+                    @if (Model.Services.Count == 0)
+                    {
+                        <div class="card empty">
+                            <div class="empty-icon">@Icon.Svg("scissors")</div>
+                            <strong>@T["Book_NoServices"]</strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul class="services">
+                            @foreach (var (s, i) in Model.Services.Select((s, i) => (s, i)))
+                            {
+                                <li class="rise" style="animation-delay:@(60 + i * 40)ms">
+                                    <a class="service" asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@s.Id">
+                                        <div class="service-body">
+                                            <div class="service-name">@s.Name</div>
+                                            <div class="service-meta">
+                                                <span class="chip">@Icon.Svg("clock") @s.DurationMinutes @T["Minutes"]</span>
+                                                @if (s.DepositCents > 0)
+                                                {
+                                                    <span class="chip chip-brass">@T["Book_DepositOnline", Money.Format(s.DepositCents)]</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="chip chip-brand">@T["Book_NoDepositChip"]</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="service-price"><strong>@Money.Format(s.PriceCents)</strong></div>
+                                        <span class="service-go" aria-hidden="true">@Icon.Svg("arrow-right")</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </section>
+            }
+            else
+            {
+                <partial name="_Steps" model="2" />
+                <div class="stack rise rise-1" style="--stack:24px">
+                    <div class="picked">
+                        <div>
+                            <div class="label-sm">@T["Book_YourChoice"]</div>
+                            <strong>@Model.Service.Name</strong>
+                            <span class="muted"> · @Model.Service.DurationMinutes @T["Minutes"] · @Money.Format(Model.Service.PriceCents)</span>
+                        </div>
+                        <a class="btn btn-sm" asp-page="Index" asp-route-slug="@Model.Slug">@T["Book_OtherService"]</a>
+                    </div>
+
+                    <section>
+                        <div class="section-title">
+                            <h1 id="days-heading" class="pane-title">@T["Book_ChooseDay"]</h1>
+                        </div>
+                        <div class="days-wrap">
+                            <ul class="days" aria-labelledby="days-heading">
+                                @foreach (var day in Model.Days)
+                                {
+                                    <li>
+                                        <a class="day" data-day asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@Model.Service.Id" asp-route-date="@day.ToString("yyyy-MM-dd")"
+                                           hx-get="@Url.Page("Tijden", new { slug = Model.Slug, service = Model.Service.Id, date = day.ToString("yyyy-MM-dd") })"
+                                           hx-target="#slots" hx-indicator="#slots-panel" hx-push-url="false"
+                                           aria-label="@day.ToString("dddd d MMMM", culture)"
+                                           aria-current="@(day == Model.Date ? "date" : null)">
+                                            <span class="dow">@day.ToString("ddd", culture).TrimEnd('.')</span>
+                                            <span class="dnum">@day.Day</span>
+                                            <span class="mon">@day.ToString("MMM", culture).TrimEnd('.')</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="card card-pad slots-panel" id="slots-panel">
+                            <div class="slots-loading" aria-hidden="true">
+                                <div class="skeleton" style="width:40%;height:18px;margin-bottom:16px"></div>
+                                <div class="skeleton-grid">
+                                    @for (var i = 0; i < 12; i++) { <div class="skeleton"></div> }
+                                </div>
+                            </div>
+                            <section id="slots" aria-live="polite">
+                                @if (Model.Date is not null)
+                                {
+                                    <partial name="_Slots" model="Model.SlotsView" />
+                                }
+                                else
+                                {
+                                    <div class="empty">
+                                        <div class="empty-icon">@Icon.Svg("calendar")</div>
+                                        <strong>@T["Book_PickDayFirst"]</strong>
+                                        <span>@T["Book_PickDayHelp"]</span>
+                                    </div>
+                                }
+                            </section>
+                        </div>
                     </section>
                 </div>
-            </section>
+            }
         </div>
-
-        <aside class="book-aside rise rise-2">
-            <div class="card summary">
-                <div class="summary-top">
-                    <span class="eyebrow">@T["Book_Summary"]</span>
-                    <h2>@Model.Service.Name</h2>
-                    <div class="summary-when">
-                        <span>@Icon.Svg("clock") @Model.Service.DurationMinutes @T["Minutes"]</span>
-                        <span>@Icon.Svg("calendar") @T["Book_PickDayShort"]</span>
-                    </div>
-                </div>
-                <dl class="summary-lines">
-                    <div><dt>@T["Book_Price"]</dt><dd>@Money.Format(Model.Service.PriceCents)</dd></div>
-                    <div class="total"><dt>@T["Book_PayNow"]</dt><dd>@(Model.Service.DepositCents > 0 ? Money.Format(Model.Service.DepositCents) : T["Book_NoDepositChip"])</dd></div>
-                </dl>
-            </div>
-            <div class="trust">@Icon.Svg("lock") @T["Book_SecurePay"]</div>
-        </aside>
     </div>
-}
+</div>

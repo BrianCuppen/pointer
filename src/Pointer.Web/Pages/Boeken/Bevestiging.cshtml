@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = T["Confirm_Title"];
     ViewData["Narrow"] = true;
+    ViewData["BarShop"] = Model.Shop.Name;
     var start = Model.Local(Model.Booking.StartUtc);
     var end = Model.Local(Model.Booking.EndUtc);
 }

@@ -22,6 +22,7 @@
   <data name="AppName" xml:space="preserve"><value>Pointer</value></data>
   <data name="Book_AcceptRules" xml:space="preserve"><value>Ik ga akkoord met deze regels</value></data>
   <data name="Book_At" xml:space="preserve"><value>om</value></data>
+  <data name="Book_CancelOnline" xml:space="preserve"><value>Annuleren kan online via de link in je bevestiging</value></data>
   <data name="Book_CheckFields" xml:space="preserve"><value>Vul je naam en een geldig e-mailadres in, en ga akkoord met de regels.</value></data>
   <data name="Book_ChooseDay" xml:space="preserve"><value>Kies een dag</value></data>
   <data name="Book_ChooseService" xml:space="preserve"><value>Kies een dienst</value></data>
@@ -37,6 +38,7 @@
   <data name="Book_NoServices" xml:space="preserve"><value>Er kan op dit moment niets geboekt worden.</value></data>
   <data name="Book_NoSlots" xml:space="preserve"><value>Op deze dag is er geen plaats meer. Kies een andere dag.</value></data>
   <data name="Book_NoSlotsHelp" xml:space="preserve"><value>Kies een andere dag hierboven.</value></data>
+  <data name="Book_OnlineAt" xml:space="preserve"><value>Online een afspraak maken bij</value></data>
   <data name="Book_OtherService" xml:space="preserve"><value>Andere dienst kiezen</value></data>
   <data name="Book_OtherTime" xml:space="preserve"><value>Ander moment kiezen</value></data>
   <data name="Book_PayInShop" xml:space="preserve"><value>Te betalen in de zaak</value></data>
@@ -197,6 +199,7 @@
   <data name="Landing_F3_Body" xml:space="preserve"><value>Weinig gegevens, export en wissen met één klik, en een verwerkersovereenkomst klaar voor elke zaak.</value></data>
   <data name="Landing_F3_Title" xml:space="preserve"><value>Privacy ingebouwd</value></data>
   <data name="Landing_Lead" xml:space="preserve"><value>Pointer geeft kleine zaken zoals kappers en salons een eigen boekingspagina. Klanten kiezen een vrij moment en betalen een voorschot. De zaak beslist wat er gebeurt bij een no-show.</value></data>
+  <data name="Landing_MockConfirmed" xml:space="preserve"><value>Afspraak bevestigd · wo 10:15</value></data>
   <data name="Landing_Stack" xml:space="preserve"><value>Gebouwd met</value></data>
   <data name="Landing_Title" xml:space="preserve"><value>Afspraken boeken, &lt;em&gt;zonder gedoe&lt;/em&gt;.</value></data>
   <data name="Landing_TryAdmin" xml:space="preserve"><value>Open de beheeromgeving</value></data>

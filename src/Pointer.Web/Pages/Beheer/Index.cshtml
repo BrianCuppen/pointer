@@ -43,10 +43,10 @@
 </div>
 
 <div class="stats rise rise-1">
-    <div class="card stat"><div class="k">@Icon.Svg("calendar") @T["Stats_Bookings"]</div><div class="v">@all.Count</div></div>
-    <div class="card stat"><div class="k">@Icon.Svg("clock") @T["Stats_Upcoming"]</div><div class="v">@open</div></div>
-    <div class="card stat"><div class="k">@Icon.Svg("euro") @T["Stats_Deposits"]</div><div class="v">@Money.Format(depositsPaid)</div></div>
-    <div class="card stat"><div class="k">@Icon.Svg("user") @T["Stats_NoShows"]</div><div class="v">@noShows</div></div>
+    <div class="stat"><div class="k">@Icon.Svg("calendar") @T["Stats_Bookings"]</div><div class="v">@all.Count</div></div>
+    <div class="stat"><div class="k">@Icon.Svg("clock") @T["Stats_Upcoming"]</div><div class="v">@open</div></div>
+    <div class="stat"><div class="k">@Icon.Svg("euro") @T["Stats_Deposits"]</div><div class="v">@Money.Format(depositsPaid)</div></div>
+    <div class="stat"><div class="k">@Icon.Svg("user") @T["Stats_NoShows"]</div><div class="v">@noShows</div></div>
 </div>
 
 <nav class="week-strip rise rise-2" aria-label="@T["Calendar_Days"]">
@@ -60,14 +60,14 @@
     }
 </nav>
 
-<div class="rise rise-3">
+<div class="week-grid rise rise-3">
 @foreach (var day in Model.Week)
 {
     var id = $"day-{day.Date:yyyyMMdd}";
-    <section class="card day-block @(day.Entries.Count == 0 ? "is-empty" : null)" id="@id" aria-labelledby="@id-h">
+    <section class="card day-block @(day.Entries.Count == 0 ? "is-empty" : null) @(day.Date == Model.Today ? "is-today" : null)" id="@id" aria-labelledby="@id-h">
         <div class="day-head">
-            <h2 id="@id-h">@day.Date.ToString("dddd d MMMM") @if (day.Date == Model.Today) { <span class="today">@T["Calendar_Today"]</span> }</h2>
-            <span class="muted" style="font-size:.8125rem">@(day.Entries.Count == 0 ? T["Calendar_NoBookings"] : T["Calendar_Count", day.Entries.Count])</span>
+            <h2 id="@id-h"><span class="dl">@day.Date.ToString("dddd d MMMM")</span><span class="ds">@day.Date.ToString("ddd d MMM").Replace(".", "")</span> @if (day.Date == Model.Today) { <span class="today">@T["Calendar_Today"]</span> }</h2>
+            <span class="count">@(day.Entries.Count == 0 ? T["Calendar_NoBookings"] : T["Calendar_Count", day.Entries.Count])</span>
         </div>
         @if (day.Entries.Count > 0)
         {
