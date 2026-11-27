@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<PublicBookingQueries>();
         services.AddScoped<ShopAdminService>();
         services.AddScoped<CalendarQueries>();
+        services.AddScoped<CustomerDataService>();
         services.AddScoped<ShopProvisioning>();
 
         services.Configure<PlatformFeeOptions>(configuration.GetSection(PlatformFeeOptions.SectionName));

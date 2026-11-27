@@ -1,0 +1,59 @@
+@page "/beheer/klantgegevens"
+@model Pointer.Web.Pages.Beheer.KlantgegevensModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Admin_CustomerData"];
+}
+<h1>@T["Admin_CustomerData"]</h1>
+<p>@T["CustomerData_Help"]</p>
+<form method="get">
+    <p>
+        <label for="email">@T["CustomerData_Email"]</label>
+        <input id="email" name="email" type="email" value="@Model.Email" required />
+        <button type="submit">@T["CustomerData_Search"]</button>
+    </p>
+</form>
+
+@if (Model.Results is not null)
+{
+    @if (Model.Results.Count == 0)
+    {
+        <p>@T["CustomerData_None"]</p>
+    }
+    else
+    {
+        <h2>@T["CustomerData_Found", Model.Results.Count]</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">@T["CustomerData_When"]</th>
+                    <th scope="col">@T["CustomerData_Service"]</th>
+                    <th scope="col">@T["CustomerData_Name"]</th>
+                    <th scope="col">@T["CustomerData_Phone"]</th>
+                    <th scope="col">@T["CustomerData_Status"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.Results)
+                {
+                    <tr>
+                        <td>@b.StartLocal.ToString("d MMMM yyyy HH:mm")</td>
+                        <td>@b.Service</td>
+                        <td>@b.CustomerName</td>
+                        <td>@b.CustomerPhone</td>
+                        <td>@T[$"Status_{b.Status}"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form method="post" asp-page-handler="Export">
+            <input type="hidden" name="Email" value="@Model.Email" />
+            <button type="submit">@T["CustomerData_Export"]</button>
+        </form>
+        <form method="post" asp-page-handler="Erase">
+            <input type="hidden" name="Email" value="@Model.Email" />
+            <p>@T["CustomerData_EraseWarning"]</p>
+            <button type="submit">@T["CustomerData_Erase"]</button>
+        </form>
+    }
+}
