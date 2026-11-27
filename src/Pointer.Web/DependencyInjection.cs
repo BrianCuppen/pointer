@@ -2,6 +2,8 @@ using Pointer.Core.Availability;
 using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 using Pointer.Core.Payments;
+using Pointer.Core.Notifications;
+using Pointer.Web.Notifications;
 using Pointer.Web.Payments;
 
 namespace Pointer.Web;
@@ -26,6 +28,19 @@ public static class DependencyInjection
         services.AddSingleton<IPaymentGateway, StripePaymentGateway>();
         services.AddScoped<DepositService>();
         services.AddScoped<PaymentWebhookProcessor>();
+
+        services.Configure<NotificationOptions>(configuration.GetSection(NotificationOptions.SectionName));
+        services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.SectionName));
+        services.AddScoped<NotificationOutbox>();
+        services.AddScoped<NotificationRenderer>();
+        services.AddScoped<NotificationDispatcher>();
+        services.AddScoped<NotificationScheduler>();
+        if (string.IsNullOrEmpty(configuration[$"{EmailOptions.SectionName}:{nameof(EmailOptions.BrevoApiKey)}"]))
+            services.AddSingleton<IEmailSender, LogOnlyEmailSender>();
+        else
+            services.AddHttpClient<IEmailSender, BrevoEmailSender>(c => c.BaseAddress = new Uri(BrevoEmailSender.BaseAddress));
+        if (configuration.GetValue("Notifications:WorkerEnabled", true))
+            services.AddHostedService<NotificationWorker>();
         return services;
     }
 }

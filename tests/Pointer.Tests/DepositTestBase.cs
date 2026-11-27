@@ -5,6 +5,7 @@ using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 using Pointer.Core.Domain;
 using Pointer.Core.Payments;
+using Pointer.Core.Notifications;
 
 namespace Pointer.Tests;
 
@@ -23,10 +24,19 @@ public abstract class DepositTestBase(PostgresFixture fixture)
             Options.Create(new BookingOptions { PaymentHoldMinutes = 30 }));
 
     protected DepositService Deposits(PointerDbContext db, long feeCents = 30) =>
-        new(db, Gateway, Clock, Options.Create(new PlatformFeeOptions { PerDepositFeeCents = feeCents }));
+        new(db, Gateway, new NotificationOutbox(db, Clock), Clock, Options.Create(new PlatformFeeOptions { PerDepositFeeCents = feeCents }));
 
     protected PaymentWebhookProcessor Webhooks(PointerDbContext db) =>
-        new(db, Gateway, Clock, NullLogger<PaymentWebhookProcessor>.Instance);
+        new(db, Gateway, new NotificationOutbox(db, Clock), Clock, NullLogger<PaymentWebhookProcessor>.Instance);
+
+    protected readonly FakeEmailSender Email = new();
+    protected static readonly NotificationOptions NotificationSettings = new() { PublicBaseUrl = "https://pointer.test" };
+
+    protected NotificationDispatcher Dispatcher(PointerDbContext db) =>
+        new(db, new NotificationRenderer(db, Clock, Options.Create(NotificationSettings)), Email, Clock,
+            Options.Create(NotificationSettings), NullLogger<NotificationDispatcher>.Instance);
+
+    protected NotificationScheduler Scheduler(PointerDbContext db) => new(db, Clock, Options.Create(NotificationSettings));
 
     protected async Task<SeededShop> SeedConnectedShopAsync(PointerDbContext db)
     {

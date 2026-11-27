@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Pointer.Core.Domain;
 
 public class Booking
@@ -31,6 +33,9 @@ public class Booking
     public long DepositCents { get; set; }
     public NoShowPolicy NoShowPolicy { get; set; }
     public int FreeCancellationMinutes { get; set; }
+
+    /// <summary>Secret for the customer's cancel link. Possession of the link is the authorization.</summary>
+    public string CancelToken { get; set; } = Convert.ToHexString(RandomNumberGenerator.GetBytes(24)).ToLowerInvariant();
 
     public DateTime CreatedUtc { get; set; }
     public DateTime? CancelledUtc { get; set; }

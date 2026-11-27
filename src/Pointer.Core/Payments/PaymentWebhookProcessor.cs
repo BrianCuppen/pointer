@@ -4,6 +4,7 @@ using Npgsql;
 using Pointer.Core.Bookings;
 using Pointer.Core.Data;
 using Pointer.Core.Domain;
+using Pointer.Core.Notifications;
 
 namespace Pointer.Core.Payments;
 
@@ -29,6 +30,7 @@ public enum WebhookOutcome
 public sealed class PaymentWebhookProcessor(
     PointerDbContext db,
     IPaymentGateway gateway,
+    NotificationOutbox notifications,
     TimeProvider clock,
     ILogger<PaymentWebhookProcessor> logger)
 {
@@ -73,7 +75,7 @@ public sealed class PaymentWebhookProcessor(
         var changed = evt.Kind switch
         {
             PaymentEventKind.CheckoutPaid => await ApplyPaidAsync(evt, payment, booking, shop, now, ct),
-            PaymentEventKind.CheckoutFailed => ApplyFailed(payment, booking, now),
+            PaymentEventKind.CheckoutFailed => await ApplyFailedAsync(payment, booking, now, ct),
             PaymentEventKind.Refunded => ApplyRefunded(payment, now),
             _ => false,
         };
@@ -116,6 +118,7 @@ public sealed class PaymentWebhookProcessor(
         {
             case BookingStatus.PendingPayment:
                 Confirm(booking);
+                await notifications.OnConfirmedAsync(shop, booking, ct);
                 return true;
 
             case BookingStatus.Cancelled:
@@ -138,6 +141,7 @@ public sealed class PaymentWebhookProcessor(
         try
         {
             await db.SaveChangesAsync(ct);
+            await notifications.OnConfirmedAsync(shop, booking, ct);
             logger.LogInformation("Booking {BookingId} paid after its hold was released; slot was still free and is confirmed", booking.Id);
             return true;
         }
@@ -156,11 +160,12 @@ public sealed class PaymentWebhookProcessor(
         await gateway.RefundAsync(shop.PaymentAccountId, payment.PaymentIntentId, $"refund-slot-taken-{payment.Id}", ct);
         payment.Status = PaymentStatus.RefundPending;
         payment.UpdatedUtc = now;
+        await notifications.OnPaymentFailedAsync(booking, ct);
         logger.LogWarning("Booking {BookingId} paid after its slot was taken by another booking; deposit refunded", booking.Id);
         return true;
     }
 
-    private static bool ApplyFailed(Payment payment, Booking booking, DateTime now)
+    private async Task<bool> ApplyFailedAsync(Payment payment, Booking booking, DateTime now, CancellationToken ct)
     {
         if (payment.Status != PaymentStatus.Pending)
             return false;
@@ -175,6 +180,9 @@ public sealed class PaymentWebhookProcessor(
             booking.HoldExpiresUtc = null;
             booking.CancelledUtc = now;
         }
+        // Also when a booking request already released the expired hold.
+        if (booking.Status == BookingStatus.Cancelled)
+            await notifications.OnPaymentFailedAsync(booking, ct);
         return true;
     }
 

@@ -16,11 +16,14 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ProcessedWebhookEvent> ProcessedWebhookEvents => Set<ProcessedWebhookEvent>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<NoShowPolicy>().HaveConversion<SnakeCaseEnumConverter<NoShowPolicy>>().HaveMaxLength(32);
         configurationBuilder.Properties<BookingStatus>().HaveConversion<SnakeCaseEnumConverter<BookingStatus>>().HaveMaxLength(32);
+        configurationBuilder.Properties<NotificationType>().HaveConversion<SnakeCaseEnumConverter<NotificationType>>().HaveMaxLength(32);
+        configurationBuilder.Properties<NotificationStatus>().HaveConversion<SnakeCaseEnumConverter<NotificationStatus>>().HaveMaxLength(32);
         configurationBuilder.Properties<PaymentStatus>().HaveConversion<SnakeCaseEnumConverter<PaymentStatus>>().HaveMaxLength(32);
     }
 
@@ -37,10 +40,13 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
             e.Property(x => x.TimeZoneId).HasMaxLength(64);
             e.Property(x => x.Language).HasMaxLength(8);
             e.Property(x => x.PaymentAccountId).HasMaxLength(255);
+            e.Property(x => x.OwnerEmail).HasMaxLength(320);
+            e.Property(x => x.Address).HasMaxLength(300);
             e.ToTable(t =>
             {
                 t.HasCheckConstraint("ck_shops_slug_format", "slug ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?$'");
                 t.HasCheckConstraint("ck_shops_free_cancellation_minutes", "free_cancellation_minutes >= 0");
+                t.HasCheckConstraint("ck_shops_reminder_hours", "reminder_hours_before BETWEEN 2 AND 48");
             });
         });
 
@@ -90,6 +96,8 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
             e.Property(x => x.CustomerName).HasMaxLength(200);
             e.Property(x => x.CustomerEmail).HasMaxLength(320);
             e.Property(x => x.CustomerPhone).HasMaxLength(32);
+            e.Property(x => x.CancelToken).HasMaxLength(64);
+            e.HasIndex(x => x.CancelToken).IsUnique();
             e.HasIndex(x => new { x.ShopId, x.StartUtc });
 
             // Restrict, not cascade: deleting a service or staff member must not silently delete bookings.
@@ -129,6 +137,18 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
             e.Property(x => x.Provider).HasMaxLength(32);
             e.Property(x => x.EventId).HasMaxLength(255);
             e.Property(x => x.Type).HasMaxLength(100);
+        });
+
+        b.Entity<Notification>(e =>
+        {
+            e.Property(x => x.Recipient).HasMaxLength(320);
+            e.Property(x => x.LastError).HasMaxLength(200);
+            e.HasIndex(x => new { x.Status, x.CreatedUtc });
+            // At most one of each message per booking, and one daily overview per shop per day.
+            e.HasIndex(x => new { x.BookingId, x.Type }).IsUnique().HasFilter("booking_id IS NOT NULL");
+            e.HasIndex(x => new { x.ShopId, x.Type, x.OverviewDate }).IsUnique().HasFilter("overview_date IS NOT NULL");
+            e.HasOne<Shop>().WithMany().HasForeignKey(x => x.ShopId).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<Booking>().WithMany().HasForeignKey(x => x.BookingId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

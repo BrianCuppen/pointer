@@ -66,8 +66,16 @@ CI (`.github/workflows/ci.yml`) builds and tests every push and pull request aga
 | `Availability__MinimumNoticeMinutes` | `60` | How soon a slot can start |
 | `Availability__BookingHorizonDays` | `60` | How far ahead customers can book |
 | `Fees__PerDepositFeeCents` | `30` | Our application fee per paid deposit, in cents |
+| `Notifications__PublicBaseUrl` | `http://localhost:5137` | Base URL for links in emails |
+| `Notifications__WorkerEnabled` | `true` | Run the background job that sends emails and queues reminders |
+| `Email__BrevoApiKey` | none | Brevo API key. Without it, emails are only logged (subject only) |
+| `Email__FromAddress` / `Email__FromName` | `no-reply@example.com` / `Pointer` | Sender |
 | `Stripe__SecretKey` | none | Platform secret key. `sk_test_...` everywhere except production |
 | `Stripe__WebhookSecret` | none | Signing secret of the Connect webhook endpoint |
+
+## Emails
+
+Emails follow [docs/notifications-decisions.md](docs/notifications-decisions.md). Booking changes write rows to a `notifications` outbox in the same transaction; a background worker sends them through Brevo. Each message is sent at most once per booking and type, the body is never stored, and texts live in `src/Pointer.Core/Notifications/EmailTexts.resx` (Dutch).
 
 ## Stripe setup (test mode)
 
