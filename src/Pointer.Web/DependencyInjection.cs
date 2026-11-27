@@ -32,7 +32,10 @@ public static class DependencyInjection
 
         services.Configure<PlatformFeeOptions>(configuration.GetSection(PlatformFeeOptions.SectionName));
         services.Configure<StripeOptions>(configuration.GetSection(StripeOptions.SectionName));
-        services.AddSingleton<IPaymentGateway, StripePaymentGateway>();
+        if (IsDemoPayments(configuration))
+            services.AddSingleton<IPaymentGateway, DemoPaymentGateway>();
+        else
+            services.AddSingleton<IPaymentGateway, StripePaymentGateway>();
         services.AddScoped<DepositService>();
         services.AddScoped<PaymentWebhookProcessor>();
 
@@ -50,4 +53,8 @@ public static class DependencyInjection
             services.AddHostedService<NotificationWorker>();
         return services;
     }
+
+    /// <summary><c>Payments__Mode=demo</c>: deposits go through a local fake checkout instead of Stripe.</summary>
+    public static bool IsDemoPayments(IConfiguration configuration) =>
+        string.Equals(configuration["Payments:Mode"], "demo", StringComparison.OrdinalIgnoreCase);
 }

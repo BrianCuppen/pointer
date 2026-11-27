@@ -74,3 +74,24 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  # Runs the demo exactly as the README tells people to (docker compose up) and clicks
+  # nothing: it checks the app starts, seeds the demo shop and serves its pages.
+  demo:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up --build -d
+      - name: Wait for the app
+        run: |
+          for i in $(seq 1 60); do curl -sf http://localhost:8080/healthz && exit 0; sleep 2; done
+          docker compose logs app; exit 1
+      - name: Demo pages respond
+        run: |
+          curl -sf http://localhost:8080/kapper-demo | grep -q "Knippen en baard"
+          curl -sf http://localhost:8080/beheer/inloggen > /dev/null
+      - if: always()
+        run: docker compose logs app | tail -50
+      - if: always()
+        run: docker compose down -v
