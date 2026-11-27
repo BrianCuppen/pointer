@@ -9,11 +9,13 @@ public class IndexModel(ShopAdminService admin, IOptions<NotificationOptions> li
 {
     public string ShopName { get; private set; } = "";
     public string BookingPageUrl { get; private set; } = "";
+    public string EmbedSnippet { get; private set; } = "";
 
     public async Task OnGetAsync(CancellationToken ct)
     {
         var shop = await admin.GetShopAsync(ShopId, ct);
         ShopName = shop.Name;
         BookingPageUrl = links.Value.BookingPageUrl(shop.Slug);
+        EmbedSnippet = $"<script src=\"{links.Value.PublicBaseUrl}/embed.js\" data-shop=\"{shop.Slug}\" async></script>";
     }
 }

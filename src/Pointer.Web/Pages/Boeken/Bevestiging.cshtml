@@ -1,0 +1,31 @@
+@page "/{slug}/bevestiging/{token}"
+@model Pointer.Web.Pages.Boeken.BevestigingModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
+@{
+    ViewData["Title"] = T["Confirm_Title"];
+    var start = Model.Local(Model.Booking.StartUtc);
+}
+<h1>@Model.Shop.Name</h1>
+<section id="status" aria-live="polite"
+         hx-get="@(Model.Booking.Status == BookingStatus.PendingPayment ? Request.Path.Value : null)"
+         hx-trigger="@(Model.Booking.Status == BookingStatus.PendingPayment ? "every 3s" : null)"
+         hx-select="#status" hx-swap="outerHTML">
+    @switch (Model.Booking.Status)
+    {
+        case BookingStatus.Confirmed:
+            <h2>@T["Confirm_Confirmed"]</h2>
+            <p>@Model.Booking.Service!.Name, @start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</p>
+            <p>@T["Confirm_EmailSent", Model.Booking.CustomerEmail]</p>
+            <p><a asp-page="/Annuleren" asp-route-token="@Model.Booking.CancelToken">@T["Confirm_CancelLink"]</a></p>
+            break;
+        case BookingStatus.PendingPayment:
+            <h2>@T["Confirm_Waiting"]</h2>
+            <p>@T["Confirm_WaitingHelp"]</p>
+            break;
+        default:
+            <h2>@T["Confirm_NotConfirmed"]</h2>
+            <p><a asp-page="/Boeken/Index" asp-route-slug="@Model.Shop.Slug">@T["Confirm_TryAgain"]</a></p>
+            break;
+    }
+</section>

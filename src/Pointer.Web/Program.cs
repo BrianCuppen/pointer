@@ -8,6 +8,8 @@ using Pointer.Core.Data;
 using Pointer.Core.Domain;
 using Pointer.Web;
 using Pointer.Web.Auth;
+using Pointer.Web.Embed;
+using Pointer.Web.Pages.Boeken;
 using Pointer.Web.Payments;
 using Pointer.Web.Setup;
 
@@ -46,6 +48,10 @@ builder.Services.AddRateLimiter(o =>
     o.AddPolicy(OwnerAuth.LoginRateLimit, http => RateLimitPartition.GetFixedWindowLimiter(
         http.Connection.RemoteIpAddress?.ToString() ?? "unknown",
         _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(1) }));
+    // Booking form: generous for real customers, a brake on scripted slot-hogging.
+    o.AddPolicy(GegevensModel.BookingRateLimit, http => RateLimitPartition.GetFixedWindowLimiter(
+        http.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(10) }));
 });
 
 var app = builder.Build();
@@ -80,6 +86,7 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedUICultures = cultures.Select(c => new CultureInfo(c)).ToList(),
 });
 
+app.UseSecurityHeaders();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseRateLimiter();
@@ -88,6 +95,7 @@ app.UseAuthorization();
 
 app.MapGet("/healthz", () => Results.Ok("ok"));
 app.MapStripeWebhook();
+app.MapEmbed();
 app.MapRazorPages();
 
 app.Run();

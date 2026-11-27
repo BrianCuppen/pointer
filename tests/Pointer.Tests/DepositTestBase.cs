@@ -36,6 +36,9 @@ public abstract class DepositTestBase(PostgresFixture fixture)
         new(db, new NotificationRenderer(db, Clock, Options.Create(NotificationSettings)), Email, Clock,
             Options.Create(NotificationSettings), NullLogger<NotificationDispatcher>.Instance);
 
+    protected BookingLifecycleService Lifecycle(PointerDbContext db) =>
+        new(db, Gateway, new NotificationOutbox(db, Clock), Clock, NullLogger<BookingLifecycleService>.Instance);
+
     protected NotificationScheduler Scheduler(PointerDbContext db) => new(db, Clock, Options.Create(NotificationSettings));
 
     protected async Task<SeededShop> SeedConnectedShopAsync(PointerDbContext db)

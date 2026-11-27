@@ -1,0 +1,19 @@
+@model Pointer.Web.Pages.Boeken.SlotsView
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+<h3>@Model.Date.ToString("dddd d MMMM")</h3>
+@if (Model.Slots.Count == 0)
+{
+    <p>@T["Book_NoSlots"]</p>
+}
+else
+{
+    <ul>
+        @foreach (var slot in Model.Slots)
+        {
+            <li>
+                <a asp-page="/Boeken/Gegevens" asp-route-slug="@Model.Slug" asp-route-service="@Model.ServiceId"
+                   asp-route-start="@slot.StartUtc.ToString("yyyy-MM-ddTHH:mm:ssZ")">@slot.StartLocal.ToString("HH:mm")</a>
+            </li>
+        }
+    </ul>
+}

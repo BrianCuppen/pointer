@@ -1,0 +1,59 @@
+@page "/{slug}"
+@model Pointer.Web.Pages.Boeken.IndexModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = Model.Shop.Name;
+}
+<h1>@Model.Shop.Name</h1>
+@if (Model.Shop.Address is not null)
+{
+    <p>@Model.Shop.Address</p>
+}
+
+@if (Model.Service is null)
+{
+    <h2>@T["Book_ChooseService"]</h2>
+    @if (Model.Services.Count == 0)
+    {
+        <p>@T["Book_NoServices"]</p>
+    }
+    <ul>
+        @foreach (var s in Model.Services)
+        {
+            <li>
+                <a asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@s.Id">@s.Name</a>
+                – @s.DurationMinutes @T["Minutes"], @Money.Format(s.PriceCents)
+                @if (s.DepositCents > 0)
+                {
+                    <text>(@T["Book_DepositOnline", Money.Format(s.DepositCents)])</text>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p><a asp-page="Index" asp-route-slug="@Model.Slug">@T["Book_OtherService"]</a></p>
+    <h2>@Model.Service.Name</h2>
+    <p>@Model.Service.DurationMinutes @T["Minutes"], @Money.Format(Model.Service.PriceCents)</p>
+
+    <h3 id="days-heading">@T["Book_ChooseDay"]</h3>
+    <ul aria-labelledby="days-heading">
+        @foreach (var day in Model.Days)
+        {
+            <li>
+                <a asp-page="Index" asp-route-slug="@Model.Slug" asp-route-service="@Model.Service.Id" asp-route-date="@day.ToString("yyyy-MM-dd")"
+                   hx-get="@Url.Page("Tijden", new { slug = Model.Slug, service = Model.Service.Id, date = day.ToString("yyyy-MM-dd") })"
+                   hx-target="#slots" hx-push-url="false"
+                   aria-current="@(day == Model.Date ? "date" : null)">@day.ToString("dddd d MMMM")</a>
+            </li>
+        }
+    </ul>
+
+    <section id="slots" aria-live="polite">
+        @if (Model.Date is not null)
+        {
+            <partial name="_Slots" model="Model.SlotsView" />
+        }
+    </section>
+}
