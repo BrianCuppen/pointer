@@ -42,19 +42,29 @@ Each shop gets a hosted booking page and a one-line embed for its own website. C
 
 ## Try the demo
 
-You need the .NET 8 SDK and a PostgreSQL database (`docker compose up -d` with `cp .env.example .env` starts one).
+The quickest way needs only Docker:
 
 ```
-export ConnectionStrings__Default="Host=localhost;Database=pointer_dev;Username=postgres;Password=<your local password>"
+git clone https://github.com/BrianCuppen/pointer.git
+cd pointer
+docker compose up --build
+```
+
+When the log says `Now listening`, open:
+
+- Booking page: http://localhost:8080/kapper-demo
+- Admin: http://localhost:8080/beheer, signing in as `demo@pointer.test` with password `demo-only-password`
+
+The demo shop comes with services, a day off and a week of made-up bookings. Payments run in **demo mode**: instead of Stripe you land on a local "Demobetaling" page where you can pay, let the payment fail, or cancel, and the booking reacts exactly as it would to Stripe's webhooks. Emails are written to the log (`docker compose logs app`). Stop with Ctrl+C; `docker compose down -v` also deletes the demo data.
+
+Without Docker: start PostgreSQL (`docker compose up db`, or your own), then
+
+```
+export ConnectionStrings__Default="Host=localhost;Database=pointer_dev;Username=postgres;Password=local-demo-only"
 dotnet run --project src/Pointer.Web
 ```
 
-In Development the app applies migrations and seeds a demo barbershop with sample bookings around today:
-
-- Booking page: http://localhost:5137/kapper-demo
-- Admin: http://localhost:5137/beheer, signing in as `demo@pointer.test` with the demo-only password in `src/Pointer.Web/appsettings.Development.json`
-
-Without Stripe keys, services without a deposit book straight away and deposit services show a message that online payment is not available. Without a Brevo key, emails are written to the log. To try payments, see [Stripe setup](#stripe-setup-test-mode) and set `Demo__StripeAccountId` to a test connected account.
+and use http://localhost:5137 instead. Development uses the same demo shop and demo payments (see `src/Pointer.Web/appsettings.Development.json`). To try real Stripe test payments, set `Payments__Mode=stripe` and see [Stripe setup](#stripe-setup-test-mode).
 
 To create a real shop instead: `POINTER_OWNER_PASSWORD=... dotnet run --project src/Pointer.Web -- create-shop <slug> "<name>" <owner email>`.
 
@@ -69,7 +79,7 @@ tests/Pointer.Tests  xUnit tests, run against a real PostgreSQL database
 ## Prerequisites
 
 - .NET 8 SDK
-- PostgreSQL 16 (or Docker: `cp .env.example .env`, set a password, then `docker compose up -d`)
+- PostgreSQL 16 (or Docker: `docker compose up -d db`)
 
 Configuration comes from environment variables. Nothing secret is committed.
 
@@ -108,6 +118,7 @@ CI (`.github/workflows/ci.yml`) builds and tests every push and pull request aga
 | `Availability__SlotStepMinutes` | `15` | Distance between offered start times |
 | `Availability__MinimumNoticeMinutes` | `60` | How soon a slot can start |
 | `Availability__BookingHorizonDays` | `60` | How far ahead customers can book |
+| `Payments__Mode` | `stripe` (`demo` in Development and Docker Compose) | `demo` replaces Stripe with a local fake checkout. No money moves; never use it where real customers book |
 | `Fees__PerDepositFeeCents` | `30` | Our application fee per paid deposit, in cents |
 | `Notifications__PublicBaseUrl` | `http://localhost:5137` | Base URL for links in emails |
 | `Notifications__WorkerEnabled` | `true` | Run the background job that sends emails and queues reminders |

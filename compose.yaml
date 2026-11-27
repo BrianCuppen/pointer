@@ -1,15 +1,38 @@
-# Local development only: a PostgreSQL server for `dotnet run` and `dotnet test`.
-# Copy .env.example to .env and set a password first.
+# Local only. `docker compose up` starts the database and the app with the demo shop,
+# demo payments (no Stripe) and log-only email. Open http://localhost:8080/kapper-demo.
+# For `dotnet run` / `dotnet test` on your machine, `docker compose up db` starts just the database.
+# The passwords below are local demo values, not secrets: never reuse them anywhere real.
 services:
   db:
     image: postgres:16
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-demo-only}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      ConnectionStrings__Default: "Host=db;Database=pointer;Username=postgres;Password=${POSTGRES_PASSWORD:-local-demo-only}"
+      Database__MigrateOnStartup: "true"
+      Payments__Mode: demo
+      Notifications__PublicBaseUrl: http://localhost:8080
+      Demo__Seed: "true"
+      Demo__OwnerEmail: demo@pointer.test
+      Demo__OwnerPassword: demo-only-password
 
 volumes:
   pgdata:

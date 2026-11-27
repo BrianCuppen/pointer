@@ -40,8 +40,9 @@ public static class DemoSeeder
 
         var tracked = await db.Shops.SingleAsync(s => s.Id == shop.Id);
         tracked.Address = "Veldstraat 1, 9000 Gent";
-        // Stripe test-mode account id, if provided, so the demo can take test payments.
-        tracked.PaymentAccountId = config["Demo:StripeAccountId"];
+        // A Stripe test-mode account id if provided; in demo payment mode a placeholder, since no real account is used.
+        tracked.PaymentAccountId = config["Demo:StripeAccountId"]
+            ?? (DependencyInjection.IsDemoPayments(config) ? "acct_demo" : null);
         Service[] menu =
         [
             new() { ShopId = shop.Id, Name = "Knippen", DurationMinutes = 30, PriceCents = 2500, DepositCents = 500 },

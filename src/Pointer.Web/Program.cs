@@ -65,6 +65,9 @@ if (app.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 if (isCli)
     return await Cli.RunAsync(app.Services, args);
 
+if (DependencyInjection.IsDemoPayments(app.Configuration))
+    app.Logger.LogWarning("Payments__Mode=demo: deposits use a fake local checkout and no money moves. Do not use this with real customers");
+
 if (app.Configuration.GetValue<bool>("Demo:Seed"))
 {
     using var scope = app.Services.CreateScope();

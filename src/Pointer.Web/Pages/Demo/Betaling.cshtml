@@ -1,0 +1,26 @@
+@page "/demo-betaling/{session}"
+@model Pointer.Web.Pages.Demo.BetalingModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["DemoPay_Title"];
+}
+<h1>@T["DemoPay_Title"]</h1>
+<p role="note">@T["DemoPay_Notice"]</p>
+<p>@Model.Shop.Name: @Model.Payment.Booking!.Service!.Name</p>
+<p>@T["DemoPay_Amount", Money.Format(Model.Payment.AmountCents)]</p>
+@if (Model.Payment.Status == Pointer.Core.Domain.PaymentStatus.Pending)
+{
+    <form method="post" asp-page-handler="Pay">
+        <button type="submit">@T["DemoPay_Pay"]</button>
+    </form>
+    <form method="post" asp-page-handler="Fail">
+        <button type="submit">@T["DemoPay_Fail"]</button>
+    </form>
+    <form method="post" asp-page-handler="Cancel">
+        <button type="submit">@T["DemoPay_Cancel"]</button>
+    </form>
+}
+else
+{
+    <p><a asp-page="/Boeken/Bevestiging" asp-route-slug="@Model.Shop.Slug" asp-route-token="@Model.Payment.Booking.CancelToken">@T["DemoPay_Done"]</a></p>
+}
