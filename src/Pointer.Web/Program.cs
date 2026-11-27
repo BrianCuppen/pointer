@@ -91,6 +91,8 @@ app.UseRequestLocalization(new RequestLocalizationOptions
 
 app.UseSecurityHeaders();
 app.UseStaticFiles();
+// Friendly pages for 404 and other errors without a body; the status code is kept.
+app.UseStatusCodePagesWithReExecute("/fout/{0}");
 app.UseRouting();
 app.UseRateLimiter();
 app.UseAuthentication();

@@ -2,12 +2,18 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 @{
     ViewData["Title"] = T["Privacy_Title"];
+    ViewData["Narrow"] = true;
 }
-<h1>@T["Privacy_Title"]</h1>
-<p>@T["Privacy_Who"]</p>
-<h2>@T["Privacy_WhatTitle"]</h2>
-<p>@T["Privacy_What"]</p>
-<h2>@T["Privacy_WhyTitle"]</h2>
-<p>@T["Privacy_Why"]</p>
-<h2>@T["Privacy_RightsTitle"]</h2>
-<p>@T["Privacy_Rights"]</p>
+<article class="prose rise" style="padding-top:clamp(32px,7vw,72px)">
+    <span class="eyebrow">@Icon.Svg("shield") GDPR</span>
+    <h1 style="margin-top:10px">@T["Privacy_Title"]</h1>
+    <p class="lead" style="font-size:1.0625rem">@T["Privacy_Who"]</p>
+    <div class="card card-pad" style="margin-top:24px">
+        <h2 style="margin-top:0">@T["Privacy_WhatTitle"]</h2>
+        <p>@T["Privacy_What"]</p>
+        <h2>@T["Privacy_WhyTitle"]</h2>
+        <p>@T["Privacy_Why"]</p>
+        <h2>@T["Privacy_RightsTitle"]</h2>
+        <p>@T["Privacy_Rights"]</p>
+    </div>
+</article>

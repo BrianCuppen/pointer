@@ -22,6 +22,7 @@ public class IndexModel(
     public string BookingPageUrl { get; private set; } = "";
     public string EmbedSnippet { get; private set; } = "";
     public DateOnly Monday { get; private set; }
+    public DateOnly Today { get; private set; }
     public IReadOnlyList<CalendarDay> Week { get; private set; } = [];
 
     public async Task OnGetAsync([FromQuery] DateOnly? week, CancellationToken ct)
@@ -32,6 +33,7 @@ public class IndexModel(
         EmbedSnippet = $"<script src=\"{links.Value.PublicBaseUrl}/embed.js\" data-shop=\"{shop.Slug}\" async></script>";
 
         var today = ShopTime.LocalDate(clock.GetUtcNow().UtcDateTime, ShopTime.FindZone(shop.TimeZoneId));
+        Today = today;
         Monday = CalendarQueries.MondayOf(week ?? today);
         Week = await calendar.WeekAsync(shop, Monday, ct);
     }

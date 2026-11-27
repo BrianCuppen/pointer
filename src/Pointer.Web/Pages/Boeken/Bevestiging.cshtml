@@ -4,28 +4,61 @@
 @using Pointer.Core.Domain
 @{
     ViewData["Title"] = T["Confirm_Title"];
+    ViewData["Narrow"] = true;
     var start = Model.Local(Model.Booking.StartUtc);
+    var end = Model.Local(Model.Booking.EndUtc);
 }
-<h1>@Model.Shop.Name</h1>
-<section id="status" aria-live="polite"
+<section id="status" class="result" aria-live="polite"
          hx-get="@(Model.Booking.Status == BookingStatus.PendingPayment ? Request.Path.Value : null)"
          hx-trigger="@(Model.Booking.Status == BookingStatus.PendingPayment ? "every 3s" : null)"
          hx-select="#status" hx-swap="outerHTML">
     @switch (Model.Booking.Status)
     {
         case BookingStatus.Confirmed:
-            <h2>@T["Confirm_Confirmed"]</h2>
-            <p>@Model.Booking.Service!.Name, @start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</p>
-            <p>@T["Confirm_EmailSent", Model.Booking.CustomerEmail]</p>
-            <p><a asp-page="/Annuleren" asp-route-token="@Model.Booking.CancelToken">@T["Confirm_CancelLink"]</a></p>
+            <div class="result-icon ok">@Icon.Svg("check")</div>
+            <h1>@T["Confirm_Confirmed"]</h1>
+            <p class="lead">@T["Confirm_EmailSent", Model.Booking.CustomerEmail]</p>
+            <div class="card ticket rise rise-2">
+                <div class="ticket-row">
+                    <span class="icon-box">@Icon.Svg("scissors")</span>
+                    <div><div class="k">@Model.Shop.Name</div><div class="v">@Model.Booking.Service!.Name</div></div>
+                </div>
+                <div class="ticket-row">
+                    <span class="icon-box">@Icon.Svg("calendar")</span>
+                    <div><div class="k">@T["Book_When"]</div><div class="v">@start.ToString("dddd d MMMM yyyy") · @start.ToString("HH:mm")–@end.ToString("HH:mm")</div></div>
+                </div>
+                @if (Model.Shop.Address is not null)
+                {
+                    <div class="ticket-row">
+                        <span class="icon-box">@Icon.Svg("map-pin")</span>
+                        <div><div class="k">@T["Confirm_Where"]</div><div class="v">@Model.Shop.Address</div></div>
+                    </div>
+                }
+                @if (Model.Booking.DepositCents > 0)
+                {
+                    <div class="ticket-row">
+                        <span class="icon-box">@Icon.Svg("check-circle")</span>
+                        <div><div class="k">@T["Confirm_Deposit"]</div><div class="v">@T["Confirm_DepositPaid", Money.Format(Model.Booking.DepositCents)]</div></div>
+                    </div>
+                }
+            </div>
+            <div class="result-actions rise rise-3">
+                <a class="btn" asp-page="/Boeken/Index" asp-route-slug="@Model.Shop.Slug">@T["Confirm_BackToShop"]</a>
+                <a class="btn btn-ghost btn-danger" asp-page="/Annuleren" asp-route-token="@Model.Booking.CancelToken">@T["Confirm_CancelLink"]</a>
+            </div>
             break;
         case BookingStatus.PendingPayment:
-            <h2>@T["Confirm_Waiting"]</h2>
-            <p>@T["Confirm_WaitingHelp"]</p>
+            <div class="result-icon wait"><div class="spinner"></div></div>
+            <h1>@T["Confirm_Waiting"]</h1>
+            <p class="lead">@T["Confirm_WaitingHelp"]</p>
             break;
         default:
-            <h2>@T["Confirm_NotConfirmed"]</h2>
-            <p><a asp-page="/Boeken/Index" asp-route-slug="@Model.Shop.Slug">@T["Confirm_TryAgain"]</a></p>
+            <div class="result-icon bad">@Icon.Svg("x")</div>
+            <h1>@T["Confirm_NotConfirmed"]</h1>
+            <p class="lead">@T["Confirm_NotConfirmedHelp"]</p>
+            <div class="result-actions">
+                <a class="btn btn-primary" asp-page="/Boeken/Index" asp-route-slug="@Model.Shop.Slug">@T["Confirm_TryAgain"] @Icon.Svg("arrow-right")</a>
+            </div>
             break;
     }
 </section>

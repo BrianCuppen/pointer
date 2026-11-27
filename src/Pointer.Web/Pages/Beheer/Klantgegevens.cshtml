@@ -1,59 +1,76 @@
 @page "/beheer/klantgegevens"
 @model Pointer.Web.Pages.Beheer.KlantgegevensModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
 @{
     ViewData["Title"] = T["Admin_CustomerData"];
 }
-<h1>@T["Admin_CustomerData"]</h1>
-<p>@T["CustomerData_Help"]</p>
-<form method="get">
-    <p>
-        <label for="email">@T["CustomerData_Email"]</label>
-        <input id="email" name="email" type="email" value="@Model.Email" required />
-        <button type="submit">@T["CustomerData_Search"]</button>
-    </p>
+<div class="page-head rise">
+    <div>
+        <h1>@T["Admin_CustomerData"]</h1>
+        <p>@T["CustomerData_Help"]</p>
+    </div>
+</div>
+<form method="get" class="card card-pad rise rise-1" style="max-width:720px">
+    <label class="label" for="email">@T["CustomerData_Email"]</label>
+    <div class="row" style="margin-top:8px;flex-wrap:nowrap">
+        <div class="input-group grow">
+            @Icon.Svg("search")
+            <input class="input" id="email" name="email" type="email" value="@Model.Email" required placeholder="klant@voorbeeld.be" />
+        </div>
+        <button type="submit" class="btn btn-dark" style="min-height:48px">@T["CustomerData_Search"]</button>
+    </div>
 </form>
 
 @if (Model.Results is not null)
 {
     @if (Model.Results.Count == 0)
     {
-        <p>@T["CustomerData_None"]</p>
+        <div class="card empty rise" style="margin-top:16px;max-width:720px">
+            <div class="empty-icon">@Icon.Svg("search")</div>
+            <strong>@T["CustomerData_None"]</strong>
+        </div>
     }
     else
     {
-        <h2>@T["CustomerData_Found", Model.Results.Count]</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">@T["CustomerData_When"]</th>
-                    <th scope="col">@T["CustomerData_Service"]</th>
-                    <th scope="col">@T["CustomerData_Name"]</th>
-                    <th scope="col">@T["CustomerData_Phone"]</th>
-                    <th scope="col">@T["CustomerData_Status"]</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var b in Model.Results)
-                {
-                    <tr>
-                        <td>@b.StartLocal.ToString("d MMMM yyyy HH:mm")</td>
-                        <td>@b.Service</td>
-                        <td>@b.CustomerName</td>
-                        <td>@b.CustomerPhone</td>
-                        <td>@T[$"Status_{b.Status}"]</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <form method="post" asp-page-handler="Export">
-            <input type="hidden" name="Email" value="@Model.Email" />
-            <button type="submit">@T["CustomerData_Export"]</button>
-        </form>
-        <form method="post" asp-page-handler="Erase">
-            <input type="hidden" name="Email" value="@Model.Email" />
-            <p>@T["CustomerData_EraseWarning"]</p>
-            <button type="submit">@T["CustomerData_Erase"]</button>
-        </form>
+        <section class="card rise" style="margin-top:16px">
+            <div class="card-head row-between">
+                <h2 style="font-size:1.0625rem">@T["CustomerData_Found", Model.Results.Count]</h2>
+                <form method="post" asp-page-handler="Export">
+                    <input type="hidden" name="Email" value="@Model.Email" />
+                    <button type="submit" class="btn btn-sm" data-no-busy>@Icon.Svg("download") @T["CustomerData_Export"]</button>
+                </form>
+            </div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">@T["CustomerData_When"]</th>
+                            <th scope="col">@T["CustomerData_Service"]</th>
+                            <th scope="col">@T["CustomerData_Name"]</th>
+                            <th scope="col">@T["CustomerData_Phone"]</th>
+                            <th scope="col">@T["CustomerData_Status"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in Model.Results)
+                        {
+                            <tr>
+                                <td class="nowrap tabular">@b.StartLocal.ToString("d MMM yyyy · HH:mm")</td>
+                                <td>@b.Service</td>
+                                <td>@b.CustomerName</td>
+                                <td>@(b.CustomerPhone ?? "—")</td>
+                                <td><span class="badge">@T[$"Status_{b.Status}"]</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" asp-page-handler="Erase" class="card-foot row-between">
+                <input type="hidden" name="Email" value="@Model.Email" />
+                <p class="hint" style="max-width:560px">@Icon.Svg("alert") @T["CustomerData_EraseWarning"]</p>
+                <button type="submit" class="btn btn-danger">@Icon.Svg("trash") @T["CustomerData_Erase"]</button>
+            </form>
+        </section>
     }
 }

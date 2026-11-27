@@ -5,63 +5,112 @@
 @{
     ViewData["Title"] = T["Book_DetailsTitle"];
     var start = Model.Local(Model.Start);
+    var end = start.AddMinutes(Model.Service.DurationMinutes);
+    var hasDeposit = Model.Service.DepositCents > 0;
 }
-<h1>@Model.Shop.Name</h1>
-<h2>@T["Book_DetailsTitle"]</h2>
-<dl>
-    <dt>@T["Book_What"]</dt>
-    <dd>@Model.Service.Name (@Model.Service.DurationMinutes @T["Minutes"])</dd>
-    <dt>@T["Book_When"]</dt>
-    <dd>@start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</dd>
-    <dt>@T["Book_Price"]</dt>
-    <dd>@Money.Format(Model.Service.PriceCents)</dd>
-</dl>
+<partial name="_ShopHero" model="Model.Shop" />
+<partial name="_Steps" model="3" />
 
-@* Hard rule 5: the rules are shown before payment. *@
-<section aria-labelledby="rules-heading">
-    <h3 id="rules-heading">@T["Book_RulesTitle"]</h3>
-    <ul>
-        @if (Model.Service.DepositCents > 0)
-        {
-            <li>@T["Book_RuleDeposit", Money.Format(Model.Service.DepositCents)]</li>
-            <li>@(Model.Shop.NoShowPolicy == NoShowPolicy.KeepDeposit ? T["Book_RuleNoShowKeep"] : T["Book_RuleNoShowRefund"])</li>
-        }
-        else
-        {
-            <li>@T["Book_RuleNoDeposit"]</li>
-        }
-        @if (Model.Shop.FreeCancellationMinutes > 0)
-        {
-            var freeUntil = Model.Local(Model.Start.AddMinutes(-Model.Shop.FreeCancellationMinutes));
-            <li>@T["Book_RuleFreeCancel", $"{freeUntil:dddd d MMMM} {T["Book_At"]} {freeUntil:HH:mm}"]</li>
-        }
-        else
-        {
-            <li>@T["Book_RuleNoFreeCancel"]</li>
-        }
-    </ul>
-</section>
+<div class="book-grid aside-first">
+    <div class="rise rise-1">
+        <a class="link-back" asp-page="/Boeken/Index" asp-route-slug="@Model.Shop.Slug" asp-route-service="@Model.Service.Id"
+           asp-route-date="@DateOnly.FromDateTime(start.DateTime).ToString("yyyy-MM-dd")">@Icon.Svg("arrow-left") @T["Book_OtherTime"]</a>
 
-<form method="post" target="_top">
-    <div asp-validation-summary="All" role="alert"></div>
-    <input type="hidden" name="service" value="@Model.Service.Id" />
-    <input type="hidden" name="start" value="@Model.Start.ToString("yyyy-MM-ddTHH:mm:ssZ")" />
-    <p>
-        <label asp-for="Input.Name">@T["Book_Name"]</label>
-        <input asp-for="Input.Name" autocomplete="name" required maxlength="200" />
-    </p>
-    <p>
-        <label asp-for="Input.Email">@T["Book_Email"]</label>
-        <input asp-for="Input.Email" type="email" autocomplete="email" required maxlength="320" />
-    </p>
-    <p>
-        <label asp-for="Input.Phone">@T["Book_Phone"]</label>
-        <input asp-for="Input.Phone" type="tel" autocomplete="tel" maxlength="32" />
-    </p>
-    <p>
-        <input asp-for="Input.AcceptRules" type="checkbox" required />
-        <label asp-for="Input.AcceptRules">@T["Book_AcceptRules"]</label>
-    </p>
-    <p><small>@T["Book_PrivacyNote"] <a href="/privacy">@T["Book_PrivacyLink"]</a></small></p>
-    <button type="submit">@(Model.Service.DepositCents > 0 ? T["Book_SubmitPay", Money.Format(Model.Service.DepositCents)] : T["Book_Submit"])</button>
-</form>
+        <form method="post" target="_top" class="card" style="margin-top:14px">
+            <div class="card-head">
+                <h1 style="font-size:1.25rem">@T["Book_DetailsTitle"]</h1>
+                <p class="muted" style="margin-top:4px;font-size:.9375rem">@T["Book_DetailsHelp"]</p>
+            </div>
+            <div class="card-body">
+                <div asp-validation-summary="All" role="alert" style="margin-bottom:18px"></div>
+                <input type="hidden" name="service" value="@Model.Service.Id" />
+                <input type="hidden" name="start" value="@Model.Start.ToString("yyyy-MM-ddTHH:mm:ssZ")" />
+                <div class="field">
+                    <label class="label" asp-for="Input.Name">@T["Book_Name"]</label>
+                    <div class="input-group">
+                        @Icon.Svg("user")
+                        <input class="input" asp-for="Input.Name" autocomplete="name" required maxlength="200" placeholder="@T["Book_NamePlaceholder"]" />
+                    </div>
+                </div>
+                <div class="grid-2" style="margin-top:18px">
+                    <div class="field">
+                        <label class="label" asp-for="Input.Email">@T["Book_Email"]</label>
+                        <div class="input-group">
+                            @Icon.Svg("mail")
+                            <input class="input" asp-for="Input.Email" type="email" autocomplete="email" inputmode="email" required maxlength="320" placeholder="naam@voorbeeld.be" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" asp-for="Input.Phone">@T["Book_PhoneLabel"] <span class="optional">@T["Optional"]</span></label>
+                        <div class="input-group">
+                            @Icon.Svg("phone")
+                            <input class="input" asp-for="Input.Phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="32" placeholder="0470 12 34 56" />
+                        </div>
+                    </div>
+                </div>
+                <label class="check check-card" style="margin-top:22px">
+                    <input asp-for="Input.AcceptRules" type="checkbox" required />
+                    <span>@T["Book_AcceptRules"]</span>
+                </label>
+                <p class="hint" style="margin-top:14px">@Icon.Svg("shield") @T["Book_PrivacyNote"] <a href="/privacy">@T["Book_PrivacyLink"]</a></p>
+            </div>
+            <div class="card-foot">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    @if (hasDeposit) { @Icon.Svg("lock") }
+                    @(hasDeposit ? T["Book_SubmitPay", Money.Format(Model.Service.DepositCents)] : T["Book_Submit"])
+                </button>
+                @if (hasDeposit)
+                {
+                    <div class="trust">
+                        <span class="paymarks"><span class="paymark">Bancontact</span><span class="paymark">iDEAL</span><span class="paymark">Visa · MC</span></span>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+
+    <aside class="book-aside rise rise-2">
+        <div class="card summary">
+            <div class="summary-top">
+                <span class="eyebrow">@T["Book_Summary"]</span>
+                <h2>@Model.Service.Name</h2>
+                <div class="summary-when">
+                    <span>@Icon.Svg("calendar") @start.ToString("dddd d MMMM yyyy")</span>
+                    <span>@Icon.Svg("clock") @start.ToString("HH:mm") – @end.ToString("HH:mm")</span>
+                </div>
+            </div>
+            <dl class="summary-lines">
+                <div><dt>@T["Book_Price"]</dt><dd>@Money.Format(Model.Service.PriceCents)</dd></div>
+                @if (hasDeposit)
+                {
+                    <div><dt>@T["Book_PayInShop"]</dt><dd>@Money.Format(Math.Max(0, Model.Service.PriceCents - Model.Service.DepositCents))</dd></div>
+                }
+                <div class="total"><dt>@T["Book_PayNow"]</dt><dd>@Money.Format(Model.Service.DepositCents)</dd></div>
+            </dl>
+            @* Hard rule 5: the rules are shown before payment. *@
+            <section aria-labelledby="rules-heading">
+                <h3 id="rules-heading" class="rules-title">@Icon.Svg("info") @T["Book_RulesTitle"]</h3>
+                <ul class="rules">
+                    @if (hasDeposit)
+                    {
+                        <li>@Icon.Svg("euro") <span>@T["Book_RuleDeposit", Money.Format(Model.Service.DepositCents)]</span></li>
+                        <li>@Icon.Svg("user") <span>@(Model.Shop.NoShowPolicy == NoShowPolicy.KeepDeposit ? T["Book_RuleNoShowKeep"] : T["Book_RuleNoShowRefund"])</span></li>
+                    }
+                    else
+                    {
+                        <li>@Icon.Svg("check-circle") <span>@T["Book_RuleNoDeposit"]</span></li>
+                    }
+                    @if (Model.Shop.FreeCancellationMinutes > 0)
+                    {
+                        var freeUntil = Model.Local(Model.Start.AddMinutes(-Model.Shop.FreeCancellationMinutes));
+                        <li>@Icon.Svg("calendar-x") <span>@T["Book_RuleFreeCancel", $"{freeUntil:dddd d MMMM} {T["Book_At"]} {freeUntil:HH:mm}"]</span></li>
+                    }
+                    else
+                    {
+                        <li>@Icon.Svg("calendar-x") <span>@T["Book_RuleNoFreeCancel"]</span></li>
+                    }
+                </ul>
+            </section>
+        </div>
+    </aside>
+</div>

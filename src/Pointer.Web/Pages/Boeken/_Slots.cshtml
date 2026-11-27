@@ -1,19 +1,44 @@
 @model Pointer.Web.Pages.Boeken.SlotsView
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
-<h3>@Model.Date.ToString("dddd d MMMM")</h3>
+@{
+    var culture = System.Globalization.CultureInfo.GetCultureInfo("nl-BE");
+    var groups = Model.Slots
+        .GroupBy(s => s.StartLocal.Hour < 12 ? 0 : s.StartLocal.Hour < 17 ? 1 : 2)
+        .OrderBy(g => g.Key)
+        .ToList();
+    var groupNames = new[] { T["Slots_Morning"].Value, T["Slots_Afternoon"].Value, T["Slots_Evening"].Value };
+    var groupIcons = new[] { "sun", "sun", "clock" };
+}
+<div class="slots-head">
+    <h3>@Model.Date.ToString("dddd d MMMM", culture)</h3>
+    @if (Model.Slots.Count > 0)
+    {
+        <span class="badge badge-ok">@T["Slots_Count", Model.Slots.Count]</span>
+    }
+</div>
 @if (Model.Slots.Count == 0)
 {
-    <p>@T["Book_NoSlots"]</p>
+    <div class="empty">
+        <div class="empty-icon">@Icon.Svg("calendar-x")</div>
+        <strong>@T["Book_NoSlots"]</strong>
+        <span>@T["Book_NoSlotsHelp"]</span>
+    </div>
 }
 else
 {
-    <ul>
-        @foreach (var slot in Model.Slots)
-        {
-            <li>
-                <a asp-page="/Boeken/Gegevens" asp-route-slug="@Model.Slug" asp-route-service="@Model.ServiceId"
-                   asp-route-start="@slot.StartUtc.ToString("yyyy-MM-ddTHH:mm:ssZ")">@slot.StartLocal.ToString("HH:mm")</a>
-            </li>
-        }
-    </ul>
+    @foreach (var g in groups)
+    {
+        <div class="slot-group">
+            <div class="slot-group-title">@Icon.Svg(groupIcons[g.Key]) @groupNames[g.Key]</div>
+            <ul class="slots">
+                @foreach (var (slot, i) in g.Select((s, i) => (s, i)))
+                {
+                    <li>
+                        <a class="slot" style="animation-delay:@(Math.Min(i, 12) * 18)ms" asp-page="/Boeken/Gegevens" asp-route-slug="@Model.Slug" asp-route-service="@Model.ServiceId"
+                           asp-route-start="@slot.StartUtc.ToString("yyyy-MM-ddTHH:mm:ssZ")">@slot.StartLocal.ToString("HH:mm")</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
 }

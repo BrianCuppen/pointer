@@ -1,38 +1,86 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    var path = Context.Request.Path.Value?.TrimEnd('/').ToLowerInvariant() ?? "";
+    string? Current(params string[] prefixes) =>
+        prefixes.Any(p => p == "/beheer" ? path is "/beheer" or "/beheer/index" : path.StartsWith(p)) ? "page" : null;
+    var signedIn = User.Identity?.IsAuthenticated == true;
+}
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="robots" content="noindex" />
-    <title>@ViewData["Title"] - @T["Admin_Title"]</title>
-    @* No styling on purpose: the visual design comes from Figma later. *@
+    <meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)" />
+    <title>@ViewData["Title"] · @T["Admin_Title"]</title>
+    <link rel="preload" href="~/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    @if (User.Identity?.IsAuthenticated == true)
+    <a class="skip-link" href="#content">@T["SkipToContent"]</a>
+    @if (TempData["Saved"] is string saved)
     {
-        <nav aria-label="@T["Admin_Nav"]">
-            <ul>
-                <li><a asp-page="/Beheer/Index">@T["Admin_Calendar"]</a></li>
-                <li><a asp-page="/Beheer/Diensten/Index">@T["Admin_Services"]</a></li>
-                <li><a asp-page="/Beheer/Openingsuren">@T["Admin_Hours"]</a></li>
-                <li><a asp-page="/Beheer/VrijeDagen">@T["Admin_TimeOff"]</a></li>
-                <li><a asp-page="/Beheer/Klantgegevens">@T["Admin_CustomerData"]</a></li>
-                <li><a asp-page="/Beheer/Instellingen">@T["Admin_Settings"]</a></li>
-                <li>
-                    <form method="post" asp-page="/Beheer/Uitloggen"><button type="submit">@T["Admin_Logout"]</button></form>
-                </li>
-            </ul>
-        </nav>
+        <div class="toast" role="status">@Icon.Svg("check-circle") @saved</div>
     }
-    <main>
-        @if (TempData["Saved"] is string saved)
+    @if (!signedIn)
+    {
+        <main id="content">@RenderBody()</main>
+    }
+    else
+    {
+        var nav = new (string Page, string Icon, string Label, string[] Match)[]
         {
-            <p role="status">@saved</p>
-        }
-        @RenderBody()
-    </main>
+            ("/Beheer/Index", "calendar", T["Admin_Calendar"], ["/beheer"]),
+            ("/Beheer/Diensten/Index", "scissors", T["Admin_Services"], ["/beheer/diensten"]),
+            ("/Beheer/Openingsuren", "clock", T["Admin_Hours"], ["/beheer/openingsuren"]),
+            ("/Beheer/VrijeDagen", "calendar-x", T["Admin_TimeOff"], ["/beheer/vrijedagen"]),
+            ("/Beheer/Klantgegevens", "shield", T["Admin_CustomerData"], ["/beheer/klantgegevens"]),
+            ("/Beheer/Instellingen", "settings", T["Admin_Settings"], ["/beheer/instellingen"]),
+        };
+        <div class="admin">
+            <aside class="sidebar" aria-label="@T["Admin_Nav"]">
+                <a class="wordmark" asp-page="/Beheer/Index">@Icon.Mark() @T["AppName"]</a>
+                <ul class="nav">
+                    @foreach (var item in nav)
+                    {
+                        <li><a asp-page="@item.Page" aria-current="@Current(item.Match)">@Icon.Svg(item.Icon) @item.Label</a></li>
+                    }
+                </ul>
+                <div class="sidebar-foot">
+                    <form method="post" asp-page="/Beheer/Uitloggen" class="nav">
+                        <button type="submit" data-no-busy>@Icon.Svg("log-out") @T["Admin_Logout"]</button>
+                    </form>
+                </div>
+            </aside>
+            <div>
+                <header class="topbar">
+                    <a class="wordmark" asp-page="/Beheer/Index">@Icon.Mark() @T["AppName"]</a>
+                    <details class="mobile-nav">
+                        <summary class="btn btn-ghost btn-icon" aria-label="@T["Admin_Nav"]">@Icon.Svg("menu")</summary>
+                        <div class="sheet">
+                            <ul class="nav">
+                                @foreach (var item in nav)
+                                {
+                                    <li><a asp-page="@item.Page" aria-current="@Current(item.Match)">@Icon.Svg(item.Icon) @item.Label</a></li>
+                                }
+                                <li>
+                                    <form method="post" asp-page="/Beheer/Uitloggen">
+                                        <button type="submit" data-no-busy>@Icon.Svg("log-out") @T["Admin_Logout"]</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </header>
+                <main id="content" class="admin-main">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    }
     <script src="~/lib/htmx/htmx.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

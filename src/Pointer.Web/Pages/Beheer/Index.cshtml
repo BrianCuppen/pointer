@@ -2,82 +2,139 @@
 @model Pointer.Web.Pages.Beheer.IndexModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 @using Pointer.Core.Domain
+@using Pointer.Core.Admin
 @{
     ViewData["Title"] = T["Admin_Calendar"];
+    var all = Model.Week.SelectMany(d => d.Entries).ToList();
+    var depositsPaid = all.Where(e => e.PaymentStatus == PaymentStatus.Succeeded).Sum(e => e.DepositCents);
+    var noShows = all.Count(e => e.Status == BookingStatus.NoShow);
+    var open = all.Count(e => e.Status == BookingStatus.Confirmed && !e.HasStarted);
+    var sunday = Model.Monday.AddDays(6);
+    var wk = Model.Monday.ToString("yyyy-MM-dd");
+    string StatusBadge(BookingStatus s) => s switch
+    {
+        BookingStatus.Confirmed => "badge-brand",
+        BookingStatus.Completed => "badge-ok",
+        BookingStatus.NoShow => "badge-bad",
+        BookingStatus.PendingPayment => "badge-warn",
+        _ => "",
+    };
+    string RowClass(CalendarEntry e) => e.Status switch
+    {
+        BookingStatus.PendingPayment => "is-pending",
+        BookingStatus.NoShow => "is-noshow",
+        BookingStatus.Completed => "is-done",
+        _ => "",
+    };
 }
-<h1>@Model.ShopName</h1>
-<p>@T["Admin_BookingPage"]: <a href="@Model.BookingPageUrl">@Model.BookingPageUrl</a></p>
+<div class="page-head rise">
+    <div>
+        <span class="eyebrow">@Model.ShopName</span>
+        <h1 style="margin-top:6px">@T["Calendar_Week", Model.Monday.ToString("d MMMM yyyy")]</h1>
+    </div>
+    <nav class="weeknav" aria-label="@T["Calendar_WeekNav"]">
+        <div class="segmented">
+            <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(-7).ToString("yyyy-MM-dd")" aria-label="@T["Calendar_Previous"]">@Icon.Svg("chevron-left")<span class="visually-hidden">@T["Calendar_Previous"]</span></a>
+            <a asp-page="Index">@T["Calendar_ThisWeek"]</a>
+            <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(7).ToString("yyyy-MM-dd")" aria-label="@T["Calendar_Next"]"><span class="visually-hidden">@T["Calendar_Next"]</span>@Icon.Svg("chevron-right")</a>
+        </div>
+        <a class="btn btn-sm" href="@Model.BookingPageUrl" target="_blank" rel="noopener">@Icon.Svg("external") <span>@T["Admin_OpenBookingPage"]</span></a>
+    </nav>
+</div>
 
-<h2>@T["Calendar_Week", Model.Monday.ToString("d MMMM yyyy")]</h2>
-<nav aria-label="@T["Calendar_WeekNav"]">
-    <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(-7).ToString("yyyy-MM-dd")">@T["Calendar_Previous"]</a>
-    <a asp-page="Index">@T["Calendar_ThisWeek"]</a>
-    <a asp-page="Index" asp-route-week="@Model.Monday.AddDays(7).ToString("yyyy-MM-dd")">@T["Calendar_Next"]</a>
+<div class="stats rise rise-1">
+    <div class="card stat"><div class="k">@Icon.Svg("calendar") @T["Stats_Bookings"]</div><div class="v">@all.Count</div></div>
+    <div class="card stat"><div class="k">@Icon.Svg("clock") @T["Stats_Upcoming"]</div><div class="v">@open</div></div>
+    <div class="card stat"><div class="k">@Icon.Svg("euro") @T["Stats_Deposits"]</div><div class="v">@Money.Format(depositsPaid)</div></div>
+    <div class="card stat"><div class="k">@Icon.Svg("user") @T["Stats_NoShows"]</div><div class="v">@noShows</div></div>
+</div>
+
+<nav class="week-strip rise rise-2" aria-label="@T["Calendar_Days"]">
+    @foreach (var day in Model.Week)
+    {
+        <a href="#day-@day.Date.ToString("yyyyMMdd")" class="@(day.Date == Model.Today ? "is-today" : null)">
+            <span class="dow">@day.Date.ToString("ddd").TrimEnd('.')</span>
+            <span class="dnum">@day.Date.Day</span>
+            <span class="dots">@for (var i = 0; i < Math.Min(day.Entries.Count, 4); i++) { <i></i> }</span>
+        </a>
+    }
 </nav>
 
+<div class="rise rise-3">
 @foreach (var day in Model.Week)
 {
-    <section aria-labelledby="day-@day.Date.ToString("yyyyMMdd")">
-        <h3 id="day-@day.Date.ToString("yyyyMMdd")">@day.Date.ToString("dddd d MMMM")</h3>
-        @if (day.Entries.Count == 0)
+    var id = $"day-{day.Date:yyyyMMdd}";
+    <section class="card day-block @(day.Entries.Count == 0 ? "is-empty" : null)" id="@id" aria-labelledby="@id-h">
+        <div class="day-head">
+            <h2 id="@id-h">@day.Date.ToString("dddd d MMMM") @if (day.Date == Model.Today) { <span class="today">@T["Calendar_Today"]</span> }</h2>
+            <span class="muted" style="font-size:.8125rem">@(day.Entries.Count == 0 ? T["Calendar_NoBookings"] : T["Calendar_Count", day.Entries.Count])</span>
+        </div>
+        @if (day.Entries.Count > 0)
         {
-            <p>@T["Calendar_NoBookings"]</p>
-        }
-        else
-        {
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">@T["Calendar_Time"]</th>
-                        <th scope="col">@T["Calendar_Service"]</th>
-                        <th scope="col">@T["Calendar_Customer"]</th>
-                        <th scope="col">@T["Calendar_Status"]</th>
-                        <th scope="col">@T["Calendar_Actions"]</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var e in day.Entries)
-                    {
-                        <tr>
-                            <td>@e.StartLocal.ToString("HH:mm")–@e.EndLocal.ToString("HH:mm")</td>
-                            <td>@e.Service</td>
-                            <td>
-                                @e.CustomerName<br />
-                                <a href="mailto:@e.CustomerEmail">@e.CustomerEmail</a>
-                                @if (e.CustomerPhone is not null) { <br /><a href="tel:@e.CustomerPhone">@e.CustomerPhone</a> }
-                            </td>
-                            <td>
-                                @T[$"Status_{e.Status}"]
+            <ul class="appts">
+                @foreach (var e in day.Entries)
+                {
+                    <li class="appt @RowClass(e)">
+                        <div class="appt-time"><strong>@e.StartLocal.ToString("HH:mm")</strong><span>@e.EndLocal.ToString("HH:mm")</span></div>
+                        <div class="appt-main">
+                            <div class="appt-title">
+                                <span>@(string.IsNullOrEmpty(e.CustomerName) ? T["Calendar_Erased"] : e.CustomerName)</span>
+                                <span class="badge @StatusBadge(e.Status)">@T[$"Status_{e.Status}"]</span>
+                            </div>
+                            <div class="appt-sub">
+                                <span>@e.Service</span>
                                 @if (e.DepositCents > 0 && e.PaymentStatus is { } ps)
                                 {
-                                    <br /><small>@T["Calendar_Deposit", Money.Format(e.DepositCents)]: @T[$"Payment_{ps}"]</small>
+                                    <span>@T["Calendar_Deposit", Money.Format(e.DepositCents)]: @T[$"Payment_{ps}"]</span>
                                 }
-                            </td>
-                            <td>
-                                @if (e.Status == BookingStatus.Confirmed && !e.HasStarted)
+                                @if (!string.IsNullOrEmpty(e.CustomerEmail))
                                 {
-                                    <form method="post" asp-page-handler="Cancel" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
-                                        <button type="submit" aria-label="@T["Calendar_CancelFor", e.CustomerName]">@T["Calendar_Cancel"]</button>
-                                    </form>
+                                    <a href="mailto:@e.CustomerEmail">@Icon.Svg("mail") @e.CustomerEmail</a>
                                 }
-                                @if (e.Status == BookingStatus.Confirmed && e.HasStarted)
+                                @if (e.CustomerPhone is not null)
                                 {
-                                    <form method="post" asp-page-handler="Completed" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
-                                        <button type="submit" aria-label="@T["Calendar_CompletedFor", e.CustomerName]">@T["Calendar_Completed"]</button>
-                                    </form>
-                                    <form method="post" asp-page-handler="NoShow" asp-route-id="@e.BookingId" asp-route-week="@Model.Monday.ToString("yyyy-MM-dd")">
-                                        <button type="submit" aria-label="@T["Calendar_NoShowFor", e.CustomerName]">@T["Calendar_NoShow"]</button>
+                                    <a href="tel:@e.CustomerPhone">@Icon.Svg("phone") @e.CustomerPhone</a>
+                                }
+                            </div>
+                        </div>
+                        @if (e.Status == BookingStatus.Confirmed)
+                        {
+                            <div class="appt-actions">
+                                @if (!e.HasStarted)
+                                {
+                                    <form method="post" asp-page-handler="Cancel" asp-route-id="@e.BookingId" asp-route-week="@wk">
+                                        <button type="submit" class="btn btn-sm btn-danger" aria-label="@T["Calendar_CancelFor", e.CustomerName]">@Icon.Svg("x") @T["Calendar_Cancel"]</button>
                                     </form>
                                 }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Completed" asp-route-id="@e.BookingId" asp-route-week="@wk">
+                                        <button type="submit" class="btn btn-sm btn-ok" aria-label="@T["Calendar_CompletedFor", e.CustomerName]">@Icon.Svg("check") @T["Calendar_Completed"]</button>
+                                    </form>
+                                    <form method="post" asp-page-handler="NoShow" asp-route-id="@e.BookingId" asp-route-week="@wk">
+                                        <button type="submit" class="btn btn-sm btn-danger" aria-label="@T["Calendar_NoShowFor", e.CustomerName]">@Icon.Svg("user") @T["Calendar_NoShow"]</button>
+                                    </form>
+                                }
+                            </div>
+                        }
+                    </li>
+                }
+            </ul>
         }
     </section>
 }
+</div>
 
-<h2>@T["Admin_EmbedTitle"]</h2>
-<p>@T["Admin_EmbedHelp"]</p>
-<pre><code>@Model.EmbedSnippet</code></pre>
+<section class="card" style="margin-top:28px">
+    <div class="card-head">
+        <h2 style="font-size:1.0625rem;display:flex;gap:10px;align-items:center">@Icon.Svg("code") @T["Admin_EmbedTitle"]</h2>
+        <p class="muted" style="margin-top:4px;font-size:.9rem">@T["Admin_EmbedHelp"]</p>
+    </div>
+    <div class="card-body">
+        <div class="embed">
+            <pre><code id="embed-code">@Model.EmbedSnippet</code></pre>
+            <button type="button" class="btn btn-sm" data-copy="#embed-code" data-copied="@T["Copied"]">@Icon.Svg("copy") <span data-label>@T["Copy"]</span></button>
+        </div>
+        <p class="hint" style="margin-top:12px">@T["Admin_BookingPage"]: <a href="@Model.BookingPageUrl">@Model.BookingPageUrl</a></p>
+    </div>
+</section>
