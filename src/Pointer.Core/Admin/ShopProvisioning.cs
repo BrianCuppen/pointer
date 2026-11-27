@@ -10,9 +10,17 @@ namespace Pointer.Core.Admin;
 /// </summary>
 public sealed class ShopProvisioning(PointerDbContext db, TimeProvider clock)
 {
+    /// <summary>First path segments the app uses itself; a shop slug cannot take them.</summary>
+    public static readonly IReadOnlySet<string> ReservedSlugs = new HashSet<string>
+    {
+        "beheer", "annuleren", "webhooks", "healthz", "embed", "embed.js", "lib", "css", "js", "privacy", "error", "admin", "api",
+    };
+
     public async Task<Shop> CreateAsync(string slug, string name, string ownerEmail, string passwordHash, CancellationToken ct = default)
     {
         slug = slug.Trim().ToLowerInvariant();
+        if (ReservedSlugs.Contains(slug))
+            throw new InvalidOperationException($"'{slug}' is reserved for the app's own pages.");
         if (await db.Shops.AnyAsync(s => s.Slug == slug, ct))
             throw new InvalidOperationException($"A shop with slug '{slug}' already exists.");
 

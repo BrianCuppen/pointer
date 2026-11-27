@@ -1,0 +1,29 @@
+@page "/annuleren/{token}"
+@model Pointer.Web.Pages.AnnulerenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
+@{
+    ViewData["Title"] = T["CancelPage_Title"];
+    var start = Model.Local(Model.Booking.StartUtc);
+}
+<h1>@T["CancelPage_Title"]</h1>
+<p>@Model.ShopName: @Model.Booking.Service!.Name, @start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</p>
+
+@if (Model.Done)
+{
+    <p role="status">@T["CancelPage_Done"]</p>
+}
+else if (!Model.CanCancel)
+{
+    <p>@T["CancelPage_NotPossible"]</p>
+}
+else
+{
+    @if (Model.HasDeposit)
+    {
+        <p>@(Model.WouldRefund ? T["CancelPage_Refund", Money.Format(Model.Booking.DepositCents)] : T["CancelPage_NoRefund", Money.Format(Model.Booking.DepositCents)])</p>
+    }
+    <form method="post">
+        <button type="submit">@T["CancelPage_Submit"]</button>
+    </form>
+}

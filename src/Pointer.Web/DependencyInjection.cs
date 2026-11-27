@@ -23,6 +23,8 @@ public static class DependencyInjection
         services.Configure<AvailabilityOptions>(configuration.GetSection(AvailabilityOptions.SectionName));
         services.AddScoped<AvailabilityService>();
         services.AddScoped<BookingService>();
+        services.AddScoped<BookingLifecycleService>();
+        services.AddScoped<PublicBookingQueries>();
         services.AddScoped<ShopAdminService>();
         services.AddScoped<ShopProvisioning>();
 

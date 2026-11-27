@@ -15,6 +15,7 @@ public sealed class WebAppFactory(PostgresFixture fixture) : WebApplicationFacto
             ["ConnectionStrings:Default"] = fixture.ConnectionString,
             ["Notifications:WorkerEnabled"] = "false",
             ["Demo:Seed"] = "false",
+            ["Logging:LogLevel:Default"] = "Warning",
         }));
         // Program reads the connection string while building services, before the in-memory
         // configuration above is applied, so also pass it the way production does.

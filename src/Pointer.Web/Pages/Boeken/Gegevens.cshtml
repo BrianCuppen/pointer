@@ -1,0 +1,67 @@
+@page "/{slug}/gegevens"
+@model Pointer.Web.Pages.Boeken.GegevensModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@using Pointer.Core.Domain
+@{
+    ViewData["Title"] = T["Book_DetailsTitle"];
+    var start = Model.Local(Model.Start);
+}
+<h1>@Model.Shop.Name</h1>
+<h2>@T["Book_DetailsTitle"]</h2>
+<dl>
+    <dt>@T["Book_What"]</dt>
+    <dd>@Model.Service.Name (@Model.Service.DurationMinutes @T["Minutes"])</dd>
+    <dt>@T["Book_When"]</dt>
+    <dd>@start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</dd>
+    <dt>@T["Book_Price"]</dt>
+    <dd>@Money.Format(Model.Service.PriceCents)</dd>
+</dl>
+
+@* Hard rule 5: the rules are shown before payment. *@
+<section aria-labelledby="rules-heading">
+    <h3 id="rules-heading">@T["Book_RulesTitle"]</h3>
+    <ul>
+        @if (Model.Service.DepositCents > 0)
+        {
+            <li>@T["Book_RuleDeposit", Money.Format(Model.Service.DepositCents)]</li>
+            <li>@(Model.Shop.NoShowPolicy == NoShowPolicy.KeepDeposit ? T["Book_RuleNoShowKeep"] : T["Book_RuleNoShowRefund"])</li>
+        }
+        else
+        {
+            <li>@T["Book_RuleNoDeposit"]</li>
+        }
+        @if (Model.Shop.FreeCancellationMinutes > 0)
+        {
+            var freeUntil = Model.Local(Model.Start.AddMinutes(-Model.Shop.FreeCancellationMinutes));
+            <li>@T["Book_RuleFreeCancel", $"{freeUntil:dddd d MMMM} {T["Book_At"]} {freeUntil:HH:mm}"]</li>
+        }
+        else
+        {
+            <li>@T["Book_RuleNoFreeCancel"]</li>
+        }
+    </ul>
+</section>
+
+<form method="post" target="_top">
+    <div asp-validation-summary="All" role="alert"></div>
+    <input type="hidden" name="service" value="@Model.Service.Id" />
+    <input type="hidden" name="start" value="@Model.Start.ToString("yyyy-MM-ddTHH:mm:ssZ")" />
+    <p>
+        <label asp-for="Input.Name">@T["Book_Name"]</label>
+        <input asp-for="Input.Name" autocomplete="name" required maxlength="200" />
+    </p>
+    <p>
+        <label asp-for="Input.Email">@T["Book_Email"]</label>
+        <input asp-for="Input.Email" type="email" autocomplete="email" required maxlength="320" />
+    </p>
+    <p>
+        <label asp-for="Input.Phone">@T["Book_Phone"]</label>
+        <input asp-for="Input.Phone" type="tel" autocomplete="tel" maxlength="32" />
+    </p>
+    <p>
+        <input asp-for="Input.AcceptRules" type="checkbox" required />
+        <label asp-for="Input.AcceptRules">@T["Book_AcceptRules"]</label>
+    </p>
+    <p><small>@T["Book_PrivacyNote"] <a href="/privacy">@T["Book_PrivacyLink"]</a></small></p>
+    <button type="submit">@(Model.Service.DepositCents > 0 ? T["Book_SubmitPay", Money.Format(Model.Service.DepositCents)] : T["Book_Submit"])</button>
+</form>
