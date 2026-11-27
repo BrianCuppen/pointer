@@ -1,0 +1,37 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>@ViewData["Title"] - @T["Admin_Title"]</title>
+    @* No styling on purpose: the visual design comes from Figma later. *@
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <nav aria-label="@T["Admin_Nav"]">
+            <ul>
+                <li><a asp-page="/Beheer/Index">@T["Admin_Calendar"]</a></li>
+                <li><a asp-page="/Beheer/Diensten/Index">@T["Admin_Services"]</a></li>
+                <li><a asp-page="/Beheer/Openingsuren">@T["Admin_Hours"]</a></li>
+                <li><a asp-page="/Beheer/VrijeDagen">@T["Admin_TimeOff"]</a></li>
+                <li><a asp-page="/Beheer/Instellingen">@T["Admin_Settings"]</a></li>
+                <li>
+                    <form method="post" asp-page="/Beheer/Uitloggen"><button type="submit">@T["Admin_Logout"]</button></form>
+                </li>
+            </ul>
+        </nav>
+    }
+    <main>
+        @if (TempData["Saved"] is string saved)
+        {
+            <p role="status">@saved</p>
+        }
+        @RenderBody()
+    </main>
+    <script src="~/lib/htmx/htmx.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

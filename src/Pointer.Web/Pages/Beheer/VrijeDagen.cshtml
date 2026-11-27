@@ -1,0 +1,45 @@
+@page
+@model Pointer.Web.Pages.Beheer.VrijeDagenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Admin_TimeOff"];
+}
+<h1>@T["Admin_TimeOff"]</h1>
+<p>@T["TimeOff_Help"]</p>
+<form method="post" asp-page-handler="Add">
+    <div asp-validation-summary="All" role="alert"></div>
+    <p>
+        <label asp-for="Input.From">@T["TimeOff_From"]</label>
+        <input asp-for="Input.From" type="date" required />
+    </p>
+    <p>
+        <label asp-for="Input.To">@T["TimeOff_To"]</label>
+        <input asp-for="Input.To" type="date" required />
+    </p>
+    <p>
+        <label asp-for="Input.Note">@T["TimeOff_Note"]</label>
+        <input asp-for="Input.Note" maxlength="200" />
+    </p>
+    <button type="submit">@T["TimeOff_Add"]</button>
+</form>
+
+<h2>@T["TimeOff_Upcoming"]</h2>
+@if (Model.Upcoming.Count == 0)
+{
+    <p>@T["TimeOff_None"]</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in Model.Upcoming)
+        {
+            <li>
+                @item.From.ToString("d MMMM yyyy") – @item.To.ToString("d MMMM yyyy")
+                @if (item.Note is not null) { <text>(@item.Note)</text> }
+                <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline">
+                    <button type="submit">@T["Delete"]</button>
+                </form>
+            </li>
+        }
+    </ul>
+}

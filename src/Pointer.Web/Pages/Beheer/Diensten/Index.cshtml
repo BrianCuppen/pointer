@@ -1,0 +1,40 @@
+@page
+@model Pointer.Web.Pages.Beheer.Diensten.IndexModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Admin_Services"];
+}
+<h1>@T["Admin_Services"]</h1>
+<p><a asp-page="Bewerken">@T["Services_Add"]</a></p>
+@if (Model.Services.Count == 0)
+{
+    <p>@T["Services_None"]</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">@T["Field_ServiceName"]</th>
+                <th scope="col">@T["Field_Duration"]</th>
+                <th scope="col">@T["Field_Price"]</th>
+                <th scope="col">@T["Field_Deposit"]</th>
+                <th scope="col">@T["Field_Active"]</th>
+                <th scope="col"><span class="visually-hidden">@T["Edit"]</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model.Services)
+            {
+                <tr>
+                    <td>@s.Name</td>
+                    <td>@s.DurationMinutes @T["Minutes"]</td>
+                    <td>@Money.Format(s.PriceCents)</td>
+                    <td>@Money.Format(s.DepositCents)</td>
+                    <td>@(s.IsActive ? T["Yes"] : T["No"])</td>
+                    <td><a asp-page="Bewerken" asp-route-id="@s.Id">@T["Edit"]</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,38 @@
+@page
+@model Pointer.Web.Pages.Beheer.OpeningsurenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Admin_Hours"];
+}
+<h1>@T["Admin_Hours"]</h1>
+<p>@T["Hours_Help"]</p>
+<form method="post">
+    <div asp-validation-summary="All" role="alert"></div>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">@T["Hours_Day"]</th>
+                <th scope="col">@T["Hours_Opens"]</th>
+                <th scope="col">@T["Hours_Closes"]</th>
+                <th scope="col">@T["Hours_Opens2"]</th>
+                <th scope="col">@T["Hours_Closes2"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Days.Count; i++)
+            {
+                <tr>
+                    <th scope="row">
+                        @Model.DayName(Model.Days[i].Day)
+                        <input type="hidden" asp-for="Days[i].Day" />
+                    </th>
+                    <td><input asp-for="Days[i].Opens" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Opens"]" /></td>
+                    <td><input asp-for="Days[i].Closes" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Closes"]" /></td>
+                    <td><input asp-for="Days[i].Opens2" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Opens2"]" /></td>
+                    <td><input asp-for="Days[i].Closes2" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Closes2"]" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit">@T["Save"]</button>
+</form>

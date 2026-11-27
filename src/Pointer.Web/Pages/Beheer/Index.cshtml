@@ -1,0 +1,9 @@
+@page
+@model Pointer.Web.Pages.Beheer.IndexModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Admin_Calendar"];
+}
+<h1>@Model.ShopName</h1>
+<p>@T["Admin_BookingPage"]: <a href="@Model.BookingPageUrl">@Model.BookingPageUrl</a></p>
+<p>@T["Admin_CalendarComingSoon"]</p>

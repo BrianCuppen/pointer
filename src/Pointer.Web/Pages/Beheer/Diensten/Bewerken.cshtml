@@ -1,0 +1,33 @@
+@page "{id:guid?}"
+@model Pointer.Web.Pages.Beheer.Diensten.BewerkenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = Model.Id is null ? T["Services_Add"] : T["Services_Edit"];
+}
+<h1>@ViewData["Title"]</h1>
+<form method="post">
+    <div asp-validation-summary="All" role="alert"></div>
+    <p>
+        <label asp-for="Input.Name">@T["Field_ServiceName"]</label>
+        <input asp-for="Input.Name" required maxlength="200" />
+    </p>
+    <p>
+        <label asp-for="Input.DurationMinutes">@T["Field_Duration"] (@T["Minutes"])</label>
+        <input asp-for="Input.DurationMinutes" type="number" min="5" max="480" step="5" required />
+    </p>
+    <p>
+        <label asp-for="Input.PriceEuro">@T["Field_Price"] (€)</label>
+        <input asp-for="Input.PriceEuro" type="number" min="0" step="0.01" required />
+    </p>
+    <p>
+        <label asp-for="Input.DepositEuro">@T["Field_Deposit"] (€)</label>
+        <input asp-for="Input.DepositEuro" type="number" min="0" step="0.01" required aria-describedby="deposit-help" />
+        <small id="deposit-help">@T["Services_DepositHelp"]</small>
+    </p>
+    <p>
+        <input asp-for="Input.IsActive" type="checkbox" />
+        <label asp-for="Input.IsActive">@T["Services_ActiveHelp"]</label>
+    </p>
+    <button type="submit">@T["Save"]</button>
+    <a asp-page="Index">@T["Cancel"]</a>
+</form>

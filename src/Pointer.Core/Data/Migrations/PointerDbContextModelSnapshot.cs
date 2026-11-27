@@ -498,6 +498,46 @@ namespace Pointer.Core.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Pointer.Core.Domain.ShopUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_utc");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("shop_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_shop_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_shop_users_email");
+
+                    b.HasIndex("ShopId")
+                        .HasDatabaseName("ix_shop_users_shop_id");
+
+                    b.ToTable("shop_users", (string)null);
+                });
+
             modelBuilder.Entity("Pointer.Core.Domain.Staff", b =>
                 {
                     b.Property<Guid>("Id")
@@ -656,6 +696,16 @@ namespace Pointer.Core.Data.Migrations
                         .HasConstraintName("fk_services_shops_shop_id");
 
                     b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("Pointer.Core.Domain.ShopUser", b =>
+                {
+                    b.HasOne("Pointer.Core.Domain.Shop", null)
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_shop_users_shops_shop_id");
                 });
 
             modelBuilder.Entity("Pointer.Core.Domain.Staff", b =>

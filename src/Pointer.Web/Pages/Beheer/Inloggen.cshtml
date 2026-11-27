@@ -1,0 +1,20 @@
+@page
+@model Pointer.Web.Pages.Beheer.InloggenModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    ViewData["Title"] = T["Login_Title"];
+}
+<h1>@T["Login_Title"]</h1>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" role="alert"></div>
+    <p>
+        <label asp-for="Email">@T["Field_Email"]</label>
+        <input asp-for="Email" type="email" autocomplete="username" required />
+    </p>
+    <p>
+        <label asp-for="Password">@T["Field_Password"]</label>
+        <input asp-for="Password" type="password" autocomplete="current-password" required />
+    </p>
+    <input type="hidden" asp-for="ReturnUrl" />
+    <button type="submit">@T["Login_Submit"]</button>
+</form>
