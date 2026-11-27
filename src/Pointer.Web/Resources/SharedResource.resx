@@ -8,6 +8,7 @@
   <data name="Admin_BookingPage" xml:space="preserve"><value>Je boekingspagina</value></data>
   <data name="Admin_Calendar" xml:space="preserve"><value>Agenda</value></data>
   <data name="Admin_CalendarComingSoon" xml:space="preserve"><value>De agenda volgt binnenkort.</value></data>
+  <data name="Admin_CustomerData" xml:space="preserve"><value>Klantgegevens</value></data>
   <data name="Admin_EmbedHelp" xml:space="preserve"><value>Plak deze regel op je website waar de knop 'Afspraak maken' moet komen.</value></data>
   <data name="Admin_EmbedTitle" xml:space="preserve"><value>Knop op je eigen website</value></data>
   <data name="Admin_Hours" xml:space="preserve"><value>Openingsuren</value></data>
@@ -87,6 +88,22 @@
   <data name="Confirm_TryAgain" xml:space="preserve"><value>Kies een nieuw moment</value></data>
   <data name="Confirm_Waiting" xml:space="preserve"><value>We wachten op de bevestiging van je betaling</value></data>
   <data name="Confirm_WaitingHelp" xml:space="preserve"><value>Dit duurt meestal maar een paar seconden. Deze pagina werkt zichzelf bij.</value></data>
+  <data name="CustomerData_Deleted" xml:space="preserve"><value>De gegevens van deze klant zijn gewist.</value></data>
+  <data name="CustomerData_Email" xml:space="preserve"><value>E-mailadres van de klant</value></data>
+  <data name="CustomerData_Erase" xml:space="preserve"><value>Gegevens wissen</value></data>
+  <data name="CustomerData_EraseWarning" xml:space="preserve"><value>Wissen kan niet ongedaan gemaakt worden. Naam, e-mail en telefoon verdwijnen uit alle afspraken van deze klant.</value></data>
+  <data name="CustomerData_Export" xml:space="preserve"><value>Gegevens downloaden (JSON)</value></data>
+  <data name="CustomerData_Found" xml:space="preserve"><value>{0} afspraak/afspraken gevonden</value></data>
+  <data name="CustomerData_HasUpcomingBookings" xml:space="preserve"><value>Deze klant heeft nog een komende afspraak. Annuleer die eerst in de agenda en wis daarna de gegevens.</value></data>
+  <data name="CustomerData_Help" xml:space="preserve"><value>Vraagt een klant welke gegevens je over hem of haar bewaart, of wil die klant dat je ze wist? Zoek op e-mailadres. Je kunt de gegevens downloaden of wissen. Betalingen blijven bewaard voor je boekhouding, maar zonder naam, e-mail of telefoon.</value></data>
+  <data name="CustomerData_Name" xml:space="preserve"><value>Naam</value></data>
+  <data name="CustomerData_None" xml:space="preserve"><value>Geen afspraken gevonden met dit e-mailadres.</value></data>
+  <data name="CustomerData_NotFound" xml:space="preserve"><value>Geen afspraken gevonden met dit e-mailadres.</value></data>
+  <data name="CustomerData_Phone" xml:space="preserve"><value>Telefoon</value></data>
+  <data name="CustomerData_Search" xml:space="preserve"><value>Zoeken</value></data>
+  <data name="CustomerData_Service" xml:space="preserve"><value>Dienst</value></data>
+  <data name="CustomerData_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="CustomerData_When" xml:space="preserve"><value>Wanneer</value></data>
   <data name="Delete" xml:space="preserve"><value>Verwijderen</value></data>
   <data name="Edit" xml:space="preserve"><value>Bewerken</value></data>
   <data name="Embed_Button" xml:space="preserve"><value>Afspraak maken</value></data>
