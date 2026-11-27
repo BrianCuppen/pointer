@@ -13,8 +13,14 @@ public class Payment
     /// <summary>Payment provider, for example <c>stripe</c>.</summary>
     public required string Provider { get; set; }
 
-    /// <summary>The provider's id for this payment (Stripe PaymentIntent or Checkout Session id).</summary>
+    /// <summary>The provider's id for this payment: the Stripe Checkout Session id (cs_...).</summary>
     public required string ProviderPaymentId { get; set; }
+
+    /// <summary>Stripe PaymentIntent id (pi_...), known once the customer paid. Needed for refunds.</summary>
+    public string? PaymentIntentId { get; set; }
+
+    /// <summary>Hosted checkout page, reused if the customer opens the payment step again.</summary>
+    public string? CheckoutUrl { get; set; }
 
     public long AmountCents { get; set; }
     public long PlatformFeeCents { get; set; }

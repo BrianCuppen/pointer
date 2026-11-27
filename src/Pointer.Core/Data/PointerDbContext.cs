@@ -15,6 +15,7 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
     public DbSet<TimeOff> TimeOff => Set<TimeOff>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<ProcessedWebhookEvent> ProcessedWebhookEvents => Set<ProcessedWebhookEvent>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -112,11 +113,22 @@ public class PointerDbContext(DbContextOptions<PointerDbContext> options) : DbCo
         {
             e.Property(x => x.Provider).HasMaxLength(32);
             e.Property(x => x.ProviderPaymentId).HasMaxLength(255);
+            e.Property(x => x.PaymentIntentId).HasMaxLength(255);
+            e.Property(x => x.CheckoutUrl).HasMaxLength(2048);
+            e.HasIndex(x => new { x.Provider, x.PaymentIntentId });
             e.Property(x => x.Currency).HasMaxLength(3).IsFixedLength();
             // One row per provider payment: the anchor for idempotent webhook handling.
             e.HasIndex(x => new { x.Provider, x.ProviderPaymentId }).IsUnique();
             e.HasOne(x => x.Booking).WithMany(bk => bk.Payments).HasForeignKey(x => x.BookingId).OnDelete(DeleteBehavior.Restrict);
             e.ToTable(t => t.HasCheckConstraint("ck_payments_amounts", "amount_cents >= 0 AND platform_fee_cents >= 0 AND platform_fee_cents <= amount_cents"));
+        });
+
+        b.Entity<ProcessedWebhookEvent>(e =>
+        {
+            e.HasKey(x => new { x.Provider, x.EventId });
+            e.Property(x => x.Provider).HasMaxLength(32);
+            e.Property(x => x.EventId).HasMaxLength(255);
+            e.Property(x => x.Type).HasMaxLength(100);
         });
     }
 }
