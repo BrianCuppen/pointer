@@ -5,46 +5,78 @@
 @{
     ViewData["Title"] = T["Admin_Settings"];
 }
-<h1>@T["Admin_Settings"]</h1>
-<form method="post">
+<div class="page-head rise">
+    <div>
+        <h1>@T["Admin_Settings"]</h1>
+        <p>@T["Settings_Intro"]</p>
+    </div>
+</div>
+<form method="post" class="settings rise rise-1">
     <div asp-validation-summary="All" role="alert"></div>
-    <fieldset>
-        <legend>@T["Settings_Shop"]</legend>
-        <p><label asp-for="Input.Name">@T["Field_ShopName"]</label> <input asp-for="Input.Name" required maxlength="200" /></p>
-        <p><label asp-for="Input.Address">@T["Field_Address"]</label> <input asp-for="Input.Address" maxlength="300" /></p>
-        <p><label asp-for="Input.OwnerEmail">@T["Field_OwnerEmail"]</label> <input asp-for="Input.OwnerEmail" type="email" maxlength="320" /></p>
+
+    <fieldset class="card card-pad settings-section">
+        <div class="intro">
+            <legend><h2>@T["Settings_Shop"]</h2></legend>
+            <p>@T["Settings_ShopHelp"]</p>
+        </div>
+        <div>
+            <div class="field"><label class="label" asp-for="Input.Name">@T["Field_ShopName"]</label><input class="input" asp-for="Input.Name" required maxlength="200" /></div>
+            <div class="field"><label class="label" asp-for="Input.Address">@T["Field_Address"]</label>
+                <div class="input-group">@Icon.Svg("map-pin")<input class="input" asp-for="Input.Address" maxlength="300" /></div></div>
+            <div class="field"><label class="label" asp-for="Input.OwnerEmail">@T["Field_OwnerEmail"]</label>
+                <div class="input-group">@Icon.Svg("mail")<input class="input" asp-for="Input.OwnerEmail" type="email" maxlength="320" /></div></div>
+        </div>
     </fieldset>
-    <fieldset>
-        <legend>@T["Settings_Rules"]</legend>
-        <p>
-            <label asp-for="Input.NoShowPolicy">@T["Field_NoShowPolicy"]</label>
-            <select asp-for="Input.NoShowPolicy">
-                <option value="@NoShowPolicy.KeepDeposit">@T["NoShow_KeepDeposit"]</option>
-                <option value="@NoShowPolicy.RefundDeposit">@T["NoShow_RefundDeposit"]</option>
-            </select>
-        </p>
-        <p>
-            <label asp-for="Input.FreeCancellationHours">@T["Field_FreeCancellationHours"]</label>
-            <input asp-for="Input.FreeCancellationHours" type="number" min="0" max="336" required />
-        </p>
+
+    <fieldset class="card card-pad settings-section">
+        <div class="intro">
+            <legend><h2>@T["Settings_Rules"]</h2></legend>
+            <p>@T["Settings_RulesHelp"]</p>
+        </div>
+        <div class="grid-2">
+            <div class="field">
+                <label class="label" asp-for="Input.NoShowPolicy">@T["Field_NoShowPolicy"]</label>
+                <select class="select" asp-for="Input.NoShowPolicy">
+                    <option value="@NoShowPolicy.KeepDeposit">@T["NoShow_KeepDeposit"]</option>
+                    <option value="@NoShowPolicy.RefundDeposit">@T["NoShow_RefundDeposit"]</option>
+                </select>
+            </div>
+            <div class="field">
+                <label class="label" asp-for="Input.FreeCancellationHours">@T["Field_FreeCancellationHours"]</label>
+                <div class="input-affix"><input class="input" asp-for="Input.FreeCancellationHours" type="number" min="0" max="336" required /><span class="affix">@T["Hours"]</span></div>
+            </div>
+        </div>
     </fieldset>
-    <fieldset>
-        <legend>@T["Settings_Emails"]</legend>
-        <p><input asp-for="Input.OwnerInstantEmails" type="checkbox" /> <label asp-for="Input.OwnerInstantEmails">@T["Field_OwnerInstantEmails"]</label></p>
-        <p><input asp-for="Input.OwnerDailyOverview" type="checkbox" /> <label asp-for="Input.OwnerDailyOverview">@T["Field_OwnerDailyOverview"]</label></p>
-        <p><input asp-for="Input.NoShowNoticeEnabled" type="checkbox" /> <label asp-for="Input.NoShowNoticeEnabled">@T["Field_NoShowNotice"]</label></p>
-        <p>
-            <label asp-for="Input.ReminderHoursBefore">@T["Field_ReminderHours"]</label>
-            <input asp-for="Input.ReminderHoursBefore" type="number" min="2" max="48" required />
-        </p>
+
+    <fieldset class="card card-pad settings-section">
+        <div class="intro">
+            <legend><h2>@T["Settings_Emails"]</h2></legend>
+            <p>@T["Settings_EmailsHelp"]</p>
+        </div>
+        <div style="display:grid;gap:16px">
+            <label class="switch"><input asp-for="Input.OwnerInstantEmails" type="checkbox" role="switch" /><span>@T["Field_OwnerInstantEmails"]</span></label>
+            <label class="switch"><input asp-for="Input.OwnerDailyOverview" type="checkbox" role="switch" /><span>@T["Field_OwnerDailyOverview"]</span></label>
+            <label class="switch"><input asp-for="Input.NoShowNoticeEnabled" type="checkbox" role="switch" /><span>@T["Field_NoShowNotice"]</span></label>
+            <div class="field" style="max-width:280px;margin-top:4px">
+                <label class="label" asp-for="Input.ReminderHoursBefore">@T["Field_ReminderHours"]</label>
+                <div class="input-affix"><input class="input" asp-for="Input.ReminderHoursBefore" type="number" min="2" max="48" required /><span class="affix">@T["Hours"]</span></div>
+            </div>
+        </div>
     </fieldset>
-    <fieldset>
-        <legend>@T["Settings_Payments"]</legend>
-        <p>
-            <label asp-for="Input.PaymentAccountId">@T["Field_StripeAccount"]</label>
-            <input asp-for="Input.PaymentAccountId" placeholder="acct_..." maxlength="255" aria-describedby="stripe-help" />
-            <small id="stripe-help">@T["Settings_StripeHelp"]</small>
-        </p>
+
+    <fieldset class="card card-pad settings-section">
+        <div class="intro">
+            <legend><h2>@T["Settings_Payments"]</h2></legend>
+            <p>@T["Settings_PaymentsHelp"]</p>
+        </div>
+        <div class="field">
+            <label class="label" asp-for="Input.PaymentAccountId">@T["Field_StripeAccount"]</label>
+            <div class="input-group">@Icon.Svg("card")<input class="input" asp-for="Input.PaymentAccountId" placeholder="acct_..." maxlength="255" aria-describedby="stripe-help" /></div>
+            <small class="hint" id="stripe-help">@T["Settings_StripeHelp"]</small>
+        </div>
     </fieldset>
-    <button type="submit">@T["Save"]</button>
+
+    <div class="sticky-save">
+        <button type="submit" class="btn btn-primary btn-lg">@Icon.Svg("check") @T["Save"]</button>
+    </div>
 </form>

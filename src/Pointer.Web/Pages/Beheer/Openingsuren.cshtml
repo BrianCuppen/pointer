@@ -4,35 +4,44 @@
 @{
     ViewData["Title"] = T["Admin_Hours"];
 }
-<h1>@T["Admin_Hours"]</h1>
-<p>@T["Hours_Help"]</p>
-<form method="post">
-    <div asp-validation-summary="All" role="alert"></div>
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">@T["Hours_Day"]</th>
-                <th scope="col">@T["Hours_Opens"]</th>
-                <th scope="col">@T["Hours_Closes"]</th>
-                <th scope="col">@T["Hours_Opens2"]</th>
-                <th scope="col">@T["Hours_Closes2"]</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="page-head rise">
+    <div>
+        <h1>@T["Admin_Hours"]</h1>
+        <p>@T["Hours_Help"]</p>
+    </div>
+</div>
+<form method="post" class="rise rise-1" style="max-width:860px">
+    <div asp-validation-summary="All" role="alert" style="margin-bottom:16px"></div>
+    <div class="card">
+        <ul class="hours">
             @for (var i = 0; i < Model.Days.Count; i++)
             {
-                <tr>
-                    <th scope="row">
-                        @Model.DayName(Model.Days[i].Day)
+                var d = Model.Days[i];
+                var name = Model.DayName(d.Day);
+                <li class="@(d.Opens is null ? "is-closed" : null)">
+                    <div class="dayname">
+                        <span style="text-transform:capitalize">@name</span>
+                        <span class="badge">@T["Hours_Closed"]</span>
                         <input type="hidden" asp-for="Days[i].Day" />
-                    </th>
-                    <td><input asp-for="Days[i].Opens" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Opens"]" /></td>
-                    <td><input asp-for="Days[i].Closes" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Closes"]" /></td>
-                    <td><input asp-for="Days[i].Opens2" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Opens2"]" /></td>
-                    <td><input asp-for="Days[i].Closes2" type="time" aria-label="@Model.DayName(Model.Days[i].Day) @T["Hours_Closes2"]" /></td>
-                </tr>
+                    </div>
+                    <div class="ranges">
+                        <div class="range">
+                            <input class="input input-sm" asp-for="Days[i].Opens" type="time" aria-label="@name @T["Hours_Opens"]" />
+                            <span class="sep">–</span>
+                            <input class="input input-sm" asp-for="Days[i].Closes" type="time" aria-label="@name @T["Hours_Closes"]" />
+                        </div>
+                        <div class="range">
+                            <input class="input input-sm" asp-for="Days[i].Opens2" type="time" aria-label="@name @T["Hours_Opens2"]" />
+                            <span class="sep">–</span>
+                            <input class="input input-sm" asp-for="Days[i].Closes2" type="time" aria-label="@name @T["Hours_Closes2"]" />
+                        </div>
+                    </div>
+                </li>
             }
-        </tbody>
-    </table>
-    <button type="submit">@T["Save"]</button>
+        </ul>
+        <div class="card-foot row-between">
+            <span class="hint">@Icon.Svg("info") @T["Hours_SecondRangeHelp"]</span>
+            <button type="submit" class="btn btn-primary">@Icon.Svg("check") @T["Save"]</button>
+        </div>
+    </div>
 </form>

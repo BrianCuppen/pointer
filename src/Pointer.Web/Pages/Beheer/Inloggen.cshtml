@@ -1,20 +1,53 @@
 @page
 @model Pointer.Web.Pages.Beheer.InloggenModel
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@inject IConfiguration Config
 @{
     ViewData["Title"] = T["Login_Title"];
 }
-<h1>@T["Login_Title"]</h1>
-<form method="post">
-    <div asp-validation-summary="ModelOnly" role="alert"></div>
-    <p>
-        <label asp-for="Email">@T["Field_Email"]</label>
-        <input asp-for="Email" type="email" autocomplete="username" required />
-    </p>
-    <p>
-        <label asp-for="Password">@T["Field_Password"]</label>
-        <input asp-for="Password" type="password" autocomplete="current-password" required />
-    </p>
-    <input type="hidden" asp-for="ReturnUrl" />
-    <button type="submit">@T["Login_Submit"]</button>
-</form>
+<div class="auth">
+    <div class="auth-art" aria-hidden="true">
+        <span class="orb orb-1"></span><span class="orb orb-2"></span>
+        <span class="wordmark">@Icon.Mark() @T["AppName"]</span>
+        <div style="position:relative">
+            <blockquote>@T["Login_Quote"]</blockquote>
+            <div class="preview" style="margin-top:28px">
+                <div><span>09:30 · Knippen</span><b>Bevestigd</b></div>
+                <div><span>10:15 · Knippen en baard</span><b>€ 10,00 betaald</b></div>
+                <div><span>11:00 · Baard trimmen</span><b>Bevestigd</b></div>
+            </div>
+        </div>
+        <small style="position:relative;opacity:.7">@T["Login_ArtFoot"]</small>
+    </div>
+    <div class="auth-form">
+        <div class="auth-card rise">
+            <span class="wordmark" style="margin-bottom:28px">@Icon.Mark() @T["AppName"]</span>
+            <h1>@T["Login_Title"]</h1>
+            <p class="muted" style="margin-top:8px">@T["Login_Help"]</p>
+            <form method="post" style="margin-top:28px">
+                <div asp-validation-summary="ModelOnly" role="alert" style="margin-bottom:18px"></div>
+                <div class="field">
+                    <label class="label" asp-for="Email">@T["Field_Email"]</label>
+                    <div class="input-group">
+                        @Icon.Svg("mail")
+                        <input class="input" asp-for="Email" type="email" autocomplete="username" required autofocus />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" asp-for="Password">@T["Field_Password"]</label>
+                    <div class="input-group">
+                        @Icon.Svg("lock")
+                        <input class="input" asp-for="Password" type="password" autocomplete="current-password" required />
+                    </div>
+                </div>
+                <input type="hidden" asp-for="ReturnUrl" />
+                <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:24px">@T["Login_Submit"]</button>
+            </form>
+            @* Only the well-known public demo password is ever shown, never a configured one. *@
+            @if (Config.GetValue<bool>("Demo:Seed") && Config["Demo:OwnerPassword"] == "demo-only-password")
+            {
+                <div class="demo-hint">@T["Login_DemoHint"] <code>@(Config["Demo:OwnerEmail"] ?? "demo@pointer.test")</code> · <code>demo-only-password</code></div>
+            }
+        </div>
+    </div>
+</div>

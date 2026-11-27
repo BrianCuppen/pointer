@@ -1,0 +1,15 @@
+@page "/fout/{code:int}"
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    var code = int.TryParse(RouteData.Values["code"]?.ToString(), out var c) ? c : 500;
+    var notFound = code == 404;
+    ViewData["Title"] = notFound ? T["NotFound_Title"] : T["ErrorTitle"];
+    ViewData["Narrow"] = true;
+}
+<section class="result">
+    <div class="result-icon neutral">@Icon.Svg(notFound ? "search" : "alert")</div>
+    <p class="eyebrow" style="justify-content:center">@code</p>
+    <h1 style="margin-top:8px">@(notFound ? T["NotFound_Title"] : T["ErrorTitle"])</h1>
+    <p class="lead">@(notFound ? T["NotFound_Body"] : T["ErrorBody"])</p>
+    <div class="result-actions"><a class="btn" href="/">@T["Error_Home"]</a></div>
+</section>

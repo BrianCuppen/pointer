@@ -3,12 +3,15 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 @{
     ViewData["Title"] = T["ErrorTitle"];
+    ViewData["Narrow"] = true;
 }
-
-<h1>@T["ErrorTitle"]</h1>
-<p>@T["ErrorBody"]</p>
-
-@if (Model.ShowRequestId)
-{
-    <p><code>@Model.RequestId</code></p>
-}
+<section class="result">
+    <div class="result-icon bad">@Icon.Svg("alert")</div>
+    <h1>@T["ErrorTitle"]</h1>
+    <p class="lead">@T["ErrorBody"]</p>
+    @if (Model.ShowRequestId)
+    {
+        <p class="faint" style="margin-top:12px"><code>@Model.RequestId</code></p>
+    }
+    <div class="result-actions"><a class="btn" href="/">@T["Error_Home"]</a></div>
+</section>

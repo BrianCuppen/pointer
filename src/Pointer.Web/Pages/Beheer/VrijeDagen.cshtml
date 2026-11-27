@@ -4,42 +4,71 @@
 @{
     ViewData["Title"] = T["Admin_TimeOff"];
 }
-<h1>@T["Admin_TimeOff"]</h1>
-<p>@T["TimeOff_Help"]</p>
-<form method="post" asp-page-handler="Add">
-    <div asp-validation-summary="All" role="alert"></div>
-    <p>
-        <label asp-for="Input.From">@T["TimeOff_From"]</label>
-        <input asp-for="Input.From" type="date" required />
-    </p>
-    <p>
-        <label asp-for="Input.To">@T["TimeOff_To"]</label>
-        <input asp-for="Input.To" type="date" required />
-    </p>
-    <p>
-        <label asp-for="Input.Note">@T["TimeOff_Note"]</label>
-        <input asp-for="Input.Note" maxlength="200" />
-    </p>
-    <button type="submit">@T["TimeOff_Add"]</button>
-</form>
+<div class="page-head rise">
+    <div>
+        <h1>@T["Admin_TimeOff"]</h1>
+        <p>@T["TimeOff_Help"]</p>
+    </div>
+</div>
+<div class="rise rise-1">
+    <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));align-items:start">
+        <form method="post" asp-page-handler="Add" class="card">
+            <div class="card-head"><h2 style="font-size:1.0625rem">@T["TimeOff_AddTitle"]</h2></div>
+            <div class="card-body">
+                <div asp-validation-summary="All" role="alert" style="margin-bottom:16px"></div>
+                <div class="grid-2">
+                    <div class="field">
+                        <label class="label" asp-for="Input.From">@T["TimeOff_From"]</label>
+                        <input class="input" asp-for="Input.From" type="date" required />
+                    </div>
+                    <div class="field">
+                        <label class="label" asp-for="Input.To">@T["TimeOff_To"]</label>
+                        <input class="input" asp-for="Input.To" type="date" required />
+                    </div>
+                </div>
+                <div class="field" style="margin-top:18px">
+                    <label class="label" asp-for="Input.Note">@T["TimeOff_Note"] <span class="optional">@T["Optional"]</span></label>
+                    <input class="input" asp-for="Input.Note" maxlength="200" placeholder="@T["TimeOff_NotePlaceholder"]" />
+                </div>
+            </div>
+            <div class="card-foot"><button type="submit" class="btn btn-primary">@Icon.Svg("plus") @T["TimeOff_Add"]</button></div>
+        </form>
 
-<h2>@T["TimeOff_Upcoming"]</h2>
-@if (Model.Upcoming.Count == 0)
-{
-    <p>@T["TimeOff_None"]</p>
-}
-else
-{
-    <ul>
-        @foreach (var item in Model.Upcoming)
-        {
-            <li>
-                @item.From.ToString("d MMMM yyyy") – @item.To.ToString("d MMMM yyyy")
-                @if (item.Note is not null) { <text>(@item.Note)</text> }
-                <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline">
-                    <button type="submit">@T["Delete"]</button>
-                </form>
-            </li>
-        }
-    </ul>
-}
+        <section class="card">
+            <div class="card-head row-between">
+                <h2 style="font-size:1.0625rem">@T["TimeOff_Upcoming"]</h2>
+                <span class="badge">@Model.Upcoming.Count</span>
+            </div>
+            @if (Model.Upcoming.Count == 0)
+            {
+                <div class="empty">
+                    <div class="empty-icon">@Icon.Svg("sun")</div>
+                    <strong>@T["TimeOff_None"]</strong>
+                    <span>@T["TimeOff_NoneHelp"]</span>
+                </div>
+            }
+            else
+            {
+                <ul class="timeoff">
+                    @foreach (var item in Model.Upcoming)
+                    {
+                        var days = item.To.DayNumber - item.From.DayNumber + 1;
+                        <li>
+                            <span class="date-tile"><span class="m">@item.From.ToString("MMM").TrimEnd('.')</span><span class="d">@item.From.Day</span></span>
+                            <div class="grow">
+                                <div style="font-weight:600">
+                                    @if (days == 1) { @item.From.ToString("dddd d MMMM yyyy") }
+                                    else { <text>@item.From.ToString("d MMMM") – @item.To.ToString("d MMMM yyyy")</text> }
+                                </div>
+                                <div class="muted" style="font-size:.875rem">@T["TimeOff_Days", days]@if (item.Note is not null) { <text> · @item.Note</text> }</div>
+                            </div>
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-sm btn-ghost btn-danger" aria-label="@T["Delete"]">@Icon.Svg("trash") <span class="visually-hidden">@T["Delete"]</span></button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    </div>
+</div>

@@ -4,26 +4,51 @@
 @using Pointer.Core.Domain
 @{
     ViewData["Title"] = T["CancelPage_Title"];
+    ViewData["Narrow"] = true;
     var start = Model.Local(Model.Booking.StartUtc);
 }
-<h1>@T["CancelPage_Title"]</h1>
-<p>@Model.ShopName: @Model.Booking.Service!.Name, @start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</p>
-
-@if (Model.Done)
-{
-    <p role="status">@T["CancelPage_Done"]</p>
-}
-else if (!Model.CanCancel)
-{
-    <p>@T["CancelPage_NotPossible"]</p>
-}
-else
-{
-    @if (Model.HasDeposit)
+<section class="result">
+    @if (Model.Done)
     {
-        <p>@(Model.WouldRefund ? T["CancelPage_Refund", Money.Format(Model.Booking.DepositCents)] : T["CancelPage_NoRefund", Money.Format(Model.Booking.DepositCents)])</p>
+        <div class="result-icon neutral">@Icon.Svg("calendar-x")</div>
+        <h1>@T["CancelPage_Title"]</h1>
+        <p class="lead" role="status">@T["CancelPage_Done"]</p>
     }
-    <form method="post">
-        <button type="submit">@T["CancelPage_Submit"]</button>
-    </form>
-}
+    else
+    {
+        <div class="result-icon neutral">@Icon.Svg("calendar")</div>
+        <h1>@T["CancelPage_Title"]</h1>
+        <p class="lead">@T["CancelPage_Question"]</p>
+    }
+    <div class="card ticket">
+        <div class="ticket-row">
+            <span class="icon-box">@Icon.Svg("scissors")</span>
+            <div><div class="k">@Model.ShopName</div><div class="v">@Model.Booking.Service!.Name</div></div>
+        </div>
+        <div class="ticket-row">
+            <span class="icon-box">@Icon.Svg("calendar")</span>
+            <div><div class="k">@T["Book_When"]</div><div class="v">@start.ToString("dddd d MMMM yyyy") @T["Book_At"] @start.ToString("HH:mm")</div></div>
+        </div>
+    </div>
+
+    @if (!Model.Done)
+    {
+        @if (!Model.CanCancel)
+        {
+            <div class="alert alert-info" style="margin-top:18px;text-align:left">@Icon.Svg("info") <p>@T["CancelPage_NotPossible"]</p></div>
+        }
+        else
+        {
+            @if (Model.HasDeposit)
+            {
+                <div class="alert @(Model.WouldRefund ? "alert-ok" : "alert-warn")" style="margin-top:18px;text-align:left">
+                    @Icon.Svg(Model.WouldRefund ? "check-circle" : "alert")
+                    <p>@(Model.WouldRefund ? T["CancelPage_Refund", Money.Format(Model.Booking.DepositCents)] : T["CancelPage_NoRefund", Money.Format(Model.Booking.DepositCents)])</p>
+                </div>
+            }
+            <form method="post" class="result-actions">
+                <button type="submit" class="btn btn-dark btn-lg">@T["CancelPage_Submit"]</button>
+            </form>
+        }
+    }
+</section>

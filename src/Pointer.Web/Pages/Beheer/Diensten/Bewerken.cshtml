@@ -4,30 +4,48 @@
 @{
     ViewData["Title"] = Model.Id is null ? T["Services_Add"] : T["Services_Edit"];
 }
-<h1>@ViewData["Title"]</h1>
-<form method="post">
-    <div asp-validation-summary="All" role="alert"></div>
-    <p>
-        <label asp-for="Input.Name">@T["Field_ServiceName"]</label>
-        <input asp-for="Input.Name" required maxlength="200" />
-    </p>
-    <p>
-        <label asp-for="Input.DurationMinutes">@T["Field_Duration"] (@T["Minutes"])</label>
-        <input asp-for="Input.DurationMinutes" type="number" min="5" max="480" step="5" required />
-    </p>
-    <p>
-        <label asp-for="Input.PriceEuro">@T["Field_Price"] (€)</label>
-        <input asp-for="Input.PriceEuro" type="number" min="0" step="0.01" required />
-    </p>
-    <p>
-        <label asp-for="Input.DepositEuro">@T["Field_Deposit"] (€)</label>
-        <input asp-for="Input.DepositEuro" type="number" min="0" step="0.01" required aria-describedby="deposit-help" />
-        <small id="deposit-help">@T["Services_DepositHelp"]</small>
-    </p>
-    <p>
-        <input asp-for="Input.IsActive" type="checkbox" />
-        <label asp-for="Input.IsActive">@T["Services_ActiveHelp"]</label>
-    </p>
-    <button type="submit">@T["Save"]</button>
-    <a asp-page="Index">@T["Cancel"]</a>
+<a class="link-back" asp-page="Index">@Icon.Svg("arrow-left") @T["Admin_Services"]</a>
+<div class="page-head rise" style="margin-top:12px">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<form method="post" class="card rise rise-1" style="max-width:720px">
+    <div class="card-body">
+        <div asp-validation-summary="All" role="alert" style="margin-bottom:18px"></div>
+        <div class="field">
+            <label class="label" asp-for="Input.Name">@T["Field_ServiceName"]</label>
+            <input class="input" asp-for="Input.Name" required maxlength="200" placeholder="@T["Services_NamePlaceholder"]" />
+        </div>
+        <div class="grid-2" style="margin-top:18px">
+            <div class="field">
+                <label class="label" asp-for="Input.DurationMinutes">@T["Field_Duration"]</label>
+                <div class="input-affix">
+                    <input class="input" asp-for="Input.DurationMinutes" type="number" min="5" max="480" step="5" required />
+                    <span class="affix">@T["Minutes"]</span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" asp-for="Input.PriceEuro">@T["Field_Price"]</label>
+                <div class="input-affix">
+                    <input class="input" asp-for="Input.PriceEuro" type="number" min="0" step="0.01" required />
+                    <span class="affix">€</span>
+                </div>
+            </div>
+        </div>
+        <div class="field" style="margin-top:18px">
+            <label class="label" asp-for="Input.DepositEuro">@T["Field_Deposit"]</label>
+            <div class="input-affix" style="max-width:calc(50% - 9px);min-width:220px">
+                <input class="input" asp-for="Input.DepositEuro" type="number" min="0" step="0.01" required aria-describedby="deposit-help" />
+                <span class="affix">€</span>
+            </div>
+            <small class="hint" id="deposit-help">@T["Services_DepositHelp"]</small>
+        </div>
+        <label class="switch" style="margin-top:22px">
+            <input asp-for="Input.IsActive" type="checkbox" role="switch" />
+            <span>@T["Services_ActiveHelp"]</span>
+        </label>
+    </div>
+    <div class="card-foot form-actions" style="margin-top:0">
+        <button type="submit" class="btn btn-primary">@Icon.Svg("check") @T["Save"]</button>
+        <a class="btn btn-ghost" asp-page="Index">@T["Cancel"]</a>
+    </div>
 </form>

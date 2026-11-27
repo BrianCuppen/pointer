@@ -4,37 +4,51 @@
 @{
     ViewData["Title"] = T["Admin_Services"];
 }
-<h1>@T["Admin_Services"]</h1>
-<p><a asp-page="Bewerken">@T["Services_Add"]</a></p>
+<div class="page-head rise">
+    <div>
+        <h1>@T["Admin_Services"]</h1>
+        <p>@T["Services_Intro"]</p>
+    </div>
+    <a class="btn btn-primary" asp-page="Bewerken">@Icon.Svg("plus") @T["Services_Add"]</a>
+</div>
 @if (Model.Services.Count == 0)
 {
-    <p>@T["Services_None"]</p>
+    <div class="card empty rise rise-1">
+        <div class="empty-icon">@Icon.Svg("scissors")</div>
+        <strong>@T["Services_None"]</strong>
+        <span>@T["Services_NoneHelp"]</span>
+        <a class="btn btn-primary" style="margin-top:8px" asp-page="Bewerken">@Icon.Svg("plus") @T["Services_Add"]</a>
+    </div>
 }
 else
 {
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">@T["Field_ServiceName"]</th>
-                <th scope="col">@T["Field_Duration"]</th>
-                <th scope="col">@T["Field_Price"]</th>
-                <th scope="col">@T["Field_Deposit"]</th>
-                <th scope="col">@T["Field_Active"]</th>
-                <th scope="col"><span class="visually-hidden">@T["Edit"]</span></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var s in Model.Services)
-            {
-                <tr>
-                    <td>@s.Name</td>
-                    <td>@s.DurationMinutes @T["Minutes"]</td>
-                    <td>@Money.Format(s.PriceCents)</td>
-                    <td>@Money.Format(s.DepositCents)</td>
-                    <td>@(s.IsActive ? T["Yes"] : T["No"])</td>
-                    <td><a asp-page="Bewerken" asp-route-id="@s.Id">@T["Edit"]</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card rise rise-1">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">@T["Field_ServiceName"]</th>
+                        <th scope="col">@T["Field_Duration"]</th>
+                        <th scope="col" class="num">@T["Field_Price"]</th>
+                        <th scope="col" class="num">@T["Field_Deposit"]</th>
+                        <th scope="col">@T["Field_Active"]</th>
+                        <th scope="col"><span class="visually-hidden">@T["Edit"]</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model.Services)
+                    {
+                        <tr>
+                            <td><strong>@s.Name</strong></td>
+                            <td><span class="chip">@Icon.Svg("clock") @s.DurationMinutes @T["Minutes"]</span></td>
+                            <td class="num">@Money.Format(s.PriceCents)</td>
+                            <td class="num">@(s.DepositCents > 0 ? Money.Format(s.DepositCents) : "—")</td>
+                            <td><span class="badge @(s.IsActive ? "badge-ok" : "")">@(s.IsActive ? T["Services_Visible"] : T["Services_Hidden"])</span></td>
+                            <td class="num"><a class="btn btn-sm btn-ghost" asp-page="Bewerken" asp-route-id="@s.Id">@Icon.Svg("edit") @T["Edit"]</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }

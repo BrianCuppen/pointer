@@ -14,6 +14,7 @@
   <data name="Admin_Hours" xml:space="preserve"><value>Openingsuren</value></data>
   <data name="Admin_Logout" xml:space="preserve"><value>Afmelden</value></data>
   <data name="Admin_Nav" xml:space="preserve"><value>Beheermenu</value></data>
+  <data name="Admin_OpenBookingPage" xml:space="preserve"><value>Boekingspagina</value></data>
   <data name="Admin_Services" xml:space="preserve"><value>Diensten</value></data>
   <data name="Admin_Settings" xml:space="preserve"><value>Instellingen</value></data>
   <data name="Admin_TimeOff" xml:space="preserve"><value>Vrije dagen</value></data>
@@ -25,15 +26,27 @@
   <data name="Book_ChooseDay" xml:space="preserve"><value>Kies een dag</value></data>
   <data name="Book_ChooseService" xml:space="preserve"><value>Kies een dienst</value></data>
   <data name="Book_DepositOnline" xml:space="preserve"><value>{0} voorschot online</value></data>
+  <data name="Book_DetailsHelp" xml:space="preserve"><value>Nog één stap. We sturen je bevestiging naar dit e-mailadres.</value></data>
   <data name="Book_DetailsTitle" xml:space="preserve"><value>Je gegevens</value></data>
   <data name="Book_Email" xml:space="preserve"><value>E-mailadres</value></data>
+  <data name="Book_InstantConfirm" xml:space="preserve"><value>Direct bevestigd</value></data>
   <data name="Book_MustAcceptRules" xml:space="preserve"><value>Ga akkoord met de regels om verder te gaan.</value></data>
   <data name="Book_Name" xml:space="preserve"><value>Naam</value></data>
+  <data name="Book_NamePlaceholder" xml:space="preserve"><value>Voor- en achternaam</value></data>
+  <data name="Book_NoDepositChip" xml:space="preserve"><value>Geen voorschot</value></data>
   <data name="Book_NoServices" xml:space="preserve"><value>Er kan op dit moment niets geboekt worden.</value></data>
   <data name="Book_NoSlots" xml:space="preserve"><value>Op deze dag is er geen plaats meer. Kies een andere dag.</value></data>
+  <data name="Book_NoSlotsHelp" xml:space="preserve"><value>Kies een andere dag hierboven.</value></data>
   <data name="Book_OtherService" xml:space="preserve"><value>Andere dienst kiezen</value></data>
+  <data name="Book_OtherTime" xml:space="preserve"><value>Ander moment kiezen</value></data>
+  <data name="Book_PayInShop" xml:space="preserve"><value>Te betalen in de zaak</value></data>
+  <data name="Book_PayNow" xml:space="preserve"><value>Nu te betalen</value></data>
   <data name="Book_PaymentUnavailable" xml:space="preserve"><value>Online betalen lukt nu niet bij deze zaak. Probeer later opnieuw of neem contact op met de zaak.</value></data>
   <data name="Book_Phone" xml:space="preserve"><value>Telefoon (optioneel)</value></data>
+  <data name="Book_PhoneLabel" xml:space="preserve"><value>Telefoon</value></data>
+  <data name="Book_PickDayFirst" xml:space="preserve"><value>Kies een dag</value></data>
+  <data name="Book_PickDayHelp" xml:space="preserve"><value>Je ziet dan meteen welke uren nog vrij zijn.</value></data>
+  <data name="Book_PickDayShort" xml:space="preserve"><value>Kies een dag en uur</value></data>
   <data name="Book_Price" xml:space="preserve"><value>Prijs</value></data>
   <data name="Book_PrivacyLink" xml:space="preserve"><value>Privacy</value></data>
   <data name="Book_PrivacyNote" xml:space="preserve"><value>We gebruiken je gegevens alleen voor deze afspraak.</value></data>
@@ -44,20 +57,27 @@
   <data name="Book_RuleNoShowKeep" xml:space="preserve"><value>Kom je niet opdagen zonder te annuleren, dan houdt de zaak het voorschot.</value></data>
   <data name="Book_RuleNoShowRefund" xml:space="preserve"><value>Kom je niet opdagen, dan krijg je het voorschot toch terug.</value></data>
   <data name="Book_RulesTitle" xml:space="preserve"><value>Goed om te weten</value></data>
+  <data name="Book_SecurePay" xml:space="preserve"><value>Veilig betalen met Bancontact, iDEAL of kaart</value></data>
+  <data name="Book_ServiceCount" xml:space="preserve"><value>{0} diensten</value></data>
   <data name="Book_SlotTaken" xml:space="preserve"><value>Iemand anders was je net voor. Kies een ander moment.</value></data>
   <data name="Book_SlotUnavailable" xml:space="preserve"><value>Dit moment kan niet meer geboekt worden. Kies een ander moment.</value></data>
   <data name="Book_Submit" xml:space="preserve"><value>Afspraak bevestigen</value></data>
   <data name="Book_SubmitPay" xml:space="preserve"><value>Verder naar betalen ({0})</value></data>
+  <data name="Book_Summary" xml:space="preserve"><value>Jouw afspraak</value></data>
   <data name="Book_What" xml:space="preserve"><value>Wat</value></data>
   <data name="Book_When" xml:space="preserve"><value>Wanneer</value></data>
+  <data name="Book_YourChoice" xml:space="preserve"><value>Gekozen dienst</value></data>
   <data name="Calendar_Actions" xml:space="preserve"><value>Acties</value></data>
   <data name="Calendar_Cancel" xml:space="preserve"><value>Annuleren</value></data>
   <data name="Calendar_CancelFor" xml:space="preserve"><value>Afspraak van {0} annuleren</value></data>
   <data name="Calendar_Cancelled" xml:space="preserve"><value>De afspraak is geannuleerd en het voorschot wordt terugbetaald.</value></data>
   <data name="Calendar_Completed" xml:space="preserve"><value>Gekomen</value></data>
   <data name="Calendar_CompletedFor" xml:space="preserve"><value>{0} is gekomen</value></data>
+  <data name="Calendar_Count" xml:space="preserve"><value>{0} afspraken</value></data>
   <data name="Calendar_Customer" xml:space="preserve"><value>Klant</value></data>
+  <data name="Calendar_Days" xml:space="preserve"><value>Dagen van deze week</value></data>
   <data name="Calendar_Deposit" xml:space="preserve"><value>Voorschot {0}</value></data>
+  <data name="Calendar_Erased" xml:space="preserve"><value>Gewiste klant</value></data>
   <data name="Calendar_MarkedCompleted" xml:space="preserve"><value>Gemarkeerd als gekomen.</value></data>
   <data name="Calendar_MarkedNoShow" xml:space="preserve"><value>Gemarkeerd als niet opgedaagd.</value></data>
   <data name="Calendar_Next" xml:space="preserve"><value>Volgende week</value></data>
@@ -70,24 +90,33 @@
   <data name="Calendar_Status" xml:space="preserve"><value>Status</value></data>
   <data name="Calendar_ThisWeek" xml:space="preserve"><value>Deze week</value></data>
   <data name="Calendar_Time" xml:space="preserve"><value>Uur</value></data>
+  <data name="Calendar_Today" xml:space="preserve"><value>Vandaag</value></data>
   <data name="Calendar_Week" xml:space="preserve"><value>Week van {0}</value></data>
   <data name="Calendar_WeekNav" xml:space="preserve"><value>Andere week</value></data>
   <data name="Cancel" xml:space="preserve"><value>Annuleren</value></data>
   <data name="CancelPage_Done" xml:space="preserve"><value>Je afspraak is geannuleerd. Je krijgt een bevestiging per e-mail.</value></data>
   <data name="CancelPage_NoRefund" xml:space="preserve"><value>De gratis annuleringstermijn is voorbij: je voorschot van {0} wordt niet terugbetaald.</value></data>
   <data name="CancelPage_NotPossible" xml:space="preserve"><value>Deze afspraak kan niet meer geannuleerd worden.</value></data>
+  <data name="CancelPage_Question" xml:space="preserve"><value>Wil je deze afspraak annuleren?</value></data>
   <data name="CancelPage_Refund" xml:space="preserve"><value>Je annuleert op tijd: je voorschot van {0} wordt terugbetaald.</value></data>
   <data name="CancelPage_Submit" xml:space="preserve"><value>Ja, annuleer mijn afspraak</value></data>
   <data name="CancelPage_Title" xml:space="preserve"><value>Afspraak annuleren</value></data>
   <data name="ComingSoon" xml:space="preserve"><value>Online afspraken boeken voor jouw zaak. Binnenkort beschikbaar.</value></data>
+  <data name="Confirm_BackToShop" xml:space="preserve"><value>Terug naar de zaak</value></data>
   <data name="Confirm_CancelLink" xml:space="preserve"><value>Afspraak annuleren</value></data>
   <data name="Confirm_Confirmed" xml:space="preserve"><value>Je afspraak is bevestigd</value></data>
+  <data name="Confirm_Deposit" xml:space="preserve"><value>Voorschot</value></data>
+  <data name="Confirm_DepositPaid" xml:space="preserve"><value>{0} betaald</value></data>
   <data name="Confirm_EmailSent" xml:space="preserve"><value>Je krijgt een bevestiging op {0}.</value></data>
   <data name="Confirm_NotConfirmed" xml:space="preserve"><value>Je afspraak is niet doorgegaan</value></data>
+  <data name="Confirm_NotConfirmedHelp" xml:space="preserve"><value>Er is niets betaald en het moment is weer vrij. Je kunt opnieuw boeken.</value></data>
   <data name="Confirm_Title" xml:space="preserve"><value>Je afspraak</value></data>
   <data name="Confirm_TryAgain" xml:space="preserve"><value>Kies een nieuw moment</value></data>
   <data name="Confirm_Waiting" xml:space="preserve"><value>We wachten op de bevestiging van je betaling</value></data>
   <data name="Confirm_WaitingHelp" xml:space="preserve"><value>Dit duurt meestal maar een paar seconden. Deze pagina werkt zichzelf bij.</value></data>
+  <data name="Confirm_Where" xml:space="preserve"><value>Waar</value></data>
+  <data name="Copied" xml:space="preserve"><value>Gekopieerd</value></data>
+  <data name="Copy" xml:space="preserve"><value>Kopiëren</value></data>
   <data name="CustomerData_Deleted" xml:space="preserve"><value>De gegevens van deze klant zijn gewist.</value></data>
   <data name="CustomerData_Email" xml:space="preserve"><value>E-mailadres van de klant</value></data>
   <data name="CustomerData_Erase" xml:space="preserve"><value>Gegevens wissen</value></data>
@@ -107,8 +136,13 @@
   <data name="Delete" xml:space="preserve"><value>Verwijderen</value></data>
   <data name="DemoPay_Amount" xml:space="preserve"><value>Voorschot: {0}</value></data>
   <data name="DemoPay_Cancel" xml:space="preserve"><value>Annuleren en terug</value></data>
+  <data name="DemoPay_Card" xml:space="preserve"><value>Kaart (Visa, Mastercard)</value></data>
   <data name="DemoPay_Done" xml:space="preserve"><value>Deze betaling is al afgehandeld. Bekijk je afspraak.</value></data>
   <data name="DemoPay_Fail" xml:space="preserve"><value>Betaling laten mislukken</value></data>
+  <data name="DemoPay_Footer" xml:space="preserve"><value>Demo: er wordt niets aangerekend</value></data>
+  <data name="DemoPay_For" xml:space="preserve"><value>Voorschot voor {0}</value></data>
+  <data name="DemoPay_Method" xml:space="preserve"><value>Betaalmethode</value></data>
+  <data name="DemoPay_Mode" xml:space="preserve"><value>Testmodus</value></data>
   <data name="DemoPay_Notice" xml:space="preserve"><value>Dit is een demo. Er wordt niets betaald: deze pagina vervangt de betaalpagina van Stripe (Bancontact, iDEAL of kaart).</value></data>
   <data name="DemoPay_Pay" xml:space="preserve"><value>Betalen (demo)</value></data>
   <data name="DemoPay_Title" xml:space="preserve"><value>Demobetaling</value></data>
@@ -122,6 +156,7 @@
   <data name="Error_Deposit" xml:space="preserve"><value>Het voorschot moet tussen 0 en de prijs liggen.</value></data>
   <data name="Error_Duration" xml:space="preserve"><value>Kies een duur tussen 5 en 480 minuten, in stappen van 5.</value></data>
   <data name="Error_Email" xml:space="preserve"><value>Dit is geen geldig e-mailadres.</value></data>
+  <data name="Error_Home" xml:space="preserve"><value>Naar de startpagina</value></data>
   <data name="Error_Hours" xml:space="preserve"><value>Vul een begin- en einduur in, met het einde na het begin.</value></data>
   <data name="Error_HoursOverlap" xml:space="preserve"><value>Het tweede blok moet na het eerste beginnen.</value></data>
   <data name="Error_ReminderHours" xml:space="preserve"><value>Kies tussen 2 en 48 uur.</value></data>
@@ -144,19 +179,42 @@
   <data name="Field_ServiceName" xml:space="preserve"><value>Naam van de dienst</value></data>
   <data name="Field_ShopName" xml:space="preserve"><value>Naam van de zaak</value></data>
   <data name="Field_StripeAccount" xml:space="preserve"><value>Stripe-account</value></data>
+  <data name="Footer_PoweredBy" xml:space="preserve"><value>Online boeken met Pointer</value></data>
+  <data name="Hours" xml:space="preserve"><value>uur</value></data>
+  <data name="Hours_Closed" xml:space="preserve"><value>Gesloten</value></data>
   <data name="Hours_Closes" xml:space="preserve"><value>tot</value></data>
   <data name="Hours_Closes2" xml:space="preserve"><value>tot</value></data>
   <data name="Hours_Day" xml:space="preserve"><value>Dag</value></data>
   <data name="Hours_Help" xml:space="preserve"><value>Vul per dag de uren in. Laat een dag leeg als je gesloten bent. Een tweede blok is voor bijvoorbeeld een middagpauze.</value></data>
   <data name="Hours_Opens" xml:space="preserve"><value>Open van</value></data>
   <data name="Hours_Opens2" xml:space="preserve"><value>Tweede blok van</value></data>
+  <data name="Hours_SecondRangeHelp" xml:space="preserve"><value>Laat leeg om een dag te sluiten. Het tweede blok is voor een middagpauze.</value></data>
+  <data name="Landing_Eyebrow" xml:space="preserve"><value>Conceptproject</value></data>
+  <data name="Landing_F1_Body" xml:space="preserve"><value>Vrije uren komen rechtstreeks uit de agenda, in de tijdzone van de zaak. Dubbele boekingen houdt de database tegen.</value></data>
+  <data name="Landing_F1_Title" xml:space="preserve"><value>Live beschikbaarheid</value></data>
+  <data name="Landing_F2_Body" xml:space="preserve"><value>Klanten betalen via Stripe Connect rechtstreeks aan de zaak. Bancontact, iDEAL en kaarten werken.</value></data>
+  <data name="Landing_F2_Title" xml:space="preserve"><value>Voorschot met Bancontact</value></data>
+  <data name="Landing_F3_Body" xml:space="preserve"><value>Weinig gegevens, export en wissen met één klik, en een verwerkersovereenkomst klaar voor elke zaak.</value></data>
+  <data name="Landing_F3_Title" xml:space="preserve"><value>Privacy ingebouwd</value></data>
+  <data name="Landing_Lead" xml:space="preserve"><value>Pointer geeft kleine zaken zoals kappers en salons een eigen boekingspagina. Klanten kiezen een vrij moment en betalen een voorschot. De zaak beslist wat er gebeurt bij een no-show.</value></data>
+  <data name="Landing_Stack" xml:space="preserve"><value>Gebouwd met</value></data>
+  <data name="Landing_Title" xml:space="preserve"><value>Afspraken boeken, &lt;em&gt;zonder gedoe&lt;/em&gt;.</value></data>
+  <data name="Landing_TryAdmin" xml:space="preserve"><value>Open de beheeromgeving</value></data>
+  <data name="Landing_TryBooking" xml:space="preserve"><value>Probeer een boeking</value></data>
+  <data name="Login_ArtFoot" xml:space="preserve"><value>Conceptproject · gemaakt in België</value></data>
+  <data name="Login_DemoHint" xml:space="preserve"><value>Demo: log in met</value></data>
   <data name="Login_Failed" xml:space="preserve"><value>E-mailadres of wachtwoord klopt niet.</value></data>
+  <data name="Login_Help" xml:space="preserve"><value>Beheer je agenda, diensten en openingsuren.</value></data>
+  <data name="Login_Quote" xml:space="preserve"><value>Je hele week in één oogopslag, en geen lege stoelen meer door no-shows.</value></data>
   <data name="Login_Submit" xml:space="preserve"><value>Aanmelden</value></data>
   <data name="Login_Title" xml:space="preserve"><value>Aanmelden</value></data>
   <data name="Minutes" xml:space="preserve"><value>minuten</value></data>
   <data name="No" xml:space="preserve"><value>Nee</value></data>
   <data name="NoShow_KeepDeposit" xml:space="preserve"><value>Ik houd het voorschot</value></data>
   <data name="NoShow_RefundDeposit" xml:space="preserve"><value>Het voorschot wordt terugbetaald</value></data>
+  <data name="NotFound_Body" xml:space="preserve"><value>De link is misschien verlopen of verkeerd overgetypt.</value></data>
+  <data name="NotFound_Title" xml:space="preserve"><value>Deze pagina bestaat niet</value></data>
+  <data name="Optional" xml:space="preserve"><value>(optioneel)</value></data>
   <data name="Payment_Failed" xml:space="preserve"><value>mislukt</value></data>
   <data name="Payment_Pending" xml:space="preserve"><value>nog niet betaald</value></data>
   <data name="Payment_RefundPending" xml:space="preserve"><value>wordt terugbetaald</value></data>
@@ -176,22 +234,49 @@
   <data name="Services_Add" xml:space="preserve"><value>Dienst toevoegen</value></data>
   <data name="Services_DepositHelp" xml:space="preserve"><value>Dit bedrag betaalt de klant online bij het boeken. 0 betekent geen voorschot.</value></data>
   <data name="Services_Edit" xml:space="preserve"><value>Dienst bewerken</value></data>
+  <data name="Services_Hidden" xml:space="preserve"><value>Verborgen</value></data>
+  <data name="Services_Intro" xml:space="preserve"><value>Wat klanten kunnen boeken, met duur, prijs en voorschot.</value></data>
+  <data name="Services_NamePlaceholder" xml:space="preserve"><value>bv. Knippen en baard</value></data>
   <data name="Services_None" xml:space="preserve"><value>Je hebt nog geen diensten.</value></data>
+  <data name="Services_NoneHelp" xml:space="preserve"><value>Voeg je eerste dienst toe, dan kunnen klanten meteen boeken.</value></data>
+  <data name="Services_Visible" xml:space="preserve"><value>Zichtbaar</value></data>
   <data name="Settings_Emails" xml:space="preserve"><value>E-mails</value></data>
+  <data name="Settings_EmailsHelp" xml:space="preserve"><value>Kies welke e-mails jij en je klanten krijgen.</value></data>
+  <data name="Settings_Intro" xml:space="preserve"><value>Gegevens van je zaak, je regels voor annuleren en no-shows, en e-mails.</value></data>
   <data name="Settings_Payments" xml:space="preserve"><value>Betalingen</value></data>
+  <data name="Settings_PaymentsHelp" xml:space="preserve"><value>Voorschotten komen rechtstreeks op je eigen Stripe-account.</value></data>
   <data name="Settings_Rules" xml:space="preserve"><value>Regels voor klanten</value></data>
+  <data name="Settings_RulesHelp" xml:space="preserve"><value>Klanten zien deze regels voor ze betalen.</value></data>
   <data name="Settings_Shop" xml:space="preserve"><value>Zaak</value></data>
+  <data name="Settings_ShopHelp" xml:space="preserve"><value>Zo staat je zaak op de boekingspagina.</value></data>
   <data name="Settings_StripeHelp" xml:space="preserve"><value>Het Stripe-account van je zaak. Het voorschot komt rechtstreeks op dit account.</value></data>
+  <data name="SkipToContent" xml:space="preserve"><value>Naar de inhoud</value></data>
+  <data name="Slots_Afternoon" xml:space="preserve"><value>Namiddag</value></data>
+  <data name="Slots_Count" xml:space="preserve"><value>{0} vrij</value></data>
+  <data name="Slots_Evening" xml:space="preserve"><value>Avond</value></data>
+  <data name="Slots_Morning" xml:space="preserve"><value>Voormiddag</value></data>
+  <data name="Stats_Bookings" xml:space="preserve"><value>Afspraken</value></data>
+  <data name="Stats_Deposits" xml:space="preserve"><value>Voorschotten</value></data>
+  <data name="Stats_NoShows" xml:space="preserve"><value>No-shows</value></data>
+  <data name="Stats_Upcoming" xml:space="preserve"><value>Nog te komen</value></data>
   <data name="Status_Cancelled" xml:space="preserve"><value>Geannuleerd</value></data>
   <data name="Status_Completed" xml:space="preserve"><value>Gekomen</value></data>
   <data name="Status_Confirmed" xml:space="preserve"><value>Bevestigd</value></data>
   <data name="Status_NoShow" xml:space="preserve"><value>Niet opgedaagd</value></data>
   <data name="Status_PendingPayment" xml:space="preserve"><value>Wacht op betaling</value></data>
+  <data name="Step_Details" xml:space="preserve"><value>Gegevens</value></data>
+  <data name="Step_Label" xml:space="preserve"><value>Stappen</value></data>
+  <data name="Step_Service" xml:space="preserve"><value>Dienst</value></data>
+  <data name="Step_Time" xml:space="preserve"><value>Moment</value></data>
   <data name="TimeOff_Add" xml:space="preserve"><value>Vrije dagen toevoegen</value></data>
+  <data name="TimeOff_AddTitle" xml:space="preserve"><value>Vrije dag toevoegen</value></data>
+  <data name="TimeOff_Days" xml:space="preserve"><value>{0} dag(en)</value></data>
   <data name="TimeOff_From" xml:space="preserve"><value>Van</value></data>
   <data name="TimeOff_Help" xml:space="preserve"><value>Op deze dagen kan niemand boeken.</value></data>
   <data name="TimeOff_None" xml:space="preserve"><value>Er zijn geen vrije dagen gepland.</value></data>
+  <data name="TimeOff_NoneHelp" xml:space="preserve"><value>Klanten kunnen elke dag boeken waarop je open bent.</value></data>
   <data name="TimeOff_Note" xml:space="preserve"><value>Notitie (optioneel)</value></data>
+  <data name="TimeOff_NotePlaceholder" xml:space="preserve"><value>bv. Vakantie</value></data>
   <data name="TimeOff_To" xml:space="preserve"><value>Tot en met</value></data>
   <data name="TimeOff_Upcoming" xml:space="preserve"><value>Geplande vrije dagen</value></data>
   <data name="Yes" xml:space="preserve"><value>Ja</value></data>

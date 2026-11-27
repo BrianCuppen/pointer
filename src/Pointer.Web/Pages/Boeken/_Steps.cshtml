@@ -1,0 +1,15 @@
+@model int
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+@{
+    var labels = new[] { T["Step_Service"].Value, T["Step_Time"].Value, T["Step_Details"].Value };
+}
+<ol class="steps" aria-label="@T["Step_Label"]">
+    @for (var i = 0; i < labels.Length; i++)
+    {
+        var n = i + 1;
+        <li class="@(n < Model ? "done" : null)" aria-current="@(n == Model ? "step" : null)">
+            <span class="n">@if (n < Model) { @Icon.Svg("check") } else { @n }</span>
+            <span class="t">@labels[i]</span>
+        </li>
+    }
+</ol>
