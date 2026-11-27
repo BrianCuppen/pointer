@@ -5,6 +5,78 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- User-facing strings. Neutral culture is Dutch (nl-BE). Add SharedResource.fr.resx etc. for other languages. -->
+  <data name="About_Band1" xml:space="preserve"><value>Live beschikbaarheid</value></data>
+  <data name="About_Band2" xml:space="preserve"><value>Bancontact, iDEAL en kaart</value></data>
+  <data name="About_Band3" xml:space="preserve"><value>Geen dubbele boekingen</value></data>
+  <data name="About_Band4" xml:space="preserve"><value>GDPR-proof</value></data>
+  <data name="About_CtaBody" xml:space="preserve"><value>Boek een afspraak in de demozaak en bekijk daarna de agenda van de eigenaar.</value></data>
+  <data name="About_CtaCode" xml:space="preserve"><value>Bekijk de code</value></data>
+  <data name="About_CtaTitle" xml:space="preserve"><value>Zie het zelf in actie</value></data>
+  <data name="About_F1_Body" xml:space="preserve"><value>Een eigen pagina per zaak, plus een knop voor je eigen website. Klanten kiezen een dienst, een dag en een uur, en zien altijd wat het kost.</value></data>
+  <data name="About_F1_C1" xml:space="preserve"><value>Vrije uren komen live uit de agenda, in de tijdzone van de zaak</value></data>
+  <data name="About_F1_C2" xml:space="preserve"><value>Openingsuren, pauzes en vrije dagen worden vanzelf gerespecteerd</value></data>
+  <data name="About_F1_C3" xml:space="preserve"><value>De database houdt dubbele boekingen tegen, ook bij gelijktijdige klikken</value></data>
+  <data name="About_F1_Kicker" xml:space="preserve"><value>Boekingspagina</value></data>
+  <data name="About_F1_Title" xml:space="preserve"><value>Klanten boeken in drie stappen</value></data>
+  <data name="About_F2_Body" xml:space="preserve"><value>Klanten betalen een klein voorschot via Stripe Connect. Het geld gaat rechtstreeks naar de zaak, nooit eerst naar ons.</value></data>
+  <data name="About_F2_C1" xml:space="preserve"><value>Bancontact, iDEAL en kaarten</value></data>
+  <data name="About_F2_C2" xml:space="preserve"><value>De zaak kiest wat er met het voorschot gebeurt bij een no-show</value></data>
+  <data name="About_F2_C3" xml:space="preserve"><value>De regels staan duidelijk op de pagina, nog voor er betaald wordt</value></data>
+  <data name="About_F2_Kicker" xml:space="preserve"><value>Voorschotten</value></data>
+  <data name="About_F2_Title" xml:space="preserve"><value>Minder no-shows dankzij een voorschot</value></data>
+  <data name="About_F3_Body" xml:space="preserve"><value>Een overzichtelijke agenda met wie er komt, wat er betaald is en wat er nog moet gebeuren. Markeer een afspraak als gekomen of als no-show met één klik.</value></data>
+  <data name="About_F3_C1" xml:space="preserve"><value>Diensten, openingsuren en vrije dagen zelf aanpassen</value></data>
+  <data name="About_F3_C2" xml:space="preserve"><value>E-mail bij elke nieuwe afspraak, of één overzicht per dag</value></data>
+  <data name="About_F3_C3" xml:space="preserve"><value>Klantgegevens exporteren of wissen op vraag</value></data>
+  <data name="About_F3_Kicker" xml:space="preserve"><value>Beheer</value></data>
+  <data name="About_F3_Title" xml:space="preserve"><value>Je hele week in één oogopslag</value></data>
+  <data name="About_F4_Body" xml:space="preserve"><value>De meeste klanten boeken op hun gsm. Elke stap werkt met één duim, van dienst kiezen tot betalen.</value></data>
+  <data name="About_F4_C1" xml:space="preserve"><value>Bevestiging per e-mail met een agenda-bestand</value></data>
+  <data name="About_F4_C2" xml:space="preserve"><value>Herinnering voor de afspraak</value></data>
+  <data name="About_F4_C3" xml:space="preserve"><value>Zelf annuleren via een link</value></data>
+  <data name="About_F4_Kicker" xml:space="preserve"><value>Mobiel</value></data>
+  <data name="About_F4_Title" xml:space="preserve"><value>Gemaakt voor de telefoon</value></data>
+  <data name="About_FeaturesKicker" xml:space="preserve"><value>Functies</value></data>
+  <data name="About_FeaturesLead" xml:space="preserve"><value>Geen ingewikkeld platform met honderd knoppen. Pointer doet een paar dingen, en die doet het goed.</value></data>
+  <data name="About_FeaturesTitle" xml:space="preserve"><value>Alles wat een kleine zaak nodig heeft, en niets meer</value></data>
+  <data name="About_HeroLead" xml:space="preserve"><value>Pointer geeft kappers, barbiers en salons een eigen boekingspagina. Klanten kiezen een vrij moment, betalen een voorschot met Bancontact en krijgen meteen een bevestiging. Jij houdt je agenda in één oogopslag bij.</value></data>
+  <data name="About_HeroNote" xml:space="preserve"><value>Geen account nodig. De demo gebruikt een testbetaling: er wordt niets aangerekend.</value></data>
+  <data name="About_HeroTitle" xml:space="preserve"><value>De boekingspagina die je zaak &lt;em&gt;verdient&lt;/em&gt;.</value></data>
+  <data name="About_How1_Body" xml:space="preserve"><value>Op je boekingspagina of via de knop op je eigen website.</value></data>
+  <data name="About_How1_Title" xml:space="preserve"><value>De klant kiest een moment</value></data>
+  <data name="About_How2_Body" xml:space="preserve"><value>Veilig via Stripe. Het geld komt meteen op de rekening van de zaak.</value></data>
+  <data name="About_How2_Title" xml:space="preserve"><value>Voorschot met Bancontact</value></data>
+  <data name="About_How3_Body" xml:space="preserve"><value>De klant krijgt een bevestiging, jij ziet de afspraak meteen staan.</value></data>
+  <data name="About_How3_Title" xml:space="preserve"><value>Bevestigd en in je agenda</value></data>
+  <data name="About_HowKicker" xml:space="preserve"><value>Hoe het werkt</value></data>
+  <data name="About_HowTitle" xml:space="preserve"><value>Van eerste klik tot volle stoel</value></data>
+  <data name="About_N1" xml:space="preserve"><value>dubbele boekingen, afgedwongen in de database</value></data>
+  <data name="About_N2" xml:space="preserve"><value>betaalmethodes voor België en Nederland</value></data>
+  <data name="About_N3" xml:space="preserve"><value>klantengeld op onze rekening</value></data>
+  <data name="About_N4" xml:space="preserve"><value>geautomatiseerde tests</value></data>
+  <data name="About_NavFeatures" xml:space="preserve"><value>Functies</value></data>
+  <data name="About_NavHow" xml:space="preserve"><value>Hoe het werkt</value></data>
+  <data name="About_NavTech" xml:space="preserve"><value>Techniek</value></data>
+  <data name="About_Pill" xml:space="preserve"><value>Conceptproject</value></data>
+  <data name="About_PillText" xml:space="preserve"><value>Gebouwd voor kleine zaken in België</value></data>
+  <data name="About_ShotAlt_Booking" xml:space="preserve"><value>Boekingspagina met overzicht en gegevensformulier</value></data>
+  <data name="About_ShotAlt_Calendar" xml:space="preserve"><value>Weekagenda van de eigenaar</value></data>
+  <data name="About_ShotAlt_Checkout" xml:space="preserve"><value>Betaalpagina voor het voorschot</value></data>
+  <data name="About_ShotAlt_Phone" xml:space="preserve"><value>De boekingsstappen op een telefoon</value></data>
+  <data name="About_ShotAlt_Slots" xml:space="preserve"><value>Een dag en een vrij uur kiezen</value></data>
+  <data name="About_TechKicker" xml:space="preserve"><value>Techniek</value></data>
+  <data name="About_TechLead" xml:space="preserve"><value>Een eenvoudige, degelijke stack: één container, één database, geen overbodige onderdelen.</value></data>
+  <data name="About_TechTitle" xml:space="preserve"><value>Onder de motorkap</value></data>
+  <data name="About_Tech_Brevo" xml:space="preserve"><value>Bevestigingen en herinneringen</value></data>
+  <data name="About_Tech_Docker" xml:space="preserve"><value>Eén container, overal te draaien</value></data>
+  <data name="About_Tech_Ef" xml:space="preserve"><value>Datamodel en migraties</value></data>
+  <data name="About_Tech_Gha" xml:space="preserve"><value>Tests en build bij elke wijziging</value></data>
+  <data name="About_Tech_Htmx" xml:space="preserve"><value>Snelle updates zonder zware frontend</value></data>
+  <data name="About_Tech_Pg" xml:space="preserve"><value>Constraints tegen dubbele boekingen</value></data>
+  <data name="About_Tech_Razor" xml:space="preserve"><value>Webapp, pagina's op de server gerenderd</value></data>
+  <data name="About_Tech_Stripe" xml:space="preserve"><value>Split payments, idempotente webhooks</value></data>
+  <data name="About_Title" xml:space="preserve"><value>Over Pointer</value></data>
+  <data name="About_TryDemo" xml:space="preserve"><value>Probeer de demo</value></data>
   <data name="Admin_BookingPage" xml:space="preserve"><value>Je boekingspagina</value></data>
   <data name="Admin_Calendar" xml:space="preserve"><value>Agenda</value></data>
   <data name="Admin_CalendarComingSoon" xml:space="preserve"><value>De agenda volgt binnenkort.</value></data>
@@ -181,6 +253,7 @@
   <data name="Field_ServiceName" xml:space="preserve"><value>Naam van de dienst</value></data>
   <data name="Field_ShopName" xml:space="preserve"><value>Naam van de zaak</value></data>
   <data name="Field_StripeAccount" xml:space="preserve"><value>Stripe-account</value></data>
+  <data name="Footer_About" xml:space="preserve"><value>Over Pointer</value></data>
   <data name="Footer_PoweredBy" xml:space="preserve"><value>Online boeken met Pointer</value></data>
   <data name="Hours" xml:space="preserve"><value>uur</value></data>
   <data name="Hours_Closed" xml:space="preserve"><value>Gesloten</value></data>

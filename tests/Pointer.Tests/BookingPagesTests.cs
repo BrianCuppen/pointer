@@ -168,11 +168,24 @@ public sealed partial class BookingPagesTests(PostgresFixture fixture) : IDispos
     }
 
     [Fact]
-    public async Task Reserved_paths_cannot_become_shop_slugs()
+    public async Task About_page_renders_and_links_to_the_demo()
+    {
+        var response = await Client().GetAsync("/about");
+
+        response.EnsureSuccessStatusCode();
+        var html = await response.Content.ReadAsStringAsync();
+        Assert.Contains("id=\"functies\"", html);
+        Assert.Contains("/img/about/booking.png", html);
+    }
+
+    [Theory]
+    [InlineData("beheer")]
+    [InlineData("about")]
+    public async Task Reserved_paths_cannot_become_shop_slugs(string slug)
     {
         await using var db = fixture.CreateContext();
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            new ShopProvisioning(db, TimeProvider.System).CreateAsync("beheer", "x", "x@example.com", "x"));
+            new ShopProvisioning(db, TimeProvider.System).CreateAsync(slug, "x", "x@example.com", "x"));
     }
 
     [GeneratedRegex("name=\"__RequestVerificationToken\" type=\"hidden\" value=\"([^\"]+)\"")]

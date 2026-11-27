@@ -8,10 +8,13 @@
 }
 <header class="pub-bar">
     <span class="wordmark">@Icon.Mark() @T["AppName"]</span>
-    @if (demo)
-    {
-        <a class="btn btn-sm" href="/beheer">@Icon.Svg("lock") @T["Login_Submit"]</a>
-    }
+    <div class="row" style="gap:8px">
+        <a class="btn btn-sm btn-ghost" href="/about">@T["Footer_About"]</a>
+        @if (demo)
+        {
+            <a class="btn btn-sm" href="/beheer">@Icon.Svg("lock") @T["Login_Submit"]</a>
+        }
+    </div>
 </header>
 
 <div class="site-main">
